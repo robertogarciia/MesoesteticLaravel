@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Upgrade extends Model
 {
-
     use HasFactory;
 
 
@@ -32,5 +31,5 @@ class Upgrade extends Model
         return $this->belongsTo(Admin::class);
     }
     
-    
+ 
 }
