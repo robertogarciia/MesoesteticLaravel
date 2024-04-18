@@ -17,9 +17,10 @@ class Upgrade extends Model
         'zone',
         'type',
         'worry',
-        'Benefit',
+        'benefit',
         'state',
         'likes'
+
     ];
 
     public function user()
@@ -27,10 +28,7 @@ class Upgrade extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function Admin()
-    {
-        return $this->belongsTo(Admin::class);
-    }
+    
     
     
 }

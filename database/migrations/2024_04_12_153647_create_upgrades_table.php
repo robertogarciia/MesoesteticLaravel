@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('upgrades', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('title');
+            $table->string('zone');
+            $table->string('type');
+            $table->string('worry');
+            $table->string('benefit');
+            $table->string('state');
+            $table->integer('likes');
         });
     }
 
