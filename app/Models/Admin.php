@@ -12,7 +12,7 @@ class Admin extends Model
     protected $fillable = [
         'email',
         'password',
-        'post'   
+        'post'
     ];
     
     public function upgrades(){
