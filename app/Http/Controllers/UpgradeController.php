@@ -12,7 +12,8 @@ class UpgradeController extends Controller
      */
     public function index()
     {
-        //
+        
+        
     }
 
     /**

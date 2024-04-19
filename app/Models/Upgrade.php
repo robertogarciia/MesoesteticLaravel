@@ -9,25 +9,23 @@ class Upgrade extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
-        'id',
         'title',
         'zone',
         'type',
         'worry',
         'benefit',
         'state',
-        'likes'
-
+        'likes',
+        
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+    
 
     
-    
- 
 }
+
