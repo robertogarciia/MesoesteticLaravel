@@ -31,6 +31,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('mainpage');
+        return view('editupgrade');
     })->name('dashboard');
 });
