@@ -24,6 +24,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('mainpage');
     })->name('dashboard');
 });
