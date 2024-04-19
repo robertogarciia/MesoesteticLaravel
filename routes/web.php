@@ -19,6 +19,9 @@ Route::get('/', function () {
 Route::get('/hola',function(){
     return view('ppp');
 });
+Route::get('/master',function(){
+    return view('master');
+});
 
 
 
