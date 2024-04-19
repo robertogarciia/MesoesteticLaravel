@@ -23,6 +23,10 @@ Route::get('/master',function(){
     return view('master');
 });
 
+Route::resource('users', IndexController::class);
+
+Route::resource('upgrades', UpgradeController::class);
+
 
 
 Route::middleware([
@@ -34,3 +38,4 @@ Route::middleware([
         return view('editupgrade');
     })->name('dashboard');
 });
+
