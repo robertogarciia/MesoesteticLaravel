@@ -16,8 +16,20 @@ use App\Http\Controllers\UpgradeController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
+Route::get('/hola',function(){
+    return view('ppp');
+});
+Route::get('/master',function(){
+    return view('master');
+});
+
+Route::resource('users', IndexController::class);
+
+Route::resource('upgrades', UpgradeController::class);
+
+
 
 Route::get('/principal', function () {
     return view('principal');
@@ -32,6 +44,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('editupgrade');
     })->name('dashboard');
 });
+

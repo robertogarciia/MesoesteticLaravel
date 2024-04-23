@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateUpgradesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,22 +15,18 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->integer('zone');
+            $table->string('zone');
             $table->enum('type', ['Maquinaria', 'Espacio', 'Material'])->default('Maquinaria');
             $table->string('worry');
             $table->string('benefit');
             $table->string('state');
-            $table->integer('like');
-            $table->unsignedBigInteger("users_id");
-            $table->foreign("users_id")
+            $table->integer('likes')->default(0);
+            $table->unsignedBigInteger("user_id");
+            $table->foreign("user_id")
                 ->references("id")
                 ->on("users")
                 ->onDelete("cascade");
-            $table->unsignedBigInteger("admin_id");
-            $table->foreign("admin_id")
-                ->references("id")
-                ->on("admins")
-                ->onDelete("cascade");
+            
         });
     }
 
@@ -41,4 +37,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('upgrades');
     }
-};
+}

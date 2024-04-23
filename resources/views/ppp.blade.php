@@ -1,1 +1,2 @@
-<p>Hola cris</p>
+@extends('master')
+
