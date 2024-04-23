@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UpgradeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/principal', function () {
+    return view('principal');
+});
+
+Route::get('/createUpgrade', function () {
+    return view('crearUpgrade');
+});
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
