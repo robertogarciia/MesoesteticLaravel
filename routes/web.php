@@ -30,14 +30,11 @@ Route::resource('users', IndexController::class);
 Route::resource('upgrades', UpgradeController::class);
 
 
-
 Route::get('/principal', function () {
     return view('principal');
 });
 
-Route::get('/createUpgrade', function () {
-    return view('crearUpgrade');
-});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

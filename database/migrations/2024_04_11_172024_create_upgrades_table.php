@@ -19,7 +19,7 @@ class CreateUpgradesTable extends Migration
             $table->enum('type', ['Maquinaria', 'Espacio', 'Material'])->default('Maquinaria');
             $table->string('worry');
             $table->string('benefit');
-            $table->string('state');
+            $table->string('state')->nullable();
             $table->integer('likes')->default(0);
             $table->unsignedBigInteger("user_id");
             $table->foreign("user_id")
