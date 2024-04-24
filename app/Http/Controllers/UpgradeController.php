@@ -14,6 +14,11 @@ class UpgradeController extends Controller
     {
         
         
+            $upgrades = Upgrade::all();
+            return view('upgrades.index');
+        
+        
+        
     }
 
     /**
@@ -21,6 +26,7 @@ class UpgradeController extends Controller
      */
     public function create()
     {
+
         return view('crearUpgrade');
     }
 

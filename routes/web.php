@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UpgradeController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -25,9 +26,10 @@ Route::get('/master',function(){
     return view('master');
 });
 
-Route::resource('users', IndexController::class);
+Route::resource('users', UserController::class);
 
 Route::resource('upgrades', UpgradeController::class);
+
 
 
 Route::get('/principal', function () {
