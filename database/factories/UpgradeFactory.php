@@ -33,7 +33,6 @@ class UpgradeFactory extends Factory
         'benefit' => $this->faker->sentence,
         'state' => $this->faker->word,
         'likes' => $this->faker->numberBetween(0, 100),
-        
         'user_id' => $user->id,
 
     ];
