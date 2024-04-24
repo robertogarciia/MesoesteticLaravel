@@ -1,3 +1,4 @@
+@extends('master')
 @section('content')
     <style>
        .recuadro {
