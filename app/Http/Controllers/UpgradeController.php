@@ -26,8 +26,8 @@ class UpgradeController extends Controller
      */
     public function create()
     {
-        
-        return view('upgrades.create');
+
+        return view('crearUpgrade');
     }
 
     /**
@@ -35,7 +35,24 @@ class UpgradeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'zone' => 'required|string', 
+            'type' => 'required|string',
+            'worry' => 'required|string',
+            'benefit' => 'required|string',
+        ]);
+        
+        $upgrade = new Upgrade();
+        $upgrade->title = $request->title;
+        $upgrade->zone = $request->zone;
+        $upgrade->type = $request->type;
+        $upgrade->worry = $request->worry;
+        $upgrade->benefit = $request->benefit;
+        $upgrade->user_id = auth()->id();
+        $upgrade->save();
+
+        return redirect('principal');
     }
 
     /**
