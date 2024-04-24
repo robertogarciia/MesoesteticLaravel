@@ -21,7 +21,7 @@ class UpgradeController extends Controller
      */
     public function create()
     {
-        //
+        return view('crearUpgrade');
     }
 
     /**
@@ -29,7 +29,8 @@ class UpgradeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $upgrade = Upgrade::create($request->all());
+        return redirect('principal');
     }
 
     /**
