@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -11,9 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
+
         
         $users = User::all(); // Get all users from the database
         return view('indexUsers', compact('users'));
+
     }
 
     /**
