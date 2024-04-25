@@ -54,7 +54,7 @@ class UpgradeController extends Controller
         
         $upgrade->save();
 
-        return redirect('principal');
+        return redirect()->route('upgrades.index');
     }
 
     /**
