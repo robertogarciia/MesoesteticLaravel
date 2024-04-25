@@ -20,7 +20,14 @@
                             <p class="card-text"><b>Estado:</b> {{$Upgrade->state}}</p>
                             <p class="card-text"><b>Likes:</b> {{$Upgrade->likes}}</p>
                             <p class="card-text"><b>Zona:</b> {{ $Upgrade->zone }}</p>
-                        </div>
+
+                        @if ($Upgrade->state === 'Valorandose')
+                            <a href="{{ route('upgrades.edit', $Upgrade->id) }}" class="btn btn-primary btn-sm">Edit Upgrade</a>
+                        @endif
+                </div>
+
+
+                           
 
         
 
