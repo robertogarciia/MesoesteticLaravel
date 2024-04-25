@@ -10,16 +10,12 @@ class UpgradeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         
-        
-            $upgrades = Upgrade::all();
-            return view('upgrades.index');
-        
-        
-        
+        $upgrades = Upgrade::all(); // Get all upgrades from the database
+        return view('indexUpgrades', compact('upgrades'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

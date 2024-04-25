@@ -27,8 +27,8 @@ Route::get('/master',function(){
 });
 
 Route::resource('users', UserController::class);
-
 Route::resource('upgrades', UpgradeController::class);
+
 
 
 
