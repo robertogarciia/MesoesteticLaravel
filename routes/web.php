@@ -43,7 +43,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('editupgrade');
+        return redirect()->route('upgrades.index'); // Uso correcto de route() para redirigir por nombre
     })->name('dashboard');
 });
 

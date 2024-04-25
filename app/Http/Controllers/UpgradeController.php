@@ -13,7 +13,7 @@ class UpgradeController extends Controller
     public function index() {
         
         $upgrades = Upgrade::all(); // Get all upgrades from the database
-        return view('indexUpgrades', compact('upgrades'));
+        return view('indexUpgrades', ['upgrades' => $upgrades]);
     }
     
 
@@ -31,6 +31,7 @@ class UpgradeController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'zone' => 'required|string', 
@@ -45,7 +46,12 @@ class UpgradeController extends Controller
         $upgrade->type = $request->type;
         $upgrade->worry = $request->worry;
         $upgrade->benefit = $request->benefit;
+        $upgrade->state = 'Valorandose';
+        $upgrade->likes = 0;    
         $upgrade->user_id = auth()->id();
+        
+
+        
         $upgrade->save();
 
         return redirect('principal');
@@ -56,7 +62,8 @@ class UpgradeController extends Controller
      */
     public function show(Upgrade $upgrade)
     {
-        //
+        return view('showUpgrades',['Upgrade'=>$upgrade]);
+
     }
 
     /**
