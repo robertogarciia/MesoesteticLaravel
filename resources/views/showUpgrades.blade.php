@@ -5,6 +5,7 @@
 <div class="container mt-2 bg-modul p-4">
     <div class="d-flex justify-content-between align-items-center my-4">
         <h2>Dades de la millores</h2>
+        <a href="{{ route('upgrades.index') }}" class="btn btn-secondary">Volver Atrás</a>
     </div>
     <div class="row">
         <div class="col">
@@ -34,13 +35,12 @@
                     </div>
                     <div class="col">
                         <div class="mt-3">
-                        <span class="text-muted d-block mb-1">Preocupación</span>
-                        <div class="form-group">
-                            <textarea id="nota" name="nota" class="form-control mt-2 editable w-100" rows="3" disabled>{{ $Upgrade->worry }}</textarea>
-                        </div>
+                            <span class="d-block mb-1"><strong>Preocupación:</strong></span>
+                            <div class="form-group">
+                                <textarea id="nota" name="nota" class="form-control mt-2 w-100" rows="10" disabled>{{ $Upgrade->worry }}</textarea>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
