@@ -18,7 +18,13 @@
                     <td>{{ $usuario->id }}</td>
                     <td>{{ $usuario->email }}</td>
                     <td>{{ $usuario->password }}</td>
-                    <td>{{ $usuario->post }}</td>
+                    <td>
+                        @if($usuario->post == 1)
+                            admin
+                        @elseif($usuario->post == 0)
+                            user
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
