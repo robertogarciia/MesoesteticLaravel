@@ -12,8 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = \App\Models\User::all();
-        return view("indexusers", compact("users"));
+
+        
+        $users = User::all(); // Get all users from the database
+        return view('indexUsers', compact('users'));
+
     }
 
     /**
