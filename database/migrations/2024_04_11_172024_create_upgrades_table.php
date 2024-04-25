@@ -15,11 +15,12 @@ class CreateUpgradesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->string('zone');
+            //cosmeticos blau, medicamentos vermell, Sanitaria Verd, Control de calidad gris
+            $table->enum('zone',['Cosmeticos','Medicamentos','Sanitaria','Control de calidad']);
             $table->enum('type', ['Maquinaria', 'Espacio', 'Material'])->default('Maquinaria');
             $table->string('worry');
             $table->string('benefit');
-            $table->string('state')->nullable();
+            $table->enum('state',['Valorandose','En curso','Resuelta'])->default('Valorandose');
             $table->integer('likes')->default(0);
             $table->unsignedBigInteger("user_id");
             $table->foreign("user_id")

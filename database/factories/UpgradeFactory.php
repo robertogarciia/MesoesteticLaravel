@@ -27,11 +27,11 @@ class UpgradeFactory extends Factory
     
     return [
         'title' => $this->faker->sentence,
-        'zone' => $this->faker->sentence,
+        'zone' => $this->faker->randomElement(['Cosmeticos','Medicamentos','Sanitaria','Control de calidad']),
         'type' => $this->faker->randomElement(['Maquinaria', 'Espacio', 'Material']),
         'worry' => $this->faker->sentence,
         'benefit' => $this->faker->sentence,
-        'state' => $this->faker->word,
+        'state' => $this->faker->randomElement(['Valorandose','En curso','Resuelta']),
         'likes' => $this->faker->numberBetween(0, 100),
         'user_id' => $user->id,
 

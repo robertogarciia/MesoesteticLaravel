@@ -48,16 +48,16 @@
                 <label class="col-4 col-form-label">Zona:</label><br>
                 <div class="col-6">
                     <label for="rojo" class="circulo rojo">
-                        <input type="radio" class="form-check-input" id="zone" name="zone" value="rojo">
+                        <input type="radio" class="form-check-input" id="zone" name="zone" value="Medicamentos">
                     </label>
                     <label for="verde" class="circulo verde">
-                        <input type="radio" class="form-check-input" id="zone" name="zone" value="verde">
+                        <input type="radio" class="form-check-input" id="zone" name="zone" value="Sanitaria">
                     </label>
                     <label for="azul" class="circulo azul">
-                        <input type="radio" class="form-check-input" id="zone" name="zone" value="azul">
+                        <input type="radio" class="form-check-input" id="zone" name="zone" value="Cosmeticos">
                     </label>
                     <label for="amarillo" class="circulo amarillo">
-                        <input type="radio" class="form-check-input" id="zone" name="zone" value="amarillo">
+                        <input type="radio" class="form-check-input" id="zone" name="zone" value="Control de calidad ">
                     </label>
                 </div>
 
