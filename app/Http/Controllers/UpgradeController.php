@@ -13,7 +13,11 @@ class UpgradeController extends Controller
     public function index() {
         
         $upgrades = Upgrade::all(); // Get all upgrades from the database
+
+
         return view('indexUpgrades', ['upgrades' => $upgrades]);
+
+
     }
     
 
@@ -69,7 +73,11 @@ class UpgradeController extends Controller
      */
     public function edit(Upgrade $upgrade)
     {
+
+        return "EL ROBERTO ES INUTIL";
+
         return view('editupgrade',['upgrade'=>$upgrade]);
+
     }
 
     /**
