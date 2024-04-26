@@ -15,7 +15,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <img src="images/mesoestetic-logo.png" alt="logo mesoestetic" style="width:230px;padding-right:10px;">
+        <img src="{{ asset('images/mesoestetic-logo.png') }}" alt="logo mesoestetic" style="width:200px;padding-right:10px;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
