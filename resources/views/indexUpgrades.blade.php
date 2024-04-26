@@ -45,7 +45,7 @@
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <span class="card-text mb-0">{{ $upgrade->created_at->format('d/m/Y') }}</span>
-                        <a href="{{ route('upgrades.show', $upgrade->id) }}" class="btn btn-primary btn-sm">Show Details</a>
+                        <a href="{{ route('upgrades.show', $upgrade->id) }}" class="btn btn-primary btn-sm">Show Details</a>                 
                     </div>
                 </div>
             </div>

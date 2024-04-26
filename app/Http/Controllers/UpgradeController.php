@@ -54,8 +54,6 @@ class UpgradeController extends Controller
         $upgrade->likes = 0;    
         $upgrade->user_id = auth()->id();
         
-
-        
         $upgrade->save();
 
         return redirect()->route('upgrades.index');
@@ -75,7 +73,11 @@ class UpgradeController extends Controller
      */
     public function edit(Upgrade $upgrade)
     {
+
         return "EL ROBERTO ES INUTIL";
+
+        return view('editupgrade',['upgrade'=>$upgrade]);
+
     }
 
     /**
@@ -83,7 +85,9 @@ class UpgradeController extends Controller
      */
     public function update(Request $request, Upgrade $upgrade)
     {
-        //
+       
+        $upgrade->update($request->all());
+        return redirect()->route('upgrades.show', ['upgrade'=>$upgrade]);
     }
 
     /**
