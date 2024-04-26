@@ -29,8 +29,7 @@
 </style>
 
 <div class="container">
-    <div class="bg-modul"> 
-                
+    <div class="bg-modul">   
         <div class="text-center"> 
             @if($Upgrade->state === 'Valorandose')
                 <img src="{{ asset('images/candadoAbierto.png') }}" alt="Editable" style="width:30px;">
@@ -49,16 +48,11 @@
             </div>
         </div>
 
-
         <div class="row"> 
-            <div class="col">
+            <div class="col-sm">
                 <div class="details">
                     <strong>Título:</strong>
                     <div style="max-width: 400px; overflow-y: auto; max-height: 100px;">{{ $Upgrade->title }}</div>
-                </div>
-                <div class="details">
-                    <strong>Estado:</strong>
-                    <div style="max-width: 400px; overflow-y: auto; max-height: 100px;">{{ $Upgrade->state }}</div>
                 </div>
                 <div class="details">
                     <strong>Likes:</strong>
@@ -107,13 +101,13 @@
                 </div>
 
             </div>
-            <div class="col">
+            <div class="col-sm">
                 @if($Upgrade->state === 'Valorandose')
-                    <img src="{{ asset('images/valorandose.png') }}" alt="Valorandose" style="width:230px;padding-right:10px;">
+                    <img src="{{ asset('images/valorandose.png') }}" alt="Valorandose" style="width:400px;padding-right:10px;">
                 @elseif($Upgrade->state === 'En curso')
-                    <img src="{{ asset('images/enCurso.png') }}" alt="En Curso" style="width:230px;padding-right:10px;">
+                    <img src="{{ asset('images/enCurso.png') }}" alt="En Curso" style="width:425px;padding-right:10px;">
                 @elseif($Upgrade->state === 'Resuelta')
-                    <img src="{{ asset('images/resuelta.png') }}" alt="Resuelta" style="width:230px;padding-right:10px;">
+                    <img src="{{ asset('images/resuelta.png') }}" alt="Resuelta" style="width:455px;padding-right:10px;">
                 @endif            
             </div>
         </div>
