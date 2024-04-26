@@ -75,7 +75,7 @@ class UpgradeController extends Controller
      */
     public function edit(Upgrade $upgrade)
     {
-        return "hola";
+        return "EL ROBERTO ES INUTIL";
     }
 
     /**
