@@ -74,8 +74,6 @@ class UpgradeController extends Controller
     public function edit(Upgrade $upgrade)
     {
 
-        return "EL ROBERTO ES INUTIL";
-
         return view('editupgrade',['upgrade'=>$upgrade]);
 
     }
