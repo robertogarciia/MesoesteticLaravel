@@ -14,11 +14,29 @@ class UpgradeController extends Controller
         
         $upgrades = Upgrade::all(); // Get all upgrades from the database
 
-
         return view('indexUpgrades', ['upgrades' => $upgrades]);
 
+    }
+    public function upgradesCount() {
+        
+        $totalMejoras = Upgrade::count(); 
+
+        $countUpgrades = [
+            'Valorandose' => Upgrade::where('state', 'Valorandose')->count(),
+            'En_curso' => Upgrade::where('state', 'En curso')->count(),
+            'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
+        ];
+
+        $percentages = [
+            'Valorandose' => ($totalMejoras > 0) ? ($countUpgrades['Valorandose'] / $totalMejoras) * 100 : 0,
+            'En_Curso' => ($totalMejoras > 0) ? ($countUpgrades['En_curso'] / $totalMejoras) * 100 : 0,
+            'Resuelta' => ($totalMejoras > 0) ? ($countUpgrades['Resuelta'] / $totalMejoras) * 100 : 0,
+        ];
+
+        return view('principalPage', compact('countUpgrades', 'percentages'));
 
     }
+
     
 
     /**
@@ -59,6 +77,8 @@ class UpgradeController extends Controller
         return redirect()->route('upgrades.index');
     }
 
+
+
     /**
      * Display the specified resource.
      */
@@ -68,11 +88,23 @@ class UpgradeController extends Controller
 
     }
 
+    public function showChart()
+{
+    $stateChangeCounts = [
+        'Valorandose' => UpgradeStateChange::where('current_state', 'Valorandose')->count(),
+        'En_curso' => UpgradeStateChange::where('current_state', 'En curso')->count(),
+        'Resuelta' => UpgradeStateChange::where('current_state', 'Resuelta')->count(),
+    ];
+
+    return view('principalPage', compact('stateChangeCounts'));
+}
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Upgrade $upgrade)
     {
+        
 
         return view('editupgrade',['upgrade'=>$upgrade]);
 
@@ -82,11 +114,21 @@ class UpgradeController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Upgrade $upgrade)
-    {
-       
-        $upgrade->update($request->all());
-        return redirect()->route('upgrades.show', ['upgrade'=>$upgrade]);
+{
+    $previous_state = $upgrade->state; // Estado anterior
+    $upgrade->update($request->all());
+
+    // Si el estado ha cambiado, guardar en el historial
+    if ($previous_state !== $upgrade->state) {
+        UpgradeStateChange::create([
+            'upgrade_id' => $upgrade->id,
+            'previous_state' => $previous_state,
+            'current_state' => $upgrade->state,
+        ]);
     }
+
+    return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
+}
 
     /**
      * Remove the specified resource from storage.

@@ -1,16 +1,33 @@
 @extends('master')
 
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center my-4">
-        <h2>Llista de millores</h2>
-        <a href="{{ route('upgrades.create') }}" class="btn btn-success">Crear Mejora</a>
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center my-4">
+    <h2 style="margin-left:150px;">Llista de millores</h2>
+
+    <div class="d-flex align-items-center" style="border:2px solid black; border-radius:10px;padding-left:10px;">
+      <h5 style="margin-bottom:2px;">Medicamentos</h5>
+      <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #F94537;"></div>
+      <h5 style="margin-bottom:2px;">Sanitaria</h5>
+      <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #8AE34B;"></div>
+      <h5 style="margin-bottom:2px;">Cosmeticos</h5>
+      <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #3A3AD4;"></div>
+      <h5 style="margin-bottom:2px;">Control de calidad</h5>
+      <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #AEAEAE;"></div>
     </div>
 
-    <div class="row">
+
+
+    <a href="{{ route('upgrades.create') }}" class="btn btn-success ms-4 btn-lg" style="margin-right:20px;">Crear Mejora</a>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    
+    
         @foreach($upgrades as $upgrade)
             <div class="col-md-6 mb-4">
-                <div class="card border-0 shadow h-100 d-flex flex-column">
+                <div class="card border-10 shadow h-100 d-flex flex-column" style="border-radius:10px;">
                     <img src="{{ $upgrade->image }}" class="card-img-top" alt="{{ $upgrade->name }}">
                     <div class="card-body d-flex flex-grow-1 justify-content-between align-items-stretch">
                         <div class="d-flex flex-column">
@@ -56,5 +73,5 @@
             @endif
         @endforeach
     </div>
-</div>
+    </div>
 @endsection
