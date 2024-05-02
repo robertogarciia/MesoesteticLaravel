@@ -73,6 +73,7 @@ Route::delete('/upgrades/{id}', [ApiController::class, 'destroy'])->name('upgrad
 
 
 
+Route::get('/upgrades/search', [ApiController::class, 'listUpgradesByWord'])->name('upgrades.search');
 
 
 
