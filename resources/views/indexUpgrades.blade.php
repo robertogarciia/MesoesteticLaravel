@@ -1,9 +1,17 @@
 @extends('master')
 
 @section('content')
-<div class="container-fluid">
+<style>
+  .upgrade-card {
+    display: block;
+  }
+
+  .modal-hidden {
+    display: none;
+  }
+</style>
+<div class="container">
   <div class="d-flex justify-content-between align-items-center my-4">
-    <h2 style="margin-left:150px;">Llista de millores</h2>
 
     <div class="d-flex align-items-center" style="border:2px solid black; border-radius:10px; padding-left:10px;">
       <!-- Indicadores visuales para cada zona -->
