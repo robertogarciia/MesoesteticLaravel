@@ -54,11 +54,11 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="state" class="form-label">Estat</label>
-                    <select class="form-control" id="state" name="state">
-                        <option value="Valorandose" {{ $upgrade->state == 'Valorandose' ? 'selected' : '' }}>Valorandose</option>
-                        <option value="En curso" {{ $upgrade->state == 'En curso' ? 'selected' : '' }}>En curso</option>
-                        <option value="Resuelta" {{ $upgrade->state == 'Resuelta' ? 'selected' : '' }}>Resuelta</option>
+                    <label for="type" class="form-label">Tipo:</label>
+                    <select class="form-control" id="type" name="type">
+                        <option value="Máquinaria" {{ $upgrade->type == 'Máquinaria' ? 'selected' : '' }}>Máquinaria</option>
+                        <option value="Espacio" {{ $upgrade->type == 'Espacio' ? 'selected' : '' }}>Espacio</option>
+                        <option value="Material" {{ $upgrade->type == 'Material' ? 'selected' : '' }}>Material</option>
                     </select>
                 </div>
             </div>
@@ -76,14 +76,7 @@
                 
             </div>
             <div class="col-md-6 Z mt-3">
-                <div class="mb-3">
-                    <label for="type" class="form-label">Tipo:</label>
-                    <select class="form-control" id="type" name="type">
-                        <option value="Máquinaria" {{ $upgrade->type == 'Máquinaria' ? 'selected' : '' }}>Máquinaria</option>
-                        <option value="Espacio" {{ $upgrade->type == 'Espacio' ? 'selected' : '' }}>Espacio</option>
-                        <option value="Material" {{ $upgrade->type == 'Material' ? 'selected' : '' }}>Material</option>
-                    </select>
-                </div>
+                
             <button type="submit" class="btn btn-primary">Desar canvis</button>
             </form>
         </div>
