@@ -31,6 +31,9 @@ Route::get('/home', [UpgradeController::class, 'upgradesCount', 'changesData']);
 
 
 
+Route::get('/upgrades/filter', 'UpgradeController@filter')->name('upgrades.filter');
+
+
 
 
 
