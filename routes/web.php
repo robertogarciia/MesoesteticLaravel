@@ -26,7 +26,9 @@ Route::get('/master',function(){
     return view('master');
 });
 
-Route::get('/home', [UpgradeController::class, 'upgradesCount','showChart']);
+Route::get('/home', [UpgradeController::class, 'upgradesCount', 'changesData']);
+
+
 
 
 Route::resource('users', UserController::class);
