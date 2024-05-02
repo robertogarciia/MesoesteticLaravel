@@ -26,15 +26,13 @@ Route::get('/master',function(){
     return view('master');
 });
 
+Route::get('/home', [UpgradeController::class, 'upgradesCount','showChart']);
+
+
 Route::resource('users', UserController::class);
 Route::resource('upgrades', UpgradeController::class);
 
 
-
-
-Route::get('/principal', function () {
-    return view('principal');
-});
 
 
 Route::middleware([
