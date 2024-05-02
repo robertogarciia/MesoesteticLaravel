@@ -27,6 +27,17 @@
                 <a class="nav-item nav-link" href="{{ route('users.index') }}">Users</a>
 
             </div>
+            <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-link text-white">
+                                <img src="{{ asset('images/logOut.png') }}" alt="Log Out"
+                                    style="max-height: 35px;">
+                            </button>
+                        </form>
+                    </li>
+                </ul>
         </div>
     </nav>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Upgrade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UpgradeController extends Controller
 {
@@ -84,7 +85,8 @@ class UpgradeController extends Controller
      */
     public function show(Upgrade $upgrade)
     {
-        return view('showUpgrades',['Upgrade'=>$upgrade]);
+        $user = Auth::user();
+        return view('showUpgrades',['Upgrade'=>$upgrade, 'user'=>$user]);
 
     }
 
@@ -104,9 +106,13 @@ class UpgradeController extends Controller
      */
     public function edit(Upgrade $upgrade)
     {
+        $user = Auth::user();
         
-
-        return view('editupgrade',['upgrade'=>$upgrade]);
+        if (strpos($user->email, 'admin') === 0) {
+            return view('editAdminUpgrade', ['upgrade' => $upgrade]);
+        } else {
+            return view('editupgrade', ['upgrade' => $upgrade]);
+        }
 
     }
 
