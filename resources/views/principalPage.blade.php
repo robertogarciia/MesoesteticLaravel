@@ -5,64 +5,71 @@
 <div class="container mt-5">
     <!-- Tarjetas mostrando mejoras por estado -->
     <div class="row">
+        <!-- Tarjeta para mejoras en observación -->
         <div class="col-sm-4">
-            <!-- Asegúrate de usar la clase "card" -->
-            <div class="card" style="border: 2px solid black; border-radius: 20px; height: 150px;"> 
+            <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 15px; height: 150px;">
                 <div class="card-body text-center">
-                    <h3 class="card-title">Mejoras en observación</h3>
-                    <p class="card-text fs-5">
-                        <h2>{{ $countUpgrades['Valorandose'] }}</h2>
+                    <h4 class="card-title">Mejoras </h4>
+                    <p class="card-text" style="font-size: 2em; font-weight: bold;">
+                        {{ $countUpgrades['Valorandose'] }}
                     </p>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Tarjeta para mejoras en curso -->
         <div class="col-sm-4">
-            <div class="card" style="border: 2px solid black; border-radius: 20px; height: 150px;">
+            <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 15px; height: 150px;">
                 <div class="card-body text-center">
-                    <h3 class="card-title">Mejoras en curso</h3>
-                    <p class="card-text fs-5">
-                        <h2>{{ $countUpgrades['En_curso'] }}</h2>
+                    <h4 class="card-title">Mejoras en curso</h4>
+                    <p class="card-text" style="font-size: 2em; font-weight: bold;">
+                        {{ $countUpgrades['En_curso'] }}
                     </p>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Tarjeta para mejoras completadas -->
         <div class="col-sm-4">
-            <div class="card" style="border: 2px solid black; border-radius: 20px; height: 150px;">
+            <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 15px; height: 150px;">
                 <div class="card-body text-center">
-                    <h3 la clase="card-title">Mejoras completadas</h3>
-                    <p la clase="card-text fs-5">
-                        <h2>{{ $countUpgrades['Resuelta'] }}</h2>
+                    <h4 class="card-title">Mejoras completadas</h4>
+                    <p class="card-text" style="font-size: 2em; font-weight: bold;">
+                        {{ $countUpgrades['Resuelta'] }}
                     </p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficas en una fila -->
+    <div class="row mt-4">
+    <!-- Gráfico de pastel para porcentajes de mejoras por estado -->
+    <div class="col-md-6">
+        <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+            <div class="card-body text-center">
+                <h5>Distribución por Estado</h5>
+                <canvas id="tascasChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico para el tiempo promedio de cambios de estado -->
+    <div class="col-md-6">
+        <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+            <div class="card-body text-center">
+                <h5>Tiempo Promedio para Cambiar de Estado</h5>
+                <canvas id="avgStateChangeTimeChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
             </div>
         </div>
     </div>
 </div>
-
-
-    <!-- Gráficos en columnas -->
-    <div class="row mt-5">
-        <!-- Gráfico de pastel para mostrar porcentajes de mejoras por estado -->
-        <div class="col-md-6">
-            <div class="container" style="border: 2px solid negro; border-radius: 30px; padding: 15px;">
-                <canvas id="tascasChart" width="300" height="300"></canvas>
-            </div>
-        </div>
-
-        <!-- Gráfico para el tiempo promedio de cambios de estado -->
-        <div class="col-md-6">
-            <div class="container" style="border: 2px solid negro; border-radius: 30px; padding: 15px;">
-                <canvas id="avgStateChangeTimeChart" width="300" height="300"></canvas>
-            </div>
-        </div>
-    </div>
 
 </div>
 
 <!-- Script para inicializar los gráficos -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     const ctxTascas = document.getElementById('tascasChart').getContext('2d');
     const myChartTascas = new Chart(ctxTascas, {
@@ -86,7 +93,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Distribución de Mejoras por Estado'
+                    text: 'Distribución por Estado',
                 },
             },
         },
