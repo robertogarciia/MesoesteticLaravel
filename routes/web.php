@@ -26,13 +26,10 @@ Route::get('/master',function(){
     return view('master');
 });
 
+
 Route::get('/home', [UpgradeController::class, 'upgradesCount', 'changesData']);
 
 
-
-
-Route::resource('users', UserController::class);
-Route::resource('upgrades', UpgradeController::class);
 
 
 
@@ -45,5 +42,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return redirect()->route('upgrades.index'); // Uso correcto de route() para redirigir por nombre
     })->name('dashboard');
+    Route::resource('upgrades', UpgradeController::class);
+    Route::resource('users', UserController::class);
+
 });
 
