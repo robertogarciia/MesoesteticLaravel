@@ -2,91 +2,196 @@
 @section('content')
 
 <style>
-    .circulo {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: inline-block;
-    }
-    .circulo.rojo {
-        background-color: #ff6b6b;
-    }
-    .circulo.verde {
-        background-color: #6bff6b;
-    }
-    .circulo.azul {
-        background-color: #6b9cff;
-    }
-    .circulo.amarillo {
-        background-color: #ffea6b;
-    }
-   
-    </style>
+/* General container style */
+.container {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 900px;
+    margin: 5% auto;
+}
+
+/* Estilo para etiquetas */
+label {
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+}
+
+/* Estilo para controles de formulario */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Estilo para el botón de envío */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+    padding: 14px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para selector de colores */
+.color-selector {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s, border 0.3s;
+}
+
+/* Aumentar tamaño al pasar el cursor y agregar borde */
+.color-option:hover {
+    transform: scale(1.2);
+    border: 2px solid #000000;
+    /* Borde negro */
+}
+
+/* Colores de las opciones */
+.rojo {
+    background-color: #FF3636;
+}
+
+.verde {
+    background-color: #52F43E;
+}
+
+.azul {
+    background-color: #557EF3;
+}
+
+.gris {
+    background-color: #C1C1C1;
+}
+
+/* Ocultar input radio por defecto */
+input[type="radio"] {
+    display: none;
+}
+
+/* Estilo para opción seleccionada */
+input[type="radio"]:checked + .color-option {
+  border: 3px solid #000000; /* Borde negro para opción seleccionada */
+}
+
+
+/* Espacio entre filas */
+.mb-3 {
+    margin-bottom: 30px;
+}
+
+/* Alineación de texto */
+.row {
+    text-align: left;
+}
+
+/* Ajustar el ancho y el padding del select */
+select.form-control {
+    
+    width: 100%;
+}
+</style>
 
 <body>
-    <main>
-    <div class="container mt-5">
-            <form class="row" method='POST' action="{{ route('upgrades.update', ['upgrade'=>$upgrade]) }}">
+    <div class="container">
+        <form method="POST" action="{{ route('upgrades.update', ['upgrade' => $upgrade]) }}">
             @csrf
             @method('PUT')
-            <div class="col-md-6 Z mt-3">
-            <input type="hidden" name="upgrade_id" value="{{ $upgrade->id }}">
 
-                <div class="mb-3">
-                    <label for="title" class="form-label">Títol</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Modifica el títol" value="{{ $upgrade->title }}">
+            <div class="mb-3 row">
+                <label para="title" class="col-sm-4">Título:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="title" id="title" value="{{ $upgrade->title }}"
+                        placeholder="Título...">
                 </div>
-                <div class="mb-3">
-                    <label class="col-4 col-form-label">Zona:</label><br>
-                    <div class="col-6">
-                        <label for="rojo" class="circulo rojo">
-                            <input type="radio" class="form-check-input" id="zone" name="zone" value="Medicamentos" {{ $upgrade->zone == 'Medicamentos' ? 'checked' : '' }}>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-4">Zona:</label>
+                <div class="col-sm-8">
+                    <div class="color-selector">
+                        <!-- Botones de radio con borde para opción seleccionada -->
+                        <label class="color-label">
+                            <input type="radio" id="zone_1" name="zone" value="Medicamentos"
+                                {{ $upgrade->zone == 'Medicamentos' ? 'checked' : '' }}>
+                            <div class="color-option rojo"></div>
                         </label>
-                        <label for="verde" class="circulo verde">
-                            <input type="radio" class="form-check-input" id="zone" name="zone" value="Sanitaria" {{ $upgrade->zone == 'Sanitaria' ? 'checked' : '' }}>
+                        <label class="color-label">
+                            <input type="radio" id="zone_2" name="zone" value="Sanitaria"
+                                {{ $upgrade->zone == 'Sanitaria' ? 'checked' : '' }}>
+                            <div class="color-option verde"></div>
                         </label>
-                        <label for="azul" class="circulo azul">
-                            <input type="radio" class="form-check-input" id="zone" name="zone" value="Cosmeticos" {{ $upgrade->zone == 'Cosmeticos' ? 'checked' : '' }}>
-                        </label> 
-                        <label for="amarillo" class="circulo amarillo">
-                            <input type="radio" class="form-check-input" id="zone" name="zone" value="Control de calidad" {{ $upgrade->zone == 'Control de calidad' ? 'checked' : '' }}>
+                        <label class="color-label">
+                            <input type="radio" id="zone_3" name="zone" value="Cosmeticos"
+                                {{ $upgrade->zone == 'Cosmeticos' ? 'checked' : '' }}>
+                            <div class="color-option azul"></div>
+                        </label>
+                        <label class="color-label">
+                            <input type="radio" id="zone_4" name="zone" value="Control de Calidad"
+                                {{ $upgrade->zone == 'Control de Calidad' ? 'checked' : '' }}>
+                            <div class="color-option gris"></div>
                         </label>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="type" class="form-label">Tipo:</label>
+            </div>
+
+            <div class="mb-3 row">
+                <label para="type" class="col-sm-4">Tipo:</label>
+                <div class="col-sm-8">
                     <select class="form-control" id="type" name="type">
-                        <option value="Máquinaria" {{ $upgrade->type == 'Máquinaria' ? 'selected' : '' }}>Máquinaria</option>
+                        <option value="Máquinaria" {{ $upgrade->type == 'Máquinaria' ? 'selected' : '' }}>Máquinaria
+                        </option>
                         <option value="Espacio" {{ $upgrade->type == 'Espacio' ? 'selected' : '' }}>Espacio</option>
                         <option value="Material" {{ $upgrade->type == 'Material' ? 'selected' : '' }}>Material</option>
                     </select>
                 </div>
             </div>
-            <div class="col-md-6 Z mt-3">
-                <div class="mb-3">
-                    <label for="worry" class="form-label">Preocupació</label>
-                    <textarea class="form-control" class="form-control" name="worry" id="worry"  rows="3" >{{ $upgrade->worry }}</textarea>
-                </div>
 
-                <div class="mb-3">
-                    <label for="benefit" class="form-label">Benefici</label>
-                    <textarea class="form-control" class="form-control" name="benefit" id="benefit"  rows="3">{{ $upgrade->benefit }}</textarea>
+            <div class="mb-3 row">
+                <label para="worry" class="col-sm-4">Preocupación:</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" name="worry" id="worry" rows="3">{{ $upgrade->worry }}</textarea>
                 </div>
-               
-                
             </div>
-            <div class="col-md-6 Z mt-3">
-                
-            <button type="submit" class="btn btn-primary">Desar canvis</button>
-            </form>
-        </div>
-    </main>
-    <footer>
-        <!-- peu de pàgina aquí -->
-    </footer>
-    <!-- Biblioteques JavaScript de Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+            <div class="mb-3 row">
+                <label para="benefit" class="col-sm-4">Beneficio:</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" name="benefit" id="benefit"
+                        rows="3">{{ $upgrade->benefit }}</textarea>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="offset-sm-4 col-sm-8">
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </body>
 @endsection

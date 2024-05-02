@@ -27,9 +27,10 @@ Route::get('/master',function(){
 });
 
 
-Route::get('/principal', function () {
-    return view('principal');
-});
+Route::get('/home', [UpgradeController::class, 'upgradesCount','showChart']);
+
+
+
 
 
 Route::middleware([
