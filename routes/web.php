@@ -32,6 +32,9 @@ Route::get('/home', [UpgradeController::class, 'upgradesCount','showChart']);
 Route::resource('users', UserController::class);
 Route::resource('upgrades', UpgradeController::class);
 
+Route::get('/upgrades/filter', 'UpgradeController@filter')->name('upgrades.filter');
+
+
 
 
 

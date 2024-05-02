@@ -137,4 +137,29 @@ class UpgradeController extends Controller
     {
         //
     }
+
+    public function filter(Request $request)
+    {
+        $query = Upgrade::query();
+
+        // Aplicar los filtros
+        if ($request->has('zone')) {
+            $query->where('zone', $request->zone);
+        }
+        
+        if ($request->has('state')) {
+            $query->where('state', $request->state);
+        }
+
+        if ($request->has('likes')) {
+            $query->where('likes', '>=', $request->likes);
+        }
+
+        // Obtener los resultados filtrados
+        $upgrades = $query->get();
+
+        // Retornar la vista con los resultados
+        return view('upgrades.index', compact('upgrades'));
+    }
+    
 }
