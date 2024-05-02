@@ -13,7 +13,8 @@ class UpgradeController extends Controller
      */
     public function index() {
         
-        $upgrades = Upgrade::all(); // Get all upgrades from the database
+        $upgrades = Upgrade::all(); 
+        $upgrades = Upgrade::orderBy('created_at', 'desc')->get(); // Get all upgrades from the database
 
         return view('indexUpgrades', ['upgrades' => $upgrades]);
 
