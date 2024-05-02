@@ -20,7 +20,7 @@ class ApiController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            return response()->json(['user' => $user], 200);
+            return response()->json($user, 200);
         }
 
         return response()->json(['message' => 'Unauthorized'], 401);
@@ -32,10 +32,11 @@ class ApiController extends Controller
     $user = User::find($id);
 
     if (!$user) {
-        return response()->json(['message' => 'User not found'], 404);
+        $user -> id = -1;
+        return response()->json($user, 404);
     }
 
-    return response()->json(['user' => $user], 200);
+    return response()->json($user);
 }
 
 
@@ -44,10 +45,7 @@ class ApiController extends Controller
 
         $users = User::all(); // Get all users from the database
         
-        return response()->json([
-           
-            'users' => $users
-        ]);
+        return response()->json($users);
 
     }
 
@@ -57,10 +55,10 @@ class ApiController extends Controller
     {
         $upgrades = Upgrade::all(); 
 
-        return response()->json([
+        return response()->json(
            
-            'upgrades' => $upgrades
-        ]);
+            $upgrades
+        );
     }
 
     public function getAllValorandose()
@@ -211,6 +209,25 @@ public function destroy($id)
 
     return response()->json(['message' => 'Actualización eliminada correctamente']);
 }
+
+
+public function listUpgradesByWord(Request $request)
+{
+    
+    $keyword = $request->input('keyword'); 
+
+    $upgrades = Upgrade::where('title', 'like', '%' . $keyword . '%');
+
+
+    $direction = $request->input('direction', 'asc');
+    $upgrades->orderBy('zone', $direction);
+
+    $result = $upgrades->get();
+
+    return response()->json($result);
+}
+
+
 
 
 }
