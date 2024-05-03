@@ -5,103 +5,86 @@
 <div class="container mt-5">
     <!-- Tarjetas mostrando mejoras por estado -->
     <div class="row">
+        <!-- Tarjeta para mejoras en observación -->
         <div class="col-sm-4">
-            <div class="card shadow-sm" style="border-radius: 20px; height: 150px;">
+            <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 15px; height: 150px;">
                 <div class="card-body text-center">
-                    <h3 class="card-title">Millores en observació</h3>
-                    <p class="card-text fs-5">
-                        <h2>{{ $countUpgrades['Valorandose'] }}</h2>
+                    <h4 class="card-title">Mejoras </h4>
+                    <p class="card-text" style="font-size: 2em; font-weight: bold;">
+                        {{ $countUpgrades['Valorandose'] }}
                     </p>
                 </div>
             </div>
         </div>
+
+        <!-- Tarjeta para mejoras en curso -->
         <div class="col-sm-4">
-            <div class="card shadow-sm" style="border-radius: 20px; height: 150px;">
+            <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 15px; height: 150px;">
                 <div class="card-body text-center">
-                    <h3 class="card-title">Millores en curs</h3>
-                    <p class="card-text fs-5">
-                        <h2>{{ $countUpgrades['En_curso'] }}</h2>
+                    <h4 class="card-title">Mejoras en curso</h4>
+                    <p class="card-text" style="font-size: 2em; font-weight: bold;">
+                        {{ $countUpgrades['En_curso'] }}
                     </p>
                 </div>
             </div>
         </div>
+
+        <!-- Tarjeta para mejoras completadas -->
         <div class="col-sm-4">
-            <div class="card shadow-sm" style="border-radius: 20px; height: 150px;">
+            <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 15px; height: 150px;">
                 <div class="card-body text-center">
-                    <h3 class="card-title">Millores completades</h3>
-                    <p class="card-text fs-5">
-                        <h2>{{ $countUpgrades['Resuelta'] }}</h2>
+                    <h4 class="card-title">Mejoras completadas</h4>
+                    <p class="card-text" style="font-size: 2em; font-weight: bold;">
+                        {{ $countUpgrades['Resuelta'] }}
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Espacio entre tarjetas y gráficos -->
-    <div class="my-5"></div>
+    <!-- Gráficas en una fila -->
+    <div class="row mt-4">
+    <!-- Gráfico de pastel para porcentajes de mejoras por estado -->
+    <div class="col-md-6">
+        <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+            <div class="card-body text-center">
+                <h5>Distribución por Estado</h5>
+                <canvas id="tascasChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+            </div>
+        </div>
+    </div>
 
-    <!-- Gráfico de pastel para mostrar porcentajes de mejoras por estado -->
-    <div class="container" style="max-width: 400px; border: 2px solid black; border-radius: 30px; padding-bottom: 15px;">
-        <div class="row">
-            <div class="col-12 text-center">
-                <canvas id="tascasChart" width="300" height="300"></canvas>
+    <!-- Gráfico para el tiempo promedio de cambios de estado -->
+    <div class="col-md-6">
+        <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+            <div class="card-body text-center">
+                <h5>Tiempo Promedio para Cambiar de Estado</h5>
+                <canvas id="avgStateChangeTimeChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
             </div>
         </div>
     </div>
 </div>
 
-<!-- Script para inicializar el gráfico -->
+</div>
+
+<!-- Script para inicializar los gráficos -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    // Datos para el gráfico de mejoras por estado
-    const dataTascas = {
-        labels: ['Valorándose', 'En curso', 'Resuelta'],
-        datasets: [{
-            data: [{{ $percentages['Valorandose'] }}, {{ $percentages['En_Curso'] }}, {{ $percentages['Resuelta'] }}],
-            backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384'],
-        }]
-    };
-
-    const configTascas = {
-        type: 'doughnut',
-        data: dataTascas,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Distribución de Tascas por Estado'
-                }
-            }
-        }
-    };
-
     const ctxTascas = document.getElementById('tascasChart').getContext('2d');
-    const myChartTascas = new Chart(ctxTascas, configTascas);
-</script>
-
-<!-- Gráfico de historial de cambios de estado -->
-<div class="container mt-5">
-    <h3>Historial de Cambios de Estado de las Mejoras</h3>
-    <canvas id="stateChangesChart"></canvas>
-</div>
-
-<!-- Script para inicializar el gráfico de historial -->
-<script>
-    const dataStateChanges = {
-        labels: ['Valorándose', 'En curso', 'Resuelta'],
-        datasets: [{
-            data: [{{ $stateChangeCounts['Valorandose'] }}, {{ $stateChangeCounts['En_curso'] }}, {{ $stateChangeCounts['Resuelta'] }}],
-            backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384'],
-        }]
-    };
-
-    const configStateChanges = {
+    const myChartTascas = new Chart(ctxTascas, {
         type: 'doughnut',
-        data: dataStateChanges,
+        data: {
+            labels: ['Valorándose', 'En curso', 'Resuelta'],
+            datasets: [{
+                data: [
+                    {{ $percentages['Valorandose'] }},
+                    {{ $percentages['En_Curso'] }},
+                    {{ $percentages['Resuelta'] }},
+                ],
+                backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384'],
+            }],
+        },
         options: {
             responsive: true,
             plugins: {
@@ -110,14 +93,37 @@
                 },
                 title: {
                     display: true,
-                    text: 'Historial de Cambios de Estado de las Mejoras'
-                }
-            }
-        }
-    };
+                    text: 'Distribución por Estado',
+                },
+            },
+        },
+    });
 
-    const ctxStateChanges = document.getElementById('stateChangesChart').getContext('2d');
-    const myChartStateChanges = new Chart(ctxStateChanges, configStateChanges);
+    const ctxAvgStateChangeTime = document.getElementById('avgStateChangeTimeChart').getContext('2d');
+    const avgStateChangeTimeChart = new Chart(ctxAvgStateChangeTime, {
+        type: 'bar',
+        data: {
+            labels: ['Valorándose', 'En curso', 'Resuelta'],
+            datasets: [{
+                label: 'Tiempo Promedio (días)',
+                data: [
+                    {{ $upgradeTimes['Valorándose'] ?? 0 }},
+                    {{ $upgradeTimes['En_curso'] ?? 0 }},
+                    {{ $upgradeTimes['Resuelta'] ?? 0 }},
+                ],
+                backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384'],
+            }],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Tiempo Promedio de Cambios de Estado (en días)',
+                },
+            },
+        },
+    });
 </script>
 
 @endsection

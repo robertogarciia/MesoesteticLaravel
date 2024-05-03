@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Upgrade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UpgradeController extends Controller
 {
@@ -12,21 +13,22 @@ class UpgradeController extends Controller
      */
     public function index() {
         
-        $upgrades = Upgrade::all(); // Get all upgrades from the database
+        $upgrades = Upgrade::all(); 
+        $upgrades = Upgrade::orderBy('created_at', 'desc')->get(); // Get all upgrades from the database
 
         return view('indexUpgrades', ['upgrades' => $upgrades]);
 
     }
     public function upgradesCount() {
-        
-        $totalMejoras = Upgrade::count(); 
-
+        // Cuenta el número de mejoras por estado
         $countUpgrades = [
             'Valorandose' => Upgrade::where('state', 'Valorandose')->count(),
             'En_curso' => Upgrade::where('state', 'En curso')->count(),
             'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
         ];
 
+        // Calcular los porcentajes de cada estado respecto al total de mejoras
+        $totalMejoras = Upgrade::count(); 
         $percentages = [
             'Valorandose' => ($totalMejoras > 0) ? ($countUpgrades['Valorandose'] / $totalMejoras) * 100 : 0,
             'En_Curso' => ($totalMejoras > 0) ? ($countUpgrades['En_curso'] / $totalMejoras) * 100 : 0,
@@ -34,7 +36,22 @@ class UpgradeController extends Controller
         ];
 
         return view('principalPage', compact('countUpgrades', 'percentages'));
+    }
 
+    public function changesData() {
+        // Número de mejoras que han cambiado de estado
+        $stateChangeCounts = [
+            'Valorándose' => Upgrade::where('state', 'Valorándose')->count(),
+            'En_curso' => Upgrade::where('state', 'En curso')->count(),
+            'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
+        ];
+
+        // Calcula el tiempo medio en que las mejoras cambian de estado
+        $upgradeTimes = Upgrade::selectRaw('state, AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) as avg_time')
+                                ->groupBy('state')
+                                ->pluck('avg_time', 'state'); 
+
+        return view('principalPage', compact('stateChangeCounts', 'upgradeTimes'));
     }
 
     
@@ -84,29 +101,27 @@ class UpgradeController extends Controller
      */
     public function show(Upgrade $upgrade)
     {
-        return view('showUpgrades',['Upgrade'=>$upgrade]);
+        $user = Auth::user();
+        return view('showUpgrades',['Upgrade'=>$upgrade, 'user'=>$user]);
 
     }
 
-    public function showChart()
-{
-    $stateChangeCounts = [
-        'Valorandose' => UpgradeStateChange::where('current_state', 'Valorandose')->count(),
-        'En_curso' => UpgradeStateChange::where('current_state', 'En curso')->count(),
-        'Resuelta' => UpgradeStateChange::where('current_state', 'Resuelta')->count(),
-    ];
 
-    return view('principalPage', compact('stateChangeCounts'));
-}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Upgrade $upgrade)
     {
+        $user = Auth::user();
         
 
-        return view('editupgrade',['upgrade'=>$upgrade]);
+
+        if (strpos($user->email, 'admin') === 0) {
+            return view('editAdminUpgrade', ['upgrade' => $upgrade]);
+        } else {
+            return view('editupgrade', ['upgrade' => $upgrade]);
+        }
 
     }
 
@@ -115,17 +130,9 @@ class UpgradeController extends Controller
      */
     public function update(Request $request, Upgrade $upgrade)
 {
-    $previous_state = $upgrade->state; // Estado anterior
+    // Estado anterior
     $upgrade->update($request->all());
 
-    // Si el estado ha cambiado, guardar en el historial
-    if ($previous_state !== $upgrade->state) {
-        UpgradeStateChange::create([
-            'upgrade_id' => $upgrade->id,
-            'previous_state' => $previous_state,
-            'current_state' => $upgrade->state,
-        ]);
-    }
 
     return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
 }

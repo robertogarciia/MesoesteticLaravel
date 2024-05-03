@@ -42,7 +42,7 @@
             <h2>Datos de la mejora</h2>
             <div>
                 <a href="{{ route('upgrades.index') }}" class="btn btn-secondary">Volver Atrás</a>
-                @if($Upgrade->state === 'Valorandose')
+                @if($Upgrade->state === 'Valorandose' || strpos($user->email, 'admin') === 0)
                     <a href="{{ route('upgrades.edit', ['upgrade'=>$Upgrade]) }}" class="btn btn-secondary">Editar</a>
                 @endif
             </div>
