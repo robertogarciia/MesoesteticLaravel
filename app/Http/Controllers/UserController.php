@@ -10,13 +10,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
 
-        $mode = $request->get('mode', 'cards'); // Modo por defecto es 'cards'
+         // Modo por defecto es 'cards'
         $users = User::all(); // Obtén todos los usuarios
     
-        return view('indexUsers', ['users' => $users, 'mode' => $mode]);
+        return view('indexUsers', ['users' => $users]);
 
         
     }
