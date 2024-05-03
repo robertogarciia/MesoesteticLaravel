@@ -18,6 +18,7 @@
   .zone-filter:hover {
     color: blue;
   }
+
 </style>
 
 <div class="container-fluid">
@@ -112,11 +113,34 @@
           </div>
 
           @if ($loop->iteration % 2 == 0) </div>
-        <div class="row">
-          @endif
-          @endforeach
+          <div class="row">
+              @endif
+              @endforeach
         </div>
       </div>
+
+
+      <ul class="pagination d-flex justify-content-center mt-4">
+          <li class="page-item">
+              <a class="page-link" href="{{ $upgrades->previousPageUrl() }}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+              </a>
+          </li>
+          @foreach ($upgrades->getUrlRange(1, $upgrades->lastPage()) as $page => $url)
+              <li class="page-item {{ $upgrades->currentPage() == $page ? 'active' : '' }}">
+                  <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+              </li>
+          @endforeach
+          <li class="page-item">
+              <a class="page-link" href="{{ $upgrades->nextPageUrl() }}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+              </a>
+          </li>
+      </ul>
+
+
     </div>
   </div>
 </div>
