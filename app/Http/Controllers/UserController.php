@@ -13,17 +13,21 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = User::all(); // Get all users from the database
-        return view('indexUsers', compact('users'));
+         // Modo por defecto es 'cards'
+        $users = User::all(); // Obtén todos los usuarios
+        $users = User::paginate(20);
+        return view('indexUsers', ['users' => $users]);
 
+        
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('createUser');
     }
 
     /**
@@ -31,7 +35,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+        ]);
+        $usuario = new User;
+        $usuario->email = $request->input('email');
+        $usuario->password = bcrypt($request->input('password'));
+        $usuario->save();
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -45,24 +58,30 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        return view('editUser', ['user'=>$user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->all());
+        return redirect()->route('users.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        if (!$user) {
+            return redirect()->back()->with('error', '¡Usuario no encontrado!');
+        }
+        $user->delete();
+        return redirect()->back()->with('success', '¡Usuario eliminado correctamente!');
     }
+    
 }
