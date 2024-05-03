@@ -9,6 +9,15 @@
   .modal-hidden {
     display: none;
   }
+
+  /* Afegim un cursor de punter i un color blau al passar el ratolí sobre les zones */
+  .zone-filter {
+    cursor: pointer;
+  }
+
+  .zone-filter:hover {
+    color: blue;
+  }
 </style>
 
 <div class="container-fluid">
@@ -34,19 +43,19 @@
           <div class="d-flex flex-column align-items-start" style="border-radius:10px;padding-left:10px;">
             <div class="d-flex align-items-center">
               <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #F94537;"></div>
-              <h5 id="medicamentos" style="margin-bottom:2px;">Medicamentos</h5>
+              <h5 class="zone-filter" data-zone="medicamentos" style="margin-bottom:2px;">Medicamentos</h5>
             </div>
             <div class="d-flex align-items-center">
               <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #8AE34B;"></div>
-              <h5 id="sanitaria" style="margin-bottom:2px;">Sanitaria</h5>
+              <h5 class="zone-filter" data-zone="sanitaria" style="margin-bottom:2px;">Sanitaria</h5>
             </div>
             <div class="d-flex align-items-center">
               <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #3A3AD4;"></div>
-              <h5 id="cosmeticos" style="margin-bottom:2px;">Cosmeticos</h5>
+              <h5 class="zone-filter" data-zone="cosmeticos" style="margin-bottom:2px;">Cosmeticos</h5>
             </div>
             <div class="d-flex align-items-center">
               <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #AEAEAE;"></div>
-              <h5 id="control_calidad" style="margin-bottom:2px;">Control de calidad</h5>
+              <h5 class="zone-filter" data-zone="control_calidad" style="margin-bottom:2px;">Control de calidad</h5>
             </div>
           </div>
         </div>
@@ -56,7 +65,7 @@
     <div class="col-lg-9 w-50 mt-3">
       <!-- Contenido de la llista de millores -->
       <div class="container">
-        <div class="row">
+        <div class="row" id="upgrade-list">
           @foreach($upgrades as $upgrade)
           <div class="col-md-6 mb-4 upgrade-card" style="display: block;" 
                data-zone="{{ $upgrade->zone }}" 
@@ -111,31 +120,15 @@
     </div>
   </div>
 </div>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const h5Elements = document.querySelectorAll('h5');
-
-    h5Elements.forEach(function(h5) {
-      h5.addEventListener('click', function(event) {
-        const selectedZone = event.target.id;
-        filterByZone(selectedZone);
-      });
+  // Afegim un event listener a tots els elements .zone-filter
+  document.querySelectorAll('.zone-filter').forEach(item => {
+    item.addEventListener('click', event => {
+      // Redirigeix a la nova ruta de filtratge amb la zona seleccionada
+      window.location.href = "{{ url('/upgrades/filter/') }}" + '/' + item.dataset.zone;
     });
-
-    function filterByZone(zone) {
-      const upgradeCards = document.querySelectorAll('.upgrade-card');
-
-      upgradeCards.forEach(function(card) {
-        const zoneData = card.dataset.zone;
-        if (zone === '' || zoneData === zone) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
   });
 </script>
-
 
 @endsection
