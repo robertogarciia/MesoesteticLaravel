@@ -14,7 +14,8 @@ class UpgradeController extends Controller
     public function index() {
         
         $upgrades = Upgrade::all(); 
-        $upgrades = Upgrade::orderBy('created_at', 'desc')->get(); // Get all upgrades from the database
+        $upgrades = Upgrade::orderBy('created_at', 'desc')->get();
+        $upgrades = Upgrade::paginate(10);
 
         return view('indexUpgrades', ['upgrades' => $upgrades]);
 

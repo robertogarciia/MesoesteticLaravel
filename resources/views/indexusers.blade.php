@@ -73,6 +73,28 @@
             </tbody>
         </table>
     </div>
+
+    <ul class="pagination d-flex justify-content-center mt-4">
+          <li class="page-item">
+              <a class="page-link" href="{{ $users->previousPageUrl() }}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+              </a>
+          </li>
+          @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+              <li class="page-item {{ $users->currentPage() == $page ? 'active' : '' }}">
+                  <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+              </li>
+          @endforeach
+          <li class="page-item">
+              <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+              </a>
+          </li>
+      </ul>
+
+
 </div>
 
 @endsection
