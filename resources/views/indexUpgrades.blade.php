@@ -10,41 +10,51 @@
     display: none;
   }
 </style>
+
 <div class="container-fluid">
+  <div class="row mt-3 ml-1">
+    <div class="col">
+        <h2 class="mb-0">Llista de millores</h2>
+    </div>
+    <!-- Botó de Filtratge -->
+    <!--<button type="button" class="btn btn-primary ms-4 btn-lg" data-bs-toggle="modal" data-bs-target="#filterModal">
+      Filtrar
+    </button>-->
+    <div class="col d-flex justify-content-end align-items-center">
+        <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg" style="margin-right:20px;">Crear Millora</a>
+    </div>
+  </div>
+
+
   <div class="row">
-    <!-- Columna izquierda para los filtros -->
-    <div class="col mt-4"> <!-- Añadido margen superior -->
-      <div class="d-flex flex-column align-items-start" style="border-radius:10px;padding-left:10px;">
-        <div class="d-flex align-items-center">
-          <h5 style="margin-bottom:2px;">Medicamentos</h5>
-          <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #F94537;"></div>
-        </div>
-        <div class="d-flex align-items-center">
-          <h5 style="margin-bottom:2px;">Sanitaria</h5>
-          <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #8AE34B;"></div>
-        </div>
-        <div class="d-flex align-items-center">
-          <h5 style="margin-bottom:2px;">Cosmeticos</h5>
-          <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #3A3AD4;"></div>
-        </div>
-        <div class="d-flex align-items-center">
-          <h5 style="margin-bottom:2px;">Control de calidad</h5>
-          <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #AEAEAE;"></div>
+    <div class="col mt-3 w-25">
+      <div class="card border-black border-2 shadow">
+        <div class="card-body">
+          <h4>Filtre de zones:</h4>
+          <div class="d-flex flex-column align-items-start" style="border-radius:10px;padding-left:10px;">
+            <div class="d-flex align-items-center">
+              <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #F94537;"></div>
+              <h5 id="medicamentos" style="margin-bottom:2px;">Medicamentos</h5>
+            </div>
+            <div class="d-flex align-items-center">
+              <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #8AE34B;"></div>
+              <h5 id="sanitaria" style="margin-bottom:2px;">Sanitaria</h5>
+            </div>
+            <div class="d-flex align-items-center">
+              <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #3A3AD4;"></div>
+              <h5 id="cosmeticos" style="margin-bottom:2px;">Cosmeticos</h5>
+            </div>
+            <div class="d-flex align-items-center">
+              <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #AEAEAE;"></div>
+              <h5 id="control_calidad" style="margin-bottom:2px;">Control de calidad</h5>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Columna derecha para el contenido principal -->
-    <div class="col-lg-9">
-      <div class="d-flex justify-content-between align-items-center my-4">
-        <!-- Botón de Filtratge -->
-        <button type="button" class="btn btn-primary ms-4 btn-lg" data-bs-toggle="modal" data-bs-target="#filterModal">
-          Filtrar
-        </button>
-        <a href="{{ route('upgrades.create') }}" class="btn btn-success ms-4 btn-lg" style="margin-right:20px;">Crear Mejora</a>
-      </div>
-
-      <!-- Contenido de la lista de upgrades -->
+    <div class="col-lg-9 w-50 mt-3">
+      <!-- Contenido de la llista de millores -->
       <div class="container">
         <div class="row">
           @foreach($upgrades as $upgrade)
@@ -103,48 +113,29 @@
 </div>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const filterForm = document.querySelector('form');
-    const filterModal = document.getElementById('filterModal');
+    const h5Elements = document.querySelectorAll('h5');
 
-    filterForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      applyFilters();
-      closeFilterModal();
+    h5Elements.forEach(function(h5) {
+      h5.addEventListener('click', function(event) {
+        const selectedZone = event.target.id;
+        filterByZone(selectedZone);
+      });
     });
 
-    const closeButton = document.querySelector('.modal-header .btn-close');
-    closeButton.addEventListener('click', closeFilterModal);
-
-    function applyFilters() {
-      const zoneFilterValue = document.querySelector('#zoneFilter').value;
-      const likesFilterValue = document.querySelector('#likesFilter').value;
-      const stateFilterValue = document.querySelector('#stateFilter').value;
+    function filterByZone(zone) {
       const upgradeCards = document.querySelectorAll('.upgrade-card');
 
       upgradeCards.forEach(function(card) {
-        const zone = card.dataset.zone;
-        const likes = parseInt(card.dataset.likes);
-        const state = card.dataset.state;
-        const zoneFilterPassed = zoneFilterValue === '' || zone === zoneFilterValue;
-        const likesFilterPassed = likesFilterValue === '' || (likesFilterValue === 'mas' && likes > 0) || (likesFilterValue === 'menos' && likes === 0);
-        const stateFilterPassed = stateFilterValue === '' || (stateFilterValue === 'Valoracion' && state === 'Valorandose') || state === stateFilterValue;
-
-        if (zoneFilterPassed && likesFilterPassed && stateFilterPassed) {
-          card.style.display = 'block'; 
+        const zoneData = card.dataset.zone;
+        if (zone === '' || zoneData === zone) {
+          card.style.display = 'block';
         } else {
-          card.style.display = 'none'; 
+          card.style.display = 'none';
         }
       });
     }
-
-    function closeFilterModal() {
-      filterModal.classList.add('modal-hidden');
-    }
-
-    function openFilterModal() {
-      filterModal.classList.remove('modal-hidden');
-    }
   });
 </script>
+
 
 @endsection
