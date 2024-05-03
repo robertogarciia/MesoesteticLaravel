@@ -145,28 +145,14 @@ class UpgradeController extends Controller
         //
     }
 
-    public function filter(Request $request)
-    {
-        $query = Upgrade::query();
+    public function filterByZone($zone)
+{
+    // Aquí pots recuperar les millores de la base de dades segons la zona seleccionada
+    $upgrades = Upgrade::where('zone', $zone)->get();
+    
+    // Això retorna les millores a una vista específica. Potser voldràs ajustar això a les teves necessitats.
+    return view('indexUpgrades', compact('upgrades'));
+}
 
-        // Aplicar los filtros
-        if ($request->has('zone')) {
-            $query->where('zone', $request->zone);
-        }
-        
-        if ($request->has('state')) {
-            $query->where('state', $request->state);
-        }
-
-        if ($request->has('likes')) {
-            $query->where('likes', '>=', $request->likes);
-        }
-
-        // Obtener los resultados filtrados
-        $upgrades = $query->get();
-
-        // Retornar la vista con los resultados
-        return view('upgrades.index', compact('upgrades'));
-    }
     
 }
