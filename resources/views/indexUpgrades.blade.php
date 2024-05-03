@@ -30,7 +30,12 @@
       Filtrar
     </button>-->
     <div class="col d-flex justify-content-end align-items-center">
-        <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg" style="margin-right:20px;">Crear Millora</a>
+    <form action="{{ route('upgrades.index') }}" method="GET" style="display: flex; align-items: center;">
+                <input type="text" name="search" class="form-control-lg" placeholder="Buscar Millores..." 
+                       style="margin-right: 10px;">
+                <button type="submit" class="btn btn-outline-info btn-lg m-2">Buscar</button> <!-- Botón de búsqueda -->
+            </form>
+        <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg" style="margin-right:65px;">Crear Millora</a>
     </div>
   </div>
 
