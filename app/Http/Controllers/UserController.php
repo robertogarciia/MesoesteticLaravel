@@ -15,7 +15,7 @@ class UserController extends Controller
 
          // Modo por defecto es 'cards'
         $users = User::all(); // Obtén todos los usuarios
-    
+        $users = User::paginate(20);
         return view('indexUsers', ['users' => $users]);
 
         

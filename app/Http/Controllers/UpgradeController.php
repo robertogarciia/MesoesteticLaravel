@@ -11,22 +11,23 @@ class UpgradeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) {
-        // Obtén la consulta de búsqueda
-        $query = $request->input('search');
-        
-        if ($query) {
-            // Filtra las mejoras por título y ordena por fecha de creación
-            $upgrades = Upgrade::where('title', 'like', '%' . $query . '%')
-                                ->orderBy('created_at', 'desc') // Ordenar por fecha de creación
-                                ->get();
-        } else {
-            // Si no hay búsqueda, obtén todas las mejoras y ordénalas por fecha de creación
-            $upgrades = Upgrade::orderBy('created_at', 'desc')->get();
-        }
-    
-        return view('indexUpgrades', ['upgrades' => $upgrades]);
+   public function index(Request $request) {
+    // Obtén la consulta de búsqueda
+    $query = $request->input('search');
+
+    if ($query) {
+        // Filtra las mejoras por título y ordena por fecha de creación
+        $upgrades = Upgrade::where('title', 'like', '%' . $query . '%')
+                            ->orderBy('created_at', 'desc') // Ordenar por fecha de creación
+                            ->paginate(10); // Paginación para la lista de mejoras
+    } else {
+        // Si no hay búsqueda, obtén todas las mejoras y ordénalas por fecha de creación
+        $upgrades = Upgrade::orderBy('created_at', 'desc')->paginate(10); // Paginación
     }
+
+    return view('indexUpgrades', ['upgrades' => $upgrades]);
+}
+
     
     public function upgradesCount() {
         // Cuenta el número de mejoras por estado
