@@ -167,7 +167,7 @@ class UpgradeController extends Controller
 public function getMyUpgrades() {
     // Aquí obtenemos las actualizaciones del usuario actual
     $userId = Auth::user()->id;
-    $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+    $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
 
     // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
     return view('indexUpgrades', ['upgrades' => $userUpgrades]);
