@@ -13,9 +13,8 @@ class UpgradeController extends Controller
      */
     public function index() {
         
-        $upgrades = Upgrade::all(); 
-        $upgrades = Upgrade::orderBy('created_at', 'desc')->get();
-        $upgrades = Upgrade::paginate(10);
+        $upgrades = Upgrade::orderBy('created_at', 'desc')->paginate(10);
+   
 
         return view('indexUpgrades', ['upgrades' => $upgrades]);
 
@@ -149,7 +148,7 @@ class UpgradeController extends Controller
     public function filterByZone($zone)
 {
     // Aquí pots recuperar les millores de la base de dades segons la zona seleccionada
-    $upgrades = Upgrade::where('zone', $zone)->get();
+    $upgrades = Upgrade::where('zone', $zone)->paginate(10);
     
     // Això retorna les millores a una vista específica. Potser voldràs ajustar això a les teves necessitats.
     return view('indexUpgrades', compact('upgrades'));
