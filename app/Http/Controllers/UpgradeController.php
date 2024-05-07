@@ -158,7 +158,7 @@ class UpgradeController extends Controller
     public function filterByZone($zone)
 {
     // Aquí pots recuperar les millores de la base de dades segons la zona seleccionada
-    $upgrades = Upgrade::where('zone', $zone)->get();
+    $upgrades = Upgrade::where('zone', $zone)->paginate(10);
     
     // Això retorna les millores a una vista específica. Potser voldràs ajustar això a les teves necessitats.
     return view('indexUpgrades', compact('upgrades'));
