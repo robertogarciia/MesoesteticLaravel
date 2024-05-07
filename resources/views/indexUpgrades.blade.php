@@ -32,7 +32,8 @@
     </button>-->
     <div class="col d-flex justify-content-end align-items-center">
         <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg" style="margin-right:20px;">Crear Millora</a>
-    </div>
+        <a href="{{ route('my.upgrades') }}" class="btn btn-primary btn-lg">Mis Upgrades</a>
+      </div>
   </div>
 
 
@@ -52,11 +53,14 @@
             </div>
             <div class="d-flex align-items-center">
               <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #3A3AD4;"></div>
-              <h5 class="zone-filter" data-zone="cosmeticos" style="margin-bottom:2px;">Cosmeticos</h5>
+              <h5 class="zone-filter" data-zone="cosmeticos" style="margin-bottom:2px;">Cosméticos</h5>
             </div>
             <div class="d-flex align-items-center">
               <div style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #AEAEAE;"></div>
-              <h5 class="zone-filter" data-zone="control_calidad" style="margin-bottom:2px;">Control de calidad</h5>
+              <h5 class="zone-filter" data-zone="control de calidad" style="margin-bottom:2px;">Control de calidad</h5>
+            </div>
+            <div class="d-flex align-items-center">
+              <h5 class="zone-filter" data-zone="todos" style="margin-bottom:2px;">Todas</h5>
             </div>
           </div>
         </div>
@@ -142,13 +146,16 @@
 </div>
 
 <script>
-  // Afegim un event listener a tots els elements .zone-filter
+  // Añadimos un event listener a todos los elementos .zone-filter
   document.querySelectorAll('.zone-filter').forEach(item => {
     item.addEventListener('click', event => {
-      // Redirigeix a la nova ruta de filtratge amb la zona seleccionada
-      window.location.href = "{{ url('/upgrades/filter/') }}" + '/' + item.dataset.zone;
+      // Codificar el nombre de la zona antes de concatenarlo al URL
+      const zoneName = encodeURIComponent(item.dataset.zone);
+      // Redirigir a la nueva ruta de filtrado con la zona seleccionada
+      window.location.href = "{{ url('/upgrades/filter/') }}" + '/' + zoneName;
     });
   });
 </script>
+
 
 @endsection

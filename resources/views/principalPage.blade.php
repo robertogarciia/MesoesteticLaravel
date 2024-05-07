@@ -122,7 +122,7 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
             datasets: [{
                 label: 'Tiempo Promedio (días)',
                 data: [
-                    {{ $upgradeTimes['Valorándose'] ?? 0 }},
+                    {{ $upgradeTimes['Valorandose'] ?? 0 }},
                     {{ $upgradeTimes['En_curso'] ?? 0 }},
                     {{ $upgradeTimes['Resuelta'] ?? 0 }},
                 ],
