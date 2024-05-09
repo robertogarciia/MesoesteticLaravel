@@ -11,23 +11,29 @@ class UpgradeController extends Controller
     /**
      * Display a listing of the resource.
      */
-   public function index(Request $request) {
-    // Obtén la consulta de búsqueda
-    $query = $request->input('search');
-
-    if ($query) {
-        // Filtra las mejoras por título y ordena por fecha de creación
-        $upgrades = Upgrade::where('title', 'like', '%' . $query . '%')
-                            ->orderBy('created_at', 'desc') // Ordenar por fecha de creación
-                            ->paginate(10); // Paginación para la lista de mejoras
-    } else {
-        // Si no hay búsqueda, obtén todas las mejoras y ordénalas por fecha de creación
-        $upgrades = Upgrade::orderBy('created_at', 'desc')->paginate(10); // Paginación
+    public function index(Request $request) {
+        $sort_by = $request->input('sort_by', 'created_at'); // Orden por defecto
+        $sort_direction = $request->input('sort_direction', 'desc'); // Dirección por defecto
+        $estado = $request->input('state', 'todos'); // Filtro por estado, por defecto 'todos'
+    
+        $query = Upgrade::orderBy($sort_by, $sort_direction); // Consulta base para upgrades
+    
+        // Filtrar por estado si no es 'todos'
+        if ($estado !== 'todos') {
+            $query->where('state', $estado);
+        }
+    
+        // Obtener resultados paginados
+        $upgrades = $query->paginate(10);
+    
+        return view('indexUpgrades', [
+            'upgrades' => $upgrades,
+            'sort_by' => $sort_by,
+            'sort_direction' => $sort_direction,
+            'state' => $estado,
+        ]);
     }
-
-    return view('indexUpgrades', ['upgrades' => $upgrades]);
-}
-
+    
     
     public function upgradesCount() {
         // Cuenta el número de mejoras por estado
