@@ -12,11 +12,12 @@ class UpgradeController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request) {
-        $sort_by = $request->input('sort_by', 'created_at'); // Orden por defecto
-        $sort_direction = $request->input('sort_direction', 'desc'); // Dirección por defecto
-        $estado = $request->input('state', 'todos'); // Filtro por estado, por defecto 'todos'
+        $sort_by = $request->input('sort_by', 'created_at'); 
+        $sort_direction = $request->input('sort_direction', 'desc'); 
+        $estado = $request->input('state', 'todos'); 
     
-        $query = Upgrade::orderBy($sort_by, $sort_direction); // Consulta base para upgrades
+        // Consulta base para upgrades
+        $query = Upgrade::orderBy($sort_by, $sort_direction); 
     
         // Filtrar por estado si no es 'todos'
         if ($estado !== 'todos') {
@@ -33,6 +34,7 @@ class UpgradeController extends Controller
             'state' => $estado,
         ]);
     }
+    
     
     
     public function upgradesCount() {

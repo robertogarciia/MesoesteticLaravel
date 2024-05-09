@@ -52,7 +52,23 @@
       </div>
   </div>
 
-
+        <div class="col d-flex justify-content-end align-items-center">
+            <div class="dropdown">
+                <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Ordenar per
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=asc">Likes Asc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=desc">Likes Desc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=asc">Titol Asc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc">Titol Desc</a></li>
+                </ul>
+            </div>
+            <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear Millora</a>
+            <a href="{{ route('my.upgrades') }}" class="btn btn-primary btn-lg">Mis Upgrades</a>
+        </div>
+    </div>
 
 
     <div class="row">
@@ -103,7 +119,7 @@
 
                         <div class="d-flex align-items-center">
                             <i class="fas fa-spinner" style="margin: 10px;"></i> <!-- Ícono para "En curs" -->
-                            <h5 class="zone-filter" data-zone="en_curso" style="margin-bottom:2px;">En curso</h5>
+                            <h5 class="zone-filter" data-zone="En curso" style="margin-bottom:2px;">En curso</h5>
                         </div>
 
                         <div class="d-flex align-items-center">
@@ -201,16 +217,14 @@
 <script>
 // Añadimos un event listener a todos los elementos .zone-filter
 document.querySelectorAll('.zone-filter').forEach(item => {
-    item.addEventListener('click', event => {
-        // Codificar el nombre de la zona antes de concatenarlo al URL
-        const zoneName = encodeURIComponent(item.dataset.zone);
-        if(zoneName === "todos"){
-        window.location.href = "{{ url('upgrades') }}";
-      } else {
-        window.location.href = "{{ url('/upgrades/filter/') }}" + '/' + zoneName;
-      }
-       
-    });
+  item.addEventListener('click', event => {
+    const state = encodeURIComponent(item.dataset.zone); // O podría ser data-state si usas un parámetro diferente
+    if (state === "todos") {
+      window.location.href = "{{ url('upgrades') }}"; // Redirigir a la lista sin filtros
+    } else {
+      window.location.href = `?state=${state}`; // Redirigir con el parámetro 'state'
+    }
+  });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -242,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 
 
 
