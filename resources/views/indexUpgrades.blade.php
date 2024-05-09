@@ -21,29 +21,38 @@
 </style>
 
 <div class="container-fluid">
-    <div class="row mt-3 ml-1">
-        <div class="col">
-            <h2 class="mb-0">Llista de millores</h2>
-        </div>
+  <div class="row mt-3 ml-1">
+      <div class="col">
+          <h2 class="mb-0">Llista de millores</h2>
+      </div>
+      <div class="col d-flex align-items-center">
+          <!-- Aquí comença la barra de cerca -->
+          <form id="search-form" class="input-group"> <!-- Afegim un ID al formulari -->
+            <input id="search-input" type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca">
+            <button id="search-button"class="btn btn-outline-secondary" type="submit">Cercar</button>
+          </form>
 
-        <div class="col d-flex justify-content-end align-items-center">
-            <div class="dropdown">
-                <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Ordenar per
-                </button>
-                <ul class="dropdown-menu ">
-                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=asc">Likes Asc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=desc">Likes Desc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=asc">Titol Asc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc">Titol Desc</a></li>
+          <!-- Aquí acaba la barra de cerca -->
+      </div>
+      <div class="col-auto d-flex justify-content-end">
+          <div class="dropdown">
+              <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Ordenar per
+              </button>
+              <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=asc">Likes Asc</a></li>
+                  <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=desc">Likes Desc</a></li>
+                  <li><a class="dropdown-item" href="?sort_by=title&sort_direction=asc">Titol Asc</a></li>
+                  <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc">Titol Desc</a></li>
+              </ul>
+          </div>
+          <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear Millora</a>
+          <a href="{{ route('my.upgrades') }}" class="btn btn-primary btn-lg m-2">Mis Upgrades</a>
+      </div>
+  </div>
 
-                </ul>
-            </div>
-            <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear Millora</a>
-            <a href="{{ route('my.upgrades') }}" class="btn btn-primary btn-lg">Mis Upgrades</a>
-        </div>
-    </div>
+
 
 
     <div class="row">
@@ -79,7 +88,7 @@
                                 calidad</h5>
                         </div>
                         <div class="d-flex align-items-center">
-                            <h5 class="zone-filter" data-zone="todos" style="margin-bottom:2px;">Todas</h5>
+                            <h5 class="zone-filter" data-zone="todos" style="margin-bottom:2px;">Limpiar Filtro</h5>
                         </div>
                     </div>
                     <br>
@@ -204,7 +213,35 @@ document.querySelectorAll('.zone-filter').forEach(item => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const searchButton = document.getElementById('search-button');
+    if(searchButton){
+        searchButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Evitar que el formulari s'envii
 
+            const query = encodeURIComponent(document.getElementById('search-input').value);
+            const searchUrl = "{{ route('upgrades.search') }}"; // Utilitzar la ruta correcta per a la cerca
+
+            // Fer la sol·licitud AJAX
+            fetch(searchUrl + '?query=' + query)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("S'ha produït un error en processar la cerca.");
+                    }
+                    return response.json(); // Convertir la resposta a JSON
+                })
+                .then(data => {
+                    // Manipular la resposta segons les necessitats
+                    console.log(data);
+                    // Actualitzar la llista de millores amb els resultats de la cerca
+                    updateUpgradeList(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    }
+});
 
 
 
