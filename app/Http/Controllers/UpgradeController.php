@@ -181,6 +181,16 @@ public function getMyUpgrades() {
     return view('indexUpgrades', ['upgrades' => $userUpgrades]);
 }
 
+// App\Http\Controllers\UpgradeController.php
+
+public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $upgrades = Upgrade::where('title', 'like', '%' . $query . '%')->get(); // Ajusta aquesta consulta segons les teves necessitats
+        return response()->json($upgrades);
+    }
+
+
 
 
     
