@@ -34,9 +34,6 @@ Route::get('/upgrades/search', [UpgradeController::class, 'search'])->name('upgr
 
 
 
-
-
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
