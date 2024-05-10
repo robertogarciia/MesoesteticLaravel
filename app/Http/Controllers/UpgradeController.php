@@ -14,50 +14,74 @@ class UpgradeController extends Controller
      */
     
 
-public function index(Request $request) {
-    $sort_by = $request->input('sort_by', 'created_at');
-    $sort_direction = $request->input('sort_direction', 'desc');
-    $estado = $request->input('state', 'todos');
-    $zona = $request->input('zone', 'todos');
-    $start_date = $request->input('start_date', null); // Fecha de inicio
-    $end_date = $request->input('end_date', null); // Fecha de fin
+     public function index(Request $request) {
+        $sort_by = $request->input('sort_by', 'created_at');
+        $sort_direction = $request->input('sort_direction', 'desc');
+        $estado = urldecode($request->input('state', 'todos'));
+        $zona = urldecode($request->input('zone', 'todos'));
+        $start_date = $request->input('start_date', null);
+        $end_date = $request->input('end_date', null);
     
-    $query = Upgrade::orderBy($sort_by, $sort_direction);
-
-    // Filtrar por estado si no es 'todos'
-    if ($estado !== 'todos') {
-        $query->where('state', $estado);
-    }
-
-    // Filtrar por zona si no es 'todos'
-    if ($zona !== 'todos') {
-        $query->where('zone', $zona);
-    }
-
-    // Filtrar por fechas si ambos valores están definidos
-    if ($start_date && $end_date) {
-        $start = Carbon::parse($start_date)->startOfDay();
-        $end = Carbon::parse($end_date)->endOfDay();
-
-        if ($start->gt($end)) { // Verificar que 'start_date' no sea posterior a 'end_date'
-            return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
+        $query = Upgrade::orderBy($sort_by, $sort_direction);
+    
+        // Filtrar por estado si no es 'todos'
+        if ($estado !== 'todos') {
+            $query->where('state', $estado);
         }
-
-        $query->whereBetween('created_at', [$start, $end]);
+    
+        // Filtrar por zona si no es 'todos'
+        if ($zona !== 'todos') {
+            $query->where('zone', $zona);
+        }
+    
+        // Filtrar por fechas si ambos valores están definidos
+        if ($start_date && $end_date) {
+            $start = Carbon::parse($start_date)->startOfDay();
+            $end = Carbon::parse($end_date)->endOfDay();
+    
+            if ($start->gt($end)) {
+                return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
+            }
+    
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+    
+        $upgrades = $query->paginate(10);
+    
+        
+        $totalPages = $upgrades->lastPage(); 
+        $currentPage = $upgrades->currentPage(); 
+        $pagesToShow = 5; 
+    
+        
+        $startPage = max(1, $currentPage - intdiv($pagesToShow, 2)); 
+        $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2)); 
+    
+        
+        if ($endPage - $startPage < $pagesToShow - 1) {
+            if ($currentPage <= intdiv($pagesToShow, 2)) {
+                $endPage = min($pagesToShow, $totalPages);
+            } else {
+                $startPage = max(1, $totalPages - $pagesToShow + 1);
+            }
+        }
+    
+        
+        return view('indexUpgrades', [
+            'upgrades' => $upgrades,
+            'sort_by' => $sort_by,
+            'sort_direction' => $sort_direction,
+            'state' => $estado,
+            'zone' => $zona,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'startPage' => $startPage, 
+            'endPage' => $endPage,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages 
+        ]);
     }
-
-    $upgrades = $query->paginate(10);
-
-    return view('indexUpgrades', [
-        'upgrades' => $upgrades,
-        'sort_by' => $sort_by,
-        'sort_direction' => $sort_direction,
-        'state' => $estado,
-        'zone' => $zona,
-        'start_date' => $start_date, // Pasar las fechas para mantener su valor en la vista
-        'end_date' => $end_date,
-    ]);
-}
+    
 
     
 
