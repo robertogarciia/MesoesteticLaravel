@@ -134,6 +134,14 @@
                                 data-zone="cosmeticos">Cosméticos
                             </h5>
                         </div>
+                        <div class="d-flex align-items-center">
+                            <div
+                                style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #bfbfbf;">
+                            </div>
+                            <h5 class="zone-filter {{ $zone == 'sanitaria' ? 'active-filter' : '' }}"
+                                data-zone="Control de calidad">Control de calidad
+                            </h5>
+                        </div>
 
                     </div>
 
@@ -171,21 +179,21 @@
                     <div class="d-flex flex-column alignments-start" style="border-radius:10px;padding-left:10px;">
                         <form method="GET" action="{{ route('upgrades.index') }}">
                             <!-- Ajustar el action para que apunte a la función 'index' -->
-                            <div class="col-md-3">
+                            <div class="col-12">
                                 <label for="start_date">Desde:</label>
                                 <input id="start_date" type="date" name="start_date" class="form-control"
                                     value="{{ $start_date }}" required> <!-- Mantener el valor actual -->
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-12">
                                 <label for="end_date">Hasta:</label>
                                 <input id="end_date" type="date" name="end_date" class="form-control"
                                     value="{{ $end_date }}" required> <!-- Mantener el valor actual -->
                             </div>
-                            <div class="col-md-3 pt-4">
+                            <div class="col-12 pt-3">
                                 <button type="submit" class="btn btn-primary">Filtrar por fecha</button>
                             </div>
                         </form>
-                        <div class="d-flex alignments-center" style="margin-top:5px;margin-left:14px;">
+                        <div class="d-flex alignments-center" style="margin-top:8px;margin-left:14px;">
                             <h5 class="zone-filter {{ $zone == 'todos' ? 'active-filter' : '' }}" data-zone="todos">
                                 Limpiar Filtro</h5>
                         </div>
@@ -255,26 +263,41 @@
 
 
             <ul class="pagination d-flex justify-content-center mt-4">
-            <li class="page-item {{ $upgrades->currentPage() == 1 ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $upgrades->previousPageUrl() }}" aria-label="Previous">
-                &laquo;
-            </a>
-        </li>
+                <!-- Botón para ir a la página anterior -->
 
-        
-        @for ($i = 1; $i <= 5; $i++)
-            <li class="page-item {{ $upgrades->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $upgrades->url($i) }}">{{ $i }}</a>
-            </li>
-        @endfor
+                <li class="page-item">
+                    <a class="page-link" href="{{ $upgrades->url(1) }}" aria-label="First">
+                        1
+                    </a>
+                </li>
+                <li class="page-item {{ $upgrades->currentPage() == 1 ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $upgrades->previousPageUrl() }}" aria-label="Previous">
+                        &laquo;
+                    </a>
+                </li>
 
-        <!-- Botón para ir a la página siguiente -->
-        <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
-            <a class="page-link" href="{{ $upgrades->nextPageUrl() }}" aria-label="Next">
-                &raquo;
-            </a>
-        </li>
+                <!-- Mostrar el rango de páginas calculado -->
+                @for ($i = $startPage; $i <= $endPage; $i++) <li
+                    class="page-item {{ $currentPage == $i ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $upgrades->url($i) }}">{{ $i }}</a>
+                    </li>
+                    @endfor
+
+                    <!-- Botón para ir a la página siguiente -->
+                    <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $upgrades->nextPageUrl() }}" aria-label="Next">
+                            &raquo;
+                        </a>
+                    </li>
+                    <!-- Botón para ir a la última página -->
+                    <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $upgrades->url($totalPages) }}" aria-label="Last">
+                            {{ $totalPages }}
+                        </a>
+                    </li>
+
             </ul>
+
 
 
         </div>
@@ -290,7 +313,7 @@ function handleFilterClick(element, parameterName) {
     if (parameterValue === "todos") {
         currentUrl.searchParams.delete(parameterName); // Eliminar el parámetro si es "todos"
     } else {
-        currentUrl.searchParams.set(parameterName, parameterValue); // Establecer el nuevo valor
+        currentUrl.searchParams.set(parameterName, parameterValue.toString().replace(" ", "-")); // Establecer el nuevo valor
     }
 
     // Redirigir a la nueva URL con los parámetros correctos
