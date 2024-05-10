@@ -5,38 +5,72 @@ namespace App\Http\Controllers;
 use App\Models\Upgrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class UpgradeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) {
-        $sort_by = $request->input('sort_by', 'created_at'); 
-        $sort_direction = $request->input('sort_direction', 'desc'); 
-        $estado = $request->input('state', 'todos'); 
     
-        // Consulta base para upgrades
-        $query = Upgrade::orderBy($sort_by, $sort_direction); 
+
+public function index(Request $request) {
+    $sort_by = $request->input('sort_by', 'created_at');
+    $sort_direction = $request->input('sort_direction', 'desc');
+    $estado = $request->input('state', 'todos');
+    $zona = $request->input('zone', 'todos');
+    $start_date = $request->input('start_date', null); // Fecha de inicio
+    $end_date = $request->input('end_date', null); // Fecha de fin
     
-        // Filtrar por estado si no es 'todos'
-        if ($estado !== 'todos') {
-            $query->where('state', $estado);
-        }
-    
-        // Obtener resultados paginados
-        $upgrades = $query->paginate(10);
-    
-        return view('indexUpgrades', [
-            'upgrades' => $upgrades,
-            'sort_by' => $sort_by,
-            'sort_direction' => $sort_direction,
-            'state' => $estado,
-        ]);
+    $query = Upgrade::orderBy($sort_by, $sort_direction);
+
+    // Filtrar por estado si no es 'todos'
+    if ($estado !== 'todos') {
+        $query->where('state', $estado);
     }
+
+    // Filtrar por zona si no es 'todos'
+    if ($zona !== 'todos') {
+        $query->where('zone', $zona);
+    }
+
+    // Filtrar por fechas si ambos valores están definidos
+    if ($start_date && $end_date) {
+        $start = Carbon::parse($start_date)->startOfDay();
+        $end = Carbon::parse($end_date)->endOfDay();
+
+        if ($start->gt($end)) { // Verificar que 'start_date' no sea posterior a 'end_date'
+            return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
+        }
+
+        $query->whereBetween('created_at', [$start, $end]);
+    }
+
+    $upgrades = $query->paginate(10);
+
+    return view('indexUpgrades', [
+        'upgrades' => $upgrades,
+        'sort_by' => $sort_by,
+        'sort_direction' => $sort_direction,
+        'state' => $estado,
+        'zone' => $zona,
+        'start_date' => $start_date, // Pasar las fechas para mantener su valor en la vista
+        'end_date' => $end_date,
+    ]);
+}
+
     
-    
-    
+
+    public function filterDate(Request $request){
+        
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $upgrades = Upgrade::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
+
+        return view('indexUpgrades', compact('upgrades'));
+    }
+   
     public function upgradesCount() {
         // Cuenta el número de mejoras por estado
         $countUpgrades = [
