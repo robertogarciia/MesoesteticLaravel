@@ -41,7 +41,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="btn btn-link text-white">
-                                <img src="{{ asset('images/logOut.png') }}" alt="Log Out"
+                                <img src="{{ asset('images/FavIconLogOut.png') }}" alt="Log Out"
                                     style="max-height: 35px;">
                             </button>
                         </form>
