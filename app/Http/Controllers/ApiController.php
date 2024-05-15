@@ -22,6 +22,7 @@ class ApiController extends Controller
             $user = Auth::user();
             return response()->json($user, 200);
         }
+       
 
         return response()->json(['message' => 'Unauthorized'], 401);
     }
@@ -134,7 +135,7 @@ class ApiController extends Controller
         $upgrade->benefit = $request->benefit;
         $upgrade->state = 'Valorandose';
         $upgrade->likes = 0;    
-        $upgrade->user_id = 1; 
+        $upgrade->user_id = $request->user_id; 
         
         $upgrade->save();
 
@@ -188,6 +189,12 @@ public function update(Request $request, $id)
     if ($request->has('worry')) {
         $upgrade->worry = $request->input('worry');
     }
+    if ($request->has('likes')) {
+        $upgrade->likes = $request->input('likes');
+    }
+    if ($request->has('likedBoolean')) {
+        $upgrade->likes = $request->input('likedBoolean');
+    }
     if ($request->has('benefit')) {
         $upgrade->benefit = $request->input('benefit');
     }
@@ -228,6 +235,71 @@ public function listUpgradesByWord(Request $request)
 }
 
 
+        public function listUpgradesByZoneAndUser(Request $request)
+        {
+            $zone = $request->input('zone');
+            $userId = $request->input('userId');
+            
+            $upgrades = Upgrade::where('zone', $zone)
+                                ->where('user_id', $userId)
+                                ->get();
+            
+            return response()->json($upgrades);
+        }
 
+
+        public function listUpgradesByStateAndZoneAndUser(Request $request)
+        {
+            $state = $request->input('state');
+            $zone = $request->input('zone');
+            $userId = $request->input('userId');
+            
+            $upgrades = Upgrade::where('state', $state)
+                                ->where('zone', $zone)
+                                ->where('user_id', $userId)
+                                ->get();
+            
+            return response()->json($upgrades);
+        }
+
+        public function getUpgradeCountByStateForUser(Request $request)
+        {
+            // Obtenemos el userId de la solicitud
+            $userId = $request->input('userId');
+        
+            // Realiza la búsqueda según el $userId proporcionado
+            $countValorandose = Upgrade::where('state', 'Valorandose')
+                                        ->where('user_id', $userId)
+                                        ->count();
+        
+            $countEnCurso = Upgrade::where('state', 'En curso')
+                                    ->where('user_id', $userId)
+                                    ->count();
+        
+            $countResuelta = Upgrade::where('state', 'Resuelta')
+                                    ->where('user_id', $userId)
+                                    ->count();
+        
+            // Calcula el total de actualizaciones
+            $totalCount = $countValorandose + $countEnCurso + $countResuelta;
+        
+            // Retorna la respuesta JSON con el recuento de actualizaciones por estado
+            return response()->json([
+                'Valorandose' => $countValorandose,
+                'En Curso' => $countEnCurso,
+                'Resuelta' => $countResuelta,
+                'Total' => $totalCount
+            ]);
+        }
+
+
+
+        public function getUpgradesByUserId($userId)
+        {
+            $upgrades = Upgrade::where('user_id', $userId)->get();
+        
+            return response()->json($upgrades);
+        }
+        
 
 }

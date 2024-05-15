@@ -76,7 +76,15 @@ Route::delete('/upgrades/{id}', [ApiController::class, 'destroy'])->name('upgrad
 Route::get('/upgrades/search', [ApiController::class, 'listUpgradesByWord'])->name('upgrades.search');
 
 
+Route::get('/upgrades/byZoneAndUser', [ApiController::class, 'listUpgradesByZoneAndUser']);
 
 
+Route::get('/upgrades/byStateAndZoneAndUser', [ApiController::class, 'listUpgradesByStateAndZoneAndUser']);
+
+
+Route::get('/upgrades/numStateUpgrades', [ApiController::class, 'getUpgradeCountByStateForUser']);
+
+
+Route::get('/upgrades/user/{userId}', [ApiController::class, 'getUpgradesByUserId']);
 
 

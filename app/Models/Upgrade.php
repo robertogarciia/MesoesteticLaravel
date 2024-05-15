@@ -16,6 +16,7 @@ class Upgrade extends Model
         'worry',
         'benefit',
         'state',
+
         'likes',
         'like_pressed',
 
