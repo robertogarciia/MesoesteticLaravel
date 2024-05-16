@@ -2,6 +2,7 @@
 
 @section('content')
 <style>
+    
 .upgrade-card {
     display: block;
 }
@@ -78,25 +79,25 @@
         </div>
         <div class="col d-flex align-items-center">
             <form id="search-form" class="input-group">
-                <input id="search-input" type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca">
-                <button id="search-button" class="btn btn-outline-secondary" type="submit">Cercar</button>
+                <input id="search-input" type="text" class="form-control" placeholder="Ejemplo..." aria-label="Cerca">
+                <button id="search-button" class="btn btn-outline-secondary" type="submit">Buscar</button>
             </form>
         </div>
         <div class="col-auto d-flex justify-content-end">
             <div class="dropdown">
                 <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    Ordenar per
+                    Ordenar por
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=asc">Likes Asc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=desc">Likes Desc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=asc">Titol Asc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc">Titol Desc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=asc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Likes Asc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=desc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Likes Desc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=asc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Titol Asc</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Titol Desc</a></li>
                 </ul>
             </div>
             <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear mejora</a>
-            <a href="{{ route('my.upgrades') }}" class="btn btn-info     btn-lg m-2">Mis mejoras</a>
+            <a href="{{ route('my.upgrades') }}" class="btn btn-info btn-lg m-2">Mis mejoras</a>
         </div>
     </div>
 
@@ -110,7 +111,6 @@
                             <div
                                 style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #F94537;">
                             </div>
-
 
                             <h5 class="zone-filter {{ $zone == 'medicamentos' ? 'active-filter' : '' }}"
                                 data-zone="medicamentos">
@@ -261,9 +261,7 @@
   </div>
 </div>
 
-
-
-            <ul class="pagination d-flex justify-content-center mt-4">
+<ul class="pagination d-flex justify-content-center mt-4 ml-5">
                 <!-- Botón para ir a la página anterior -->
 
                 <li class="page-item">
