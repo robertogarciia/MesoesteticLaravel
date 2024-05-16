@@ -12,9 +12,8 @@ class UpgradeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
-
-     public function index(Request $request) {
+    public function index(Request $request)
+    {
         $sort_by = $request->input('sort_by', 'created_at');
         $sort_direction = $request->input('sort_direction', 'desc');
         $estado = urldecode($request->input('state', 'todos'));
@@ -24,17 +23,17 @@ class UpgradeController extends Controller
     
         $query = Upgrade::orderBy($sort_by, $sort_direction);
     
-        // Filtrar por estado si no es 'todos'
-        if ($estado !== 'todos') {
-            $query->where('state', $estado);
-        }
-    
-        // Filtrar por zona si no es 'todos'
+        // Filter by zone (if not 'todos')
         if ($zona !== 'todos') {
             $query->where('zone', $zona);
         }
     
-        // Filtrar por fechas si ambos valores están definidos
+        // Filter by state (if not 'todos')
+        if ($estado !== 'todos') {
+            $query->where('state', $estado);
+        }
+    
+        // Filter by dates (if both values are defined)
         if ($start_date && $end_date) {
             $start = Carbon::parse($start_date)->startOfDay();
             $end = Carbon::parse($end_date)->endOfDay();
@@ -47,11 +46,10 @@ class UpgradeController extends Controller
         }
     
         $upgrades = $query->paginate(10);
-    
         
         $totalPages = $upgrades->lastPage(); 
         $currentPage = $upgrades->currentPage(); 
-        $pagesToShow = 5; 
+        $pagesToShow = 5;
     
         
         $startPage = max(1, $currentPage - intdiv($pagesToShow, 2)); 
@@ -81,11 +79,16 @@ class UpgradeController extends Controller
             'totalPages' => $totalPages 
         ]);
     }
+    public function getMyUpgrades() {
+        // Aquí obtenemos las actualizaciones del usuario actual
+        $userId = Auth::user()->id;
+        
+        $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
     
+        // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
+        return view('indexUpgrades', ['upgrades' => $userUpgrades]);
+    }
     
-
-    
-
     public function filterDate(Request $request){
         
         $start_date = $request->start_date;
@@ -231,14 +234,7 @@ class UpgradeController extends Controller
     return view('indexUpgrades', compact('upgrades'));
 }
 
-public function getMyUpgrades() {
-    // Aquí obtenemos las actualizaciones del usuario actual
-    $userId = Auth::user()->id;
-    $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
 
-    // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
-    return view('indexUpgrades', ['upgrades' => $userUpgrades]);
-}
 
 // App\Http\Controllers\UpgradeController.php
 
