@@ -258,6 +258,7 @@
         @endif
       @endforeach
     </div>
+    <div id="resultats-cerca"></div>
   </div>
 </div>
 
@@ -365,6 +366,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+fetch('{{ route('upgrades.search') }}') // Utilitzar la ruta correcta per a la cerca
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("S'ha produït un error en processar la cerca.");
+        }
+        return response.json(); // Convertir la resposta a JSON
+    })
+    .then(data => {
+        // Manipular la resposta segons les necessitats
+        console.log(data);
+        // Actualitzar la llista de millores amb els resultats de la cerca
+        updateUpgradeList(data);
+    })
+    .catch(error => {
+        console.error('Error en obtenir els resultats de la cerca:', error);
+    });
+
+// Funció per actualitzar la llista de millores amb els resultats de la cerca
+function updateUpgradeList(upgrades) {
+    const resultatsCerca = document.getElementById('resultats-cerca');
+    resultatsCerca.innerHTML = ''; // Netegem el contingut anterior
+
+    // Recorrem tots els resultats i els afegim com elements de llista al div
+    upgrades.forEach(function(upgrade) {
+        const li = document.createElement('li');
+        li.textContent = upgrade.title;
+        resultatsCerca.appendChild(li);
+    });
+}
+
 </script>
 
 

@@ -242,15 +242,44 @@ public function getMyUpgrades() {
 
 // App\Http\Controllers\UpgradeController.php
 
+// ...
+
 public function search(Request $request)
-    {
-        $query = $request->input('query');
-        $upgrades = Upgrade::where('title', 'like', '%' . $query . '%')->get(); // Ajusta aquesta consulta segons les teves necessitats
-        return response()->json($upgrades);
+{
+    $query = $request->input('query');
+    $estado = urldecode($request->input('state', 'todos'));
+    $zona = urldecode($request->input('zone', 'todos'));
+    $start_date = $request->input('start_date', null);
+    $end_date = $request->input('end_date', null);
+
+    // Empezar la consulta de Upgrade
+    $upgradesQuery = Upgrade::query();
+
+    // Filtrar por estado si no es 'todos'
+    if ($estado !== 'todos') {
+        $upgradesQuery->where('state', $estado);
     }
 
+    // Filtrar por zona si no es 'todos'
+    if ($zona !== 'todos') {
+        $upgradesQuery->where('zone', $zona);
+    }
+
+    // Filtrar por fechas si están definidas
+    if ($start_date && $end_date) {
+        $upgradesQuery->whereBetween('created_at', [$start_date, $end_date]);
+    }
+
+    // Aplicar la búsqueda por título
+    $upgradesQuery->where('title', 'like', '%' . $query . '%');
+
+    // Obtener los resultados
+    $upgrades = $upgradesQuery->get();
+
+    // Retornar una respuesta JSON solo con los datos de las mejoras
+    return response()->json($upgrades);
+}
 
 
 
-    
 }
