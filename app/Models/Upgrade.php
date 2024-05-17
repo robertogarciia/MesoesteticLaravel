@@ -18,6 +18,8 @@ class Upgrade extends Model
         'state',
         'likes'
 
+
+
     ];
 
     public function user()
