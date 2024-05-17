@@ -22,7 +22,6 @@ class CreateUpgradesTable extends Migration
             $table->string('benefit');
             $table->enum('state',['Valorandose','En curso','Resuelta'])->default('Valorandose');
             $table->integer('likes')->default(0);
-            $table->boolean('like_pressed')->default(false);
             $table->unsignedBigInteger("user_id");
             $table->foreign("user_id")
                 ->references("id")

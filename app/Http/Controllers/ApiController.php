@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Upgrade;
+use App\Models\upgradeIntermedia;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -123,7 +125,7 @@ class ApiController extends Controller
         return response()->json($result);
     }
 
-
+/*
     public function store(Request $request)
     {
         
@@ -141,6 +143,50 @@ class ApiController extends Controller
 
         return response()->json($upgrade);
     }
+*/
+
+public function store(Request $request)
+{
+   
+    
+    // Crea una nueva Upgrade con los datos recibidos
+    $upgrade = new Upgrade();
+    $upgrade->title = $request->title;
+    $upgrade->zone = $request->zone;
+    $upgrade->type = $request->type;
+    $upgrade->worry = $request->worry;
+    $upgrade->benefit = $request->benefit;
+    $upgrade->state = 'Valorandose';
+    $upgrade->likes = 0;    
+    $upgrade->user_id = $request->user_id; 
+    
+    // Guarda la Upgrade en la base de datos
+    $upgrade->save();
+
+
+    // Retorna una respuesta JSON con los datos de la Upgrade recién creada
+    return response()->json($upgrade);
+}
+
+
+public function storeIntermedia(Request $request)
+{
+    
+
+    // Crea un nuevo registro en la tabla UpgradeIntermedia
+    $tablaPivote = new UpgradeIntermedia();
+    $tablaPivote->like_pressed = $request->like_pressed;
+    $tablaPivote->user_id = $request->user_id;
+    $tablaPivote->upgrade_id = $request->upgrade_id;
+    
+    // Guarda el registro en la base de datos
+    $tablaPivote->save();
+
+    // Retorna una respuesta JSON con los datos del nuevo registro en la tabla intermedia
+    return response()->json($tablaPivote);
+}
+
+
 
 
     public function updateAdmin(Request $request, $id)
@@ -164,7 +210,38 @@ class ApiController extends Controller
     return response()->json($upgrade);
 }
 
+public function update(Request $request, $id)
+{
+    $upgrade = Upgrade::find($id);
 
+    if (!$upgrade) {
+        return response()->json(['error' => 'Actualización no encontrada'], 404);
+    }
+
+    if ($upgrade->state !== 'Valorandose') {
+        return response()->json(['error' => 'No se puede actualizar. El estado no es Valorandose'], 400);
+    }
+
+    // Actualiza los campos de Upgrade
+    $upgrade->fill($request->only(['title', 'zone', 'type', 'worry', 'benefit', 'likes']));
+
+    // Guarda los cambios en Upgrade
+    $upgrade->save();
+
+    // Actualiza la tabla pivote
+    if ($request->has('likedBoolean') && $request->has('userId')) {
+        $userId = $request->input('userId'); // Obtén el ID del usuario del cuerpo de la solicitud
+        $upgradeId = $request->input('upgradeId');
+        $likePressed = $request->input('likedBoolean');
+        
+        $upgrade->users()->sync([$userId => ['like_pressed' => $likePressed]], false); // El segundo parámetro false evita eliminar otros registros de la tabla pivote
+    }
+
+    return response()->json($upgrade);
+}
+
+
+/*
 public function update(Request $request, $id)
 {
     $upgrade = Upgrade::find($id);
@@ -203,7 +280,7 @@ public function update(Request $request, $id)
 
     return response()->json($upgrade);
 }
-
+*/
 public function destroy($id)
 {
     $upgrade = Upgrade::find($id);
@@ -302,4 +379,13 @@ public function listUpgradesByWord(Request $request)
         }
         
 
+
+        public function getUserLikedUpgrades($userId)
+        {
+            $likedUpgradeIds = UpgradeIntermedia::where('user_id', $userId)
+                                                ->where('like_pressed', true)
+                                                ->pluck('upgrade_id');
+
+            return response()->json($likedUpgradeIds);
+        }
 }
