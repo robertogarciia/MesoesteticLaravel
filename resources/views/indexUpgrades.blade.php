@@ -330,9 +330,6 @@ document.querySelectorAll('.state-filter').forEach((item) => {
 });
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
     if (searchButton) {
