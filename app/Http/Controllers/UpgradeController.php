@@ -14,73 +14,73 @@ class UpgradeController extends Controller
      */
     
 
-     public function index(Request $request) {
-        $sort_by = $request->input('sort_by', 'created_at');
-        $sort_direction = $request->input('sort_direction', 'desc');
-        $estado = urldecode($request->input('state', 'todos'));
-        $zona = urldecode($request->input('zone', 'todos'));
-        $start_date = $request->input('start_date', null);
-        $end_date = $request->input('end_date', null);
-    
-        $query = Upgrade::orderBy($sort_by, $sort_direction);
-    
-        // Filtrar por estado si no es 'todos'
-        if ($estado !== 'todos') {
-            $query->where('state', $estado);
-        }
-    
-        // Filtrar por zona si no es 'todos'
-        if ($zona !== 'todos') {
-            $query->where('zone', $zona);
-        }
-    
-        // Filtrar por fechas si ambos valores están definidos
-        if ($start_date && $end_date) {
-            $start = Carbon::parse($start_date)->startOfDay();
-            $end = Carbon::parse($end_date)->endOfDay();
-    
-            if ($start->gt($end)) {
-                return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
-            }
-    
-            $query->whereBetween('created_at', [$start, $end]);
-        }
-    
-        $upgrades = $query->paginate(10);
-    
-        
-        $totalPages = $upgrades->lastPage(); 
-        $currentPage = $upgrades->currentPage(); 
-        $pagesToShow = 5; 
-    
-        
-        $startPage = max(1, $currentPage - intdiv($pagesToShow, 2)); 
-        $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2)); 
-    
-        
-        if ($endPage - $startPage < $pagesToShow - 1) {
-            if ($currentPage <= intdiv($pagesToShow, 2)) {
-                $endPage = min($pagesToShow, $totalPages);
-            } else {
-                $startPage = max(1, $totalPages - $pagesToShow + 1);
-            }
-        }
-    
-        
-        return view('indexUpgrades', [
-            'upgrades' => $upgrades,
-            'sort_by' => $sort_by,
-            'sort_direction' => $sort_direction,
-            'state' => $estado,
-            'zone' => $zona,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'startPage' => $startPage, 
-            'endPage' => $endPage,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages 
-        ]);
+     public function index(Request $request)
+{
+    $sort_by = $request->input('sort_by', 'created_at');
+    $sort_direction = $request->input('sort_direction', 'desc');
+    $state = urldecode($request->input('state', 'todos'));
+    $zone = urldecode($request->input('zone', 'todos'));
+    $start_date = $request->input('start_date', null);
+    $end_date = $request->input('end_date', null);
+    $search = $request->input('search', null);
+
+    $query = Upgrade::orderBy($sort_by, $sort_direction);
+
+    if ($state !== 'todos') {
+        $query->where('state', $state);
     }
+
+    if ($zone !== 'todos') {
+        $query->where('zone', $zone);
+    }
+
+    if ($start_date && $end_date) {
+        $start = Carbon::parse($start_date)->startOfDay();
+        $end = Carbon::parse($end_date)->endOfDay();
+
+        if ($start->gt($end)) {
+            return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
+        }
+
+        $query->whereBetween('created_at', [$start, $end]);
+    }
+
+    if ($search) {
+        $query->where('title', 'like', "%$search%");
+    }
+
+    $upgrades = $query->paginate(10);
+
+    $totalPages = $upgrades->lastPage(); 
+    $currentPage = $upgrades->currentPage(); 
+    $pagesToShow = 5;
+
+    $startPage = max(1, $currentPage - intdiv($pagesToShow, 2)); 
+    $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2)); 
+
+    if ($endPage - $startPage < $pagesToShow - 1) {
+        if ($currentPage <= intdiv($pagesToShow, 2)) {
+            $endPage = min($pagesToShow, $totalPages);
+        } else {
+            $startPage = max(1, $totalPages - $pagesToShow + 1);
+        }
+    }
+
+    return view('indexUpgrades', [
+        'upgrades' => $upgrades,
+        'sort_by' => $sort_by,
+        'sort_direction' => $sort_direction,
+        'state' => $state,
+        'zone' => $zone,
+        'start_date' => $start_date,
+        'end_date' => $end_date,
+        'startPage' => $startPage,
+        'endPage' => $endPage,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages 
+    ]);
+}
+
     
     
 
@@ -240,46 +240,12 @@ public function getMyUpgrades() {
     return view('indexUpgrades', ['upgrades' => $userUpgrades]);
 }
 
-// App\Http\Controllers\UpgradeController.php
-
-// ...
-
 public function search(Request $request)
 {
-    $query = $request->input('query');
-    $estado = urldecode($request->input('state', 'todos'));
-    $zona = urldecode($request->input('zone', 'todos'));
-    $start_date = $request->input('start_date', null);
-    $end_date = $request->input('end_date', null);
+    $search = $request->input('search');
+    $results = Upgrade::where('title', 'like', "%$search%")->get();
 
-    // Empezar la consulta de Upgrade
-    $upgradesQuery = Upgrade::query();
-
-    // Filtrar por estado si no es 'todos'
-    if ($estado !== 'todos') {
-        $upgradesQuery->where('state', $estado);
-    }
-
-    // Filtrar por zona si no es 'todos'
-    if ($zona !== 'todos') {
-        $upgradesQuery->where('zone', $zona);
-    }
-
-    // Filtrar por fechas si están definidas
-    if ($start_date && $end_date) {
-        $upgradesQuery->whereBetween('created_at', [$start_date, $end_date]);
-    }
-
-    // Aplicar la búsqueda por título
-    $upgradesQuery->where('title', 'like', '%' . $query . '%');
-
-    // Obtener los resultados
-    $upgrades = $upgradesQuery->get();
-
-    // Retornar una respuesta JSON solo con los datos de las mejoras
-    return response()->json($upgrades);
+    return view('indexUpgrades', ['results' => $results]);
 }
-
-
 
 }
