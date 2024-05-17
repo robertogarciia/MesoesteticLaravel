@@ -65,4 +65,11 @@ class User extends Authenticatable
     public function upgrades(){
         return $this->hasMany(Upgrade::class);
     }
+
+
+    
+    public function upgradesIntermedia()
+    {
+        return $this->belongsToMany(User::class, 'upgrade_intermedia', 'user_id', 'upgrade_id');
+    }
 }

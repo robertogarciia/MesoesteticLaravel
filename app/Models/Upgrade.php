@@ -16,9 +16,7 @@ class Upgrade extends Model
         'worry',
         'benefit',
         'state',
-
-        'likes',
-        'like_pressed',
+        'likes'
 
     ];
 
@@ -26,8 +24,10 @@ class Upgrade extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
-
-    
+        
+    public function usersIntermedia()
+    {
+        return $this->belongsToMany(User::class, 'upgrade_intermedia', 'upgrade_id', 'user_id');
+    }
 }
 
