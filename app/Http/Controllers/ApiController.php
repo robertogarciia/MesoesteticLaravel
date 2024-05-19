@@ -388,4 +388,34 @@ public function listUpgradesByWord(Request $request)
 
             return response()->json($likedUpgradeIds);
         }
+
+        public function deleteUpgradeIntermedia(Request $request)
+        {
+            $upgradeId = $request->input('upgrade_id');
+            $userId = $request->input('user_id');
+    
+            // Verificar si existe el registro
+            $upgradeIntermedia = UpgradeIntermedia::where('upgrade_id', $upgradeId)
+                                                  ->where('user_id', $userId)
+                                                  ->first();
+    
+            if ($upgradeIntermedia) {
+                $upgradeIntermedia->delete();
+                return response()->json(['message' => 'Upgrade intermedia deleted successfully'], 200);
+            } else {
+                return response()->json(['message' => 'Upgrade intermedia not found'], 404);
+            }
+        }
+
+        public function updateLikes(Request $request, $id)
+        {
+            $upgrade = Upgrade::findOrFail($id);
+            $upgrade->likes = $request->input('likes');
+            $upgrade->save();
+
+            return response()->json($upgrade, 200);
+        }
+
+
+
 }

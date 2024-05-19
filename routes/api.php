@@ -90,4 +90,12 @@ Route::get('/upgrades/user/{userId}', [ApiController::class, 'getUpgradesByUserI
 
 Route::post('/upgradeIntermedia', [ApiController::class, 'storeIntermedia'])->name('upgradeIntermedia.store');
 
+
 Route::get('/users/{userId}/likedUpgrades', [ApiController::class, 'getUserLikedUpgrades']);
+
+
+Route::delete('/upgradeIntermedia', [ApiController::class, 'deleteUpgradeIntermedia']);
+
+
+Route::put('/upgrades/{id}/likes', [ApiController::class, 'updateLikes']);
+
