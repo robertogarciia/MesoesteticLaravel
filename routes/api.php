@@ -35,7 +35,6 @@ Route::get('/upgrades', [ApiController::class, 'getAll'])->name('upgrades.getAll
 
 
 
-
 Route::get('/upgradesSort', [ApiController::class, 'listUpgradesByState'])->name('upgrades.listByState');
 
 
@@ -63,7 +62,6 @@ Route::get('/upgrades/zona/cosmeticos', [ApiController::class, 'getCosmeticosZon
 Route::post('/upgrades', [ApiController::class, 'store'])->name('upgrades.store');
 
 
-Route::put('/upgradesAdmin/{id}', [ApiController::class, 'updateAdmin'])->name('upgradesAdmin.update');
 
 
 Route::put('/upgrades/{id}', [ApiController::class, 'update'])->name('upgrades.update');
@@ -74,6 +72,12 @@ Route::delete('/upgrades/{id}', [ApiController::class, 'destroy'])->name('upgrad
 
 
 Route::get('/upgrades/search', [ApiController::class, 'listUpgradesByWord'])->name('upgrades.search');
+
+
+Route::get('/upgrades/byUser', [ApiController::class, 'getAllByUser']);
+
+
+Route::get('/upgrades/byStateAndUser', [ApiController::class, 'listUpgradesByStateAndUser']);
 
 
 Route::get('/upgrades/byZoneAndUser', [ApiController::class, 'listUpgradesByZoneAndUser']);

@@ -52,6 +52,14 @@ class ApiController extends Controller
 
     }
 
+    public function getAllByUser(Request $request)
+    {
+    $userId = $request->input('userId');
+    
+    $upgrades = Upgrade::where('user_id', $userId)->get();
+    
+    return response()->json($upgrades);
+    }
 
 
     public function getAll()
@@ -125,25 +133,6 @@ class ApiController extends Controller
         return response()->json($result);
     }
 
-/*
-    public function store(Request $request)
-    {
-        
-        $upgrade = new Upgrade();
-        $upgrade->title = $request->title;
-        $upgrade->zone = $request->zone;
-        $upgrade->type = $request->type;
-        $upgrade->worry = $request->worry;
-        $upgrade->benefit = $request->benefit;
-        $upgrade->state = 'Valorandose';
-        $upgrade->likes = 0;    
-        $upgrade->user_id = $request->user_id; 
-        
-        $upgrade->save();
-
-        return response()->json($upgrade);
-    }
-*/
 
 public function store(Request $request)
 {
@@ -169,46 +158,9 @@ public function store(Request $request)
 }
 
 
-public function storeIntermedia(Request $request)
-{
-    
-
-    // Crea un nuevo registro en la tabla UpgradeIntermedia
-    $tablaPivote = new UpgradeIntermedia();
-    $tablaPivote->like_pressed = $request->like_pressed;
-    $tablaPivote->user_id = $request->user_id;
-    $tablaPivote->upgrade_id = $request->upgrade_id;
-    
-    // Guarda el registro en la base de datos
-    $tablaPivote->save();
-
-    // Retorna una respuesta JSON con los datos del nuevo registro en la tabla intermedia
-    return response()->json($tablaPivote);
-}
 
 
 
-
-    public function updateAdmin(Request $request, $id)
-{
-    $upgrade = Upgrade::find($id);
-
-    if (!$upgrade) {
-        return response()->json(['error' => 'Actualización no encontrada'], 404);
-    }
-
-    if ($request->has('state')) {
-        $state = $request->input('state');
-
-        if (!in_array($state, ['Valorandose', 'En curso', 'Resuelta'])) {
-            return response()->json(['error' => 'Estado no válido'], 400);
-        }
-        $upgrade->state = $state;
-        $upgrade->save();
-    }
-
-    return response()->json($upgrade);
-}
 
 public function update(Request $request, $id)
 {
@@ -311,6 +263,17 @@ public function listUpgradesByWord(Request $request)
     return response()->json($result);
 }
 
+        public function listUpgradesByStateAndUser(Request $request)
+        {
+            $state = $request->input('state');
+            $userId = $request->input('userId');
+            
+            $upgrades = Upgrade::where('state', $state)
+                                ->where('user_id', $userId)
+                                ->get();
+            
+            return response()->json($upgrades);
+        }
 
         public function listUpgradesByZoneAndUser(Request $request)
         {
@@ -389,23 +352,48 @@ public function listUpgradesByWord(Request $request)
             return response()->json($likedUpgradeIds);
         }
 
+
         public function deleteUpgradeIntermedia(Request $request)
         {
             $upgradeId = $request->input('upgrade_id');
             $userId = $request->input('user_id');
-    
-            // Verificar si existe el registro
+        
+            // Eliminar el registro
             $upgradeIntermedia = UpgradeIntermedia::where('upgrade_id', $upgradeId)
                                                   ->where('user_id', $userId)
-                                                  ->first();
-    
-            if ($upgradeIntermedia) {
-                $upgradeIntermedia->delete();
-                return response()->json(['message' => 'Upgrade intermedia deleted successfully'], 200);
-            } else {
-                return response()->json(['message' => 'Upgrade intermedia not found'], 404);
-            }
+                                                  ->delete();
+        
+            // Recuperar la lista actualizada de IDs de actualizaciones que le gustan al usuario
+            $likedUpgradeIds = UpgradeIntermedia::where('user_id', $userId)
+                                                  ->where('like_pressed', true)
+                                                  ->pluck('upgrade_id');
+        
+            return response()->json($likedUpgradeIds);
         }
+
+
+
+        public function storeIntermedia(Request $request)
+        {
+            // Crea un nuevo registro en la tabla UpgradeIntermedia
+            $tablaPivote = new UpgradeIntermedia();
+            $tablaPivote->like_pressed = $request->like_pressed;
+            $tablaPivote->user_id = $request->user_id;
+            $tablaPivote->upgrade_id = $request->upgrade_id;
+            
+            // Guarda el registro en la base de datos
+            $tablaPivote->save();
+        
+            // Recupera la lista actualizada de IDs de actualizaciones que le gustan al usuario
+            $likedUpgradeIds = UpgradeIntermedia::where('user_id', $request->user_id)
+                                                ->where('like_pressed', true)
+                                                ->pluck('upgrade_id');
+        
+            // Retorna una respuesta JSON con los datos el nuevo registro en la tabla intermedia y la lista actualizada de IDs
+            return response()->json($likedUpgradeIds);
+        }
+
+      
 
         public function updateLikes(Request $request, $id)
         {
@@ -415,7 +403,6 @@ public function listUpgradesByWord(Request $request)
 
             return response()->json($upgrade, 200);
         }
-
 
 
 }
