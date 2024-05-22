@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Upgrade;
+use App\Models\User;
 use App\Models\upgradeIntermedia;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use DB;
 
 class UpgradeController extends Controller
 {
@@ -102,8 +104,7 @@ class UpgradeController extends Controller
         $upgrades = Upgrade::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
         return view('indexUpgrades', compact('upgrades'));
     }
-   
-    public function dashboardData() {
+   public function dashboardData() {
         // Cuenta el número de mejoras por estado
         $countUpgrades = [
             'Valorandose' => Upgrade::where('state', 'Valorandose')->count(),
@@ -142,10 +143,39 @@ class UpgradeController extends Controller
         foreach ($upgradesPerMonth as $data) {
             $monthlyData[$data->state][$data->month_name] = $data->count;
         }
-    
-        return view('principalPage', compact('countUpgrades', 'percentages', 'upgradeTimes', 'monthlyData'));
-    }
+        // Obtenir els usuaris amb el nombre d'upgrades creats
+        $userUpgrades = User::withCount('upgrades')
+            ->orderBy('upgrades_count', 'desc')
+            ->take(10)
+            ->get();
 
+        // Calcular la tendència mensual de millores resoltes
+        $monthlyTrends = Upgrade::select(
+            DB::raw('YEAR(updated_at) as year'), 
+            DB::raw('MONTH(updated_at) as month'),
+            DB::raw('count(*) as count')
+        )
+        ->where('state', 'Resuelta')
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'asc')
+        ->orderBy('month', 'asc')
+        ->get()
+        ->groupBy(function($date) {
+            return Carbon::createFromDate($date->year, $date->month, 1)->format('Y-m');
+        });
+
+        $monthLabels = [];
+        $monthlyCounts = [];
+
+        foreach ($monthlyTrends as $month => $values) {
+            $monthLabels[] = $month;
+            $monthlyCounts[] = $values->sum('count');
+        }
+
+        return view('principalPage', compact('countUpgrades', 'percentages', 'userUpgrades', 'monthLabels', 'monthlyCounts'));
+    
+        
+    }
     
 
     /**
@@ -246,7 +276,6 @@ class UpgradeController extends Controller
     // Això retorna les millores a una vista específica. Potser voldràs ajustar això a les teves necessitats.
     return view('indexUpgrades', compact('upgrades'));
 }
-
 
 
 public function search(Request $request)
