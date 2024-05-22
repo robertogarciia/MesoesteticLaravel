@@ -142,8 +142,38 @@ class UpgradeController extends Controller
         foreach ($upgradesPerMonth as $data) {
             $monthlyData[$data->state][$data->month_name] = $data->count;
         }
+        // Obtenir els usuaris amb el nombre d'upgrades creats
+        $userUpgrades = User::withCount('upgrades')
+            ->orderBy('upgrades_count', 'desc')
+            ->take(10)
+            ->get();
+
+        // Calcular la tendència mensual de millores resoltes
+        $monthlyTrends = Upgrade::select(
+            DB::raw('YEAR(updated_at) as year'), 
+            DB::raw('MONTH(updated_at) as month'),
+            DB::raw('count(*) as count')
+        )
+        ->where('state', 'Resuelta')
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'asc')
+        ->orderBy('month', 'asc')
+        ->get()
+        ->groupBy(function($date) {
+            return Carbon::createFromDate($date->year, $date->month, 1)->format('Y-m');
+        });
+
+        $monthLabels = [];
+        $monthlyCounts = [];
+
+        foreach ($monthlyTrends as $month => $values) {
+            $monthLabels[] = $month;
+            $monthlyCounts[] = $values->sum('count');
+        }
+
+        return view('principalPage', compact('countUpgrades', 'percentages', 'userUpgrades', 'monthLabels', 'monthlyCounts'));
     
-        return view('principalPage', compact('countUpgrades', 'percentages', 'upgradeTimes', 'monthlyData'));
+        
     }
 
     
