@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Upgrade;
+use App\Models\upgradeIntermedia;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -12,7 +14,6 @@ class UpgradeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
 
      public function index(Request $request)
 {
@@ -81,18 +82,24 @@ class UpgradeController extends Controller
     ]);
 }
 
-    
-    
 
-    
+    public function getMyUpgrades() {
+        // Aquí obtenemos las actualizaciones del usuario actual
+        $userId = Auth::user()->id;
+
+        $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
+
+        // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
+        return view('indexUpgrades', ['upgrades' => $userUpgrades]);
+    }
+
+
 
     public function filterDate(Request $request){
-        
+
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-
         $upgrades = Upgrade::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
-
         return view('indexUpgrades', compact('upgrades'));
     }
    
@@ -165,6 +172,7 @@ class UpgradeController extends Controller
         $upgrade->state = 'Valorandose';
         $upgrade->likes = 0;    
         $upgrade->user_id = auth()->id();
+
         
         $upgrade->save();
 
@@ -231,14 +239,7 @@ class UpgradeController extends Controller
     return view('indexUpgrades', compact('upgrades'));
 }
 
-public function getMyUpgrades() {
-    // Aquí obtenemos las actualizaciones del usuario actual
-    $userId = Auth::user()->id;
-    $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
 
-    // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
-    return view('indexUpgrades', ['upgrades' => $userUpgrades]);
-}
 
 public function search(Request $request)
 {

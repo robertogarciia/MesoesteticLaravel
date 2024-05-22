@@ -88,3 +88,6 @@ Route::get('/upgrades/numStateUpgrades', [ApiController::class, 'getUpgradeCount
 Route::get('/upgrades/user/{userId}', [ApiController::class, 'getUpgradesByUserId']);
 
 
+Route::post('/upgradeIntermedia', [ApiController::class, 'storeIntermedia'])->name('upgradeIntermedia.store');
+
+Route::get('/users/{userId}/likedUpgrades', [ApiController::class, 'getUserLikedUpgrades']);

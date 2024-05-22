@@ -33,7 +33,6 @@ class UpgradeFactory extends Factory
         'benefit' => $this->faker->sentence,
         'state' => $this->faker->randomElement(['Valorandose','En curso','Resuelta']),
         'likes' => $this->faker->numberBetween(0, 100),
-        'like_pressed' => $this->faker->boolean,    
         'user_id' => $user->id,
 
 

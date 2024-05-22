@@ -84,17 +84,25 @@
             <div class="dropdown">
                 <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    Ordenar per
+                    Ordenar por
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=asc">Likes Asc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=likes&sort_direction=desc">Likes Desc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=asc">Titol Asc</a></li>
-                    <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc">Titol Desc</a></li>
+                    <li><a class="dropdown-item"
+                            href="?sort_by=likes&sort_direction=asc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Likes
+                            Asc</a></li>
+                    <li><a class="dropdown-item"
+                            href="?sort_by=likes&sort_direction=desc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Likes
+                            Desc</a></li>
+                    <li><a class="dropdown-item"
+                            href="?sort_by=title&sort_direction=asc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Titol
+                            Asc</a></li>
+                    <li><a class="dropdown-item"
+                            href="?sort_by=title&sort_direction=desc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Titol
+                            Desc</a></li>
                 </ul>
             </div>
             <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear mejora</a>
-            <a href="{{ route('my.upgrades') }}" class="btn btn-info     btn-lg m-2">Mis mejoras</a>
+            <a href="{{ route('my.upgrades') }}" class="btn btn-info btn-lg m-2">Mis mejoras</a>
         </div>
     </div>
 
@@ -108,7 +116,6 @@
                             <div
                                 style="width: 20px; height: 20px; margin: 10px;padding: 10px;margin-bottom:10px; border-radius: 50%; background-color: #F94537;">
                             </div>
-
 
                             <h5 class="zone-filter {{ $zone == 'medicamentos' ? 'active-filter' : '' }}"
                                 data-zone="medicamentos">
@@ -176,21 +183,26 @@
                     <h4 style="margin-top:5px;margin-bottom:15px;">Filtro por fecha: </h4>
                     <div class="d-flex flex-column alignments-start" style="border-radius:10px;padding-left:10px;">
                         <form method="GET" action="{{ route('upgrades.index') }}">
-                            <!-- Ajustar el action para que apunte a la función 'index' -->
+                            <input type="hidden" name="sort_by" value="{{ $sort_by }}">
+                            <input type="hidden" name="sort_direction" value="{{ $sort_direction }}">
+                            <input type="hidden" name="zone" value="{{ $zone }}">
+                            <input type="hidden" name="state" value="{{ $state }}">
+
                             <div class="col-12">
                                 <label for="start_date">Desde:</label>
                                 <input id="start_date" type="date" name="start_date" class="form-control"
-                                    value="{{ $start_date }}" required> <!-- Mantener el valor actual -->
+                                    value="{{ $start_date }}" required>
                             </div>
                             <div class="col-12">
                                 <label for="end_date">Hasta:</label>
                                 <input id="end_date" type="date" name="end_date" class="form-control"
-                                    value="{{ $end_date }}" required> <!-- Mantener el valor actual -->
+                                    value="{{ $end_date }}" required>
                             </div>
                             <div class="col-12 pt-3">
                                 <button type="submit" class="btn btn-primary">Filtrar por fecha</button>
                             </div>
                         </form>
+
                         <div class="d-flex alignments-center" style="margin-top:8px;margin-left:14px;">
                             <h5 class="zone-filter {{ $zone == 'todos' ? 'active-filter' : '' }}" data-zone="todos">
                                 Limpiar Filtro</h5>
@@ -204,23 +216,24 @@
 
 
         <div class="col-lg-9 w-50 mt-3">
-  <div class="container">
-    <div class="row" id="upgrade-list">
-      @foreach($upgrades as $upgrade)
-        <div class="col-md-6 mb-4 upgrade-card" style="display: block;" data-zone="{{ $upgrade->zone }}"
-             data-likes="{{ $upgrade->likes }}" data-state="{{ $upgrade->state }}">
-          <div class="card border-10 shadow h-100 d-flex flex-column" style="border-radius:10px;">
-            <img src="{{ $upgrade->image }}" class="card-img-top" alt="{{ $upgrade->name }}">
-            <div class="card-body d-flex flex-grow-1 justify-content-between align-items-stretch">
-              <div class="d-flex flex-column">
-                <div>
-                  <h5 class="card-title">{{ $upgrade->title }}</h5>
-                  <p class="card-text"><b>Estat:</b> {{ $upgrade->state }}</p>
-                  <p class="card-text"><b>Likes:</b> <span id="like-count-{{ $upgrade->id }}">{{ $upgrade->likes }}</span></p>
-                  <p class="card-text"><b>Zona:</b> {{ $upgrade->zone }}</p>
-                </div>
-                <div style="position: absolute; top: 0; right: 0;">
-                  <div style="width: 30px; height: 30px; margin: 10px; border-radius: 50%; background-color: 
+            <div class="container">
+                <div class="row" id="upgrade-list">
+                    @foreach($upgrades as $upgrade)
+                    <div class="col-md-6 mb-4 upgrade-card" style="display: block;" data-zone="{{ $upgrade->zone }}"
+                        data-likes="{{ $upgrade->likes }}" data-state="{{ $upgrade->state }}">
+                        <div class="card border-10 shadow h-100 d-flex flex-column" style="border-radius:10px;">
+                            <img src="{{ $upgrade->image }}" class="card-img-top" alt="{{ $upgrade->name }}">
+                            <div class="card-body d-flex flex-grow-1 justify-content-between align-items-stretch">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <h5 class="card-title">{{ $upgrade->title }}</h5>
+                                        <p class="card-text"><b>Estat:</b> {{ $upgrade->state }}</p>
+                                        <p class="card-text"><b>Likes:</b> <span
+                                                id="like-count-{{ $upgrade->id }}">{{ $upgrade->likes }}</span></p>
+                                        <p class="card-text"><b>Zona:</b> {{ $upgrade->zone }}</p>
+                                    </div>
+                                    <div style="position: absolute; top: 0; right: 0;">
+                                        <div style="width: 30px; height: 30px; margin: 10px; border-radius: 50%; background-color: 
                     @switch($upgrade->zone)
                       @case('Cosmeticos')
                         #3A3AD4
@@ -238,70 +251,68 @@
                         #000000
                     @endswitch
                   ">
-                    
-                  </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <span class="card-text mb-0">{{ $upgrade->created_at->format('d/m/Y') }}</span>
+                                <a href="{{ route('upgrades.show', $upgrade->id) }}" class="btn btn-primary ">Ver
+                                    detalles</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if ($loop->iteration % 2 == 0)
                 </div>
-              </div>
+                <div class="row">
+                    @endif
+                    @endforeach
+                </div>
+
             </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-              <span class="card-text mb-0">{{ $upgrade->created_at->format('d/m/Y') }}</span>
-              <a href="{{ route('upgrades.show', $upgrade->id) }}" class="btn btn-primary ">Ver detalles</a>
-            </div>
-          </div>
         </div>
 
-        @if ($loop->iteration % 2 == 0)
-        </div>
-        <div class="row">
-        @endif
-      @endforeach
+        <ul class="pagination d-flex justify-content-center mt-4 ml-5">
+            <!-- Botón para ir a la página anterior -->
+
+            <li class="page-item">
+                <a class="page-link" href="{{ $upgrades->url(1) }}" aria-label="First">
+                    1
+                </a>
+            </li>
+            <li class="page-item {{ $upgrades->currentPage() == 1 ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $upgrades->previousPageUrl() }}" aria-label="Previous">
+                    &laquo;
+                </a>
+            </li>
+
+            <!-- Mostrar el rango de páginas calculado -->
+            @for ($i = $startPage; $i <= $endPage; $i++) <li class="page-item {{ $currentPage == $i ? 'active' : '' }}">
+                <a class="page-link" href="{{ $upgrades->url($i) }}">{{ $i }}</a>
+                </li>
+                @endfor
+
+                <!-- Botón para ir a la página siguiente -->
+                <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $upgrades->nextPageUrl() }}" aria-label="Next">
+                        &raquo;
+                    </a>
+                </li>
+                <!-- Botón para ir a la última página -->
+                <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $upgrades->url($totalPages) }}" aria-label="Last">
+                        {{ $totalPages }}
+                    </a>
+                </li>
+
+        </ul>
+
+
+
     </div>
-    <div id="resultats-cerca"></div>
-  </div>
 </div>
-
-
-
-            <ul class="pagination d-flex justify-content-center mt-4">
-                <!-- Botón para ir a la página anterior -->
-
-                <li class="page-item">
-                    <a class="page-link" href="{{ $upgrades->url(1) }}" aria-label="First">
-                        1
-                    </a>
-                </li>
-                <li class="page-item {{ $upgrades->currentPage() == 1 ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $upgrades->previousPageUrl() }}" aria-label="Previous">
-                        &laquo;
-                    </a>
-                </li>
-
-                <!-- Mostrar el rango de páginas calculado -->
-                @for ($i = $startPage; $i <= $endPage; $i++) <li
-                    class="page-item {{ $currentPage == $i ? 'active' : '' }}">
-                    <a class="page-link" href="{{ $upgrades->url($i) }}">{{ $i }}</a>
-                    </li>
-                    @endfor
-
-                    <!-- Botón para ir a la página siguiente -->
-                    <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $upgrades->nextPageUrl() }}" aria-label="Next">
-                            &raquo;
-                        </a>
-                    </li>
-                    <!-- Botón para ir a la última página -->
-                    <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $upgrades->url($totalPages) }}" aria-label="Last">
-                            {{ $totalPages }}
-                        </a>
-                    </li>
-
-            </ul>
-
-
-
-        </div>
-    </div>
 </div>
 
 <script>
@@ -313,7 +324,8 @@ function handleFilterClick(element, parameterName) {
     if (parameterValue === "todos") {
         currentUrl.searchParams.delete(parameterName); // Eliminar el parámetro si es "todos"
     } else {
-        currentUrl.searchParams.set(parameterName, parameterValue.toString().replace(" ", "-")); // Establecer el nuevo valor
+        currentUrl.searchParams.set(parameterName, parameterValue.toString().replace(" ",
+            "-")); // Establecer el nuevo valor
     }
 
     // Redirigir a la nueva URL con los parámetros correctos
