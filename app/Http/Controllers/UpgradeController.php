@@ -22,19 +22,26 @@ class UpgradeController extends Controller
         $zona = urldecode($request->input('zone', 'todos'));
         $start_date = $request->input('start_date', null);
         $end_date = $request->input('end_date', null);
-    
+
         $query = Upgrade::orderBy($sort_by, $sort_direction);
-    
+
+        // Filtrar por estado si no es 'todos'
+        if ($estado !== 'todos') {
+            $query->where('state', $estado);
+        }
+
+        // Filtrar por zona si no es 'todos'
         // Filter by zone (if not 'todos')
         if ($zona !== 'todos') {
             $query->where('zone', $zona);
         }
-    
+
+        // Filtrar por fechas si ambos valores están definidos
         // Filter by state (if not 'todos')
         if ($estado !== 'todos') {
             $query->where('state', $estado);
         }
-    
+
         // Filter by dates (if both values are defined)
         if ($start_date && $end_date) {
             $start = Carbon::parse($start_date)->startOfDay();
@@ -46,14 +53,16 @@ class UpgradeController extends Controller
     
             $query->whereBetween('created_at', [$start, $end]);
         }
-    
+
         $upgrades = $query->paginate(10);
-        
+
+
         $totalPages = $upgrades->lastPage(); 
         $currentPage = $upgrades->currentPage(); 
+        $pagesToShow = 5; 
         $pagesToShow = 5;
-    
-        
+
+
         $startPage = max(1, $currentPage - intdiv($pagesToShow, 2)); 
         $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2)); 
     
@@ -84,20 +93,21 @@ class UpgradeController extends Controller
     public function getMyUpgrades() {
         // Aquí obtenemos las actualizaciones del usuario actual
         $userId = Auth::user()->id;
-        
+
         $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
-    
+
         // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
         return view('indexUpgrades', ['upgrades' => $userUpgrades]);
     }
-    
+
+
+
+
     public function filterDate(Request $request){
-        
+
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-
         $upgrades = Upgrade::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
-
         return view('indexUpgrades', compact('upgrades'));
     }
    
