@@ -10,7 +10,7 @@
             <div class="card shadow-sm" style="border: 2px solid #000000; border-radius: 15px; height: 150px;background: rgb(228,228,228);
 background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(235,54,58,1) 100%); ">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Millores a valorar </h4>
+                    <h4 class="card-title">Millores a valorar</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['Valorandose'] }}
                     </p>
@@ -47,26 +47,55 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
 
     <!-- Gráficas en una fila -->
     <div class="row mt-4">
-    <!-- Gráfico de pastel para porcentajes de mejoras por estado -->
-    <div class="col-md-6">
-        <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
-            <div class="card-body text-center">
-                <h5>Distribución por Estado</h5>
-                <canvas id="tascasChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+        <!-- Gráfico de pastel para porcentajes de mejoras por estado -->
+        <div class="col-md-6">
+            <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+                <div class="card-body text-center">
+                    <h5>Distribución por Estado</h5>
+                    <canvas id="tascasChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico para el tiempo promedio de cambios de estado -->
+        <div class="col-md-6">
+            <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+                <div class="card-body text-center">
+                    <h5>Tiempo Promedio para Cambiar de Estado</h5>
+                    <canvas id="avgStateChangeTimeChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Gráfico para el tiempo promedio de cambios de estado -->
-    <div class="col-md-6">
-        <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
-            <div class="card-body text-center">
-                <h5>Tiempo Promedio para Cambiar de Estado</h5>
-                <canvas id="avgStateChangeTimeChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+    <!-- Tabla de usuarios con más upgrades -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
+                <div class="card-body text-center">
+                    <h5>Usuaris amb més Upgrades</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Usuari</th>
+                                <th>Nombre d'Upgrades</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($userUpgrades as $user)
+                                <tr>
+                                    <td>{{ $user->name }} {{ $user->surname }}</td>
+                                    <td>{{ $user->upgrades_count }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Tendencia de Mejoras Resueltas por Mes -->
     <div class="row mt-4">
         <div class="col-12">
             <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
@@ -77,8 +106,6 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
             </div>
         </div>
     </div>
-    
-</div>
 
 </div>
 
@@ -104,11 +131,8 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
-                },
-                title: {
                     display: true,
-                    text: 'Distribución por Estado',
+                    position: 'bottom',
                 },
             },
         },
@@ -118,23 +142,29 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
     const avgStateChangeTimeChart = new Chart(ctxAvgStateChangeTime, {
         type: 'bar',
         data: {
-            labels: ['Valorándose', 'En curso', 'Resuelta'],
+            labels: ['Observació', 'En curs', 'Resoltes'],
             datasets: [{
-                label: 'Tiempo Promedio (días)',
-                data: [
-                    {{ $upgradeTimes['Valorandose'] ?? 0 }},
-                    {{ $upgradeTimes['En_curso'] ?? 0 }},
-                    {{ $upgradeTimes['Resuelta'] ?? 0 }},
-                ],
-                backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384'],
+                label: 'Temps Promig (dies)',
+                data: [3, 7, 2], // Ajustar segons les dades reals
+                backgroundColor: ['#eb363a', '#ffcd56', '#36a2eb'],
+                borderColor: ['#eb363a', '#ffcd56', '#36a2eb'],
+                borderWidth: 1,
             }],
         },
         options: {
             responsive: true,
             plugins: {
+                legend: {
+                    display: false,
+                },
                 title: {
                     display: true,
-                    text: 'Tiempo Promedio de Cambios de Estado (en días)',
+                    text: 'Tiempo Promedio para Cambiar de Estado',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
                 },
             },
         },
@@ -142,38 +172,32 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
 
     const ctxMonthlyTrends = document.getElementById('monthlyTrendsChart').getContext('2d');
     const monthlyTrendsChart = new Chart(ctxMonthlyTrends, {
-        type: 'line', // Gráfico de líneas
+        type: 'line',
         data: {
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'], // Etiquetas para el eje x
+            labels: @json($monthLabels),
             datasets: [{
                 label: 'Mejoras Resueltas',
-                data: [
-                    {{ $monthlyData['Enero'] ?? 0 }},
-                    {{ $monthlyData['Febrero'] ?? 0 }},
-                    {{ $monthlyData['Marzo'] ?? 0 }},
-                    {{ $monthlyData['Abril'] ?? 0 }},
-                    {{ $monthlyData['Mayo'] ?? 0 }},
-                    {{ $monthlyData['Junio'] ?? 0 }},
-                    {{ $monthlyData['Julio'] ?? 0 }},
-                    {{ $monthlyData['Agosto'] ?? 0 }},
-                    {{ $monthlyData['Septiembre'] ?? 0 }},
-                    {{ $monthlyData['Octubre'] ?? 0 }},
-                    {{ $monthlyData['Noviembre'] ?? 0 }},
-                    {{ $monthlyData['Diciembre'] ?? 0 }},
-                ],
-                borderColor: '#36a2eb', // Color de la línea
-                fill: false, // No rellenar debajo de la línea
+                data: @json($monthlyCounts),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                fill: true,
             }],
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    display: true,
+                    display: false,
                 },
                 title: {
                     display: true,
-                    text: 'Mejoras Resueltas por Mes',
+                    text: 'Tendencia de Mejoras Resueltas por Mes',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
                 },
             },
         },
