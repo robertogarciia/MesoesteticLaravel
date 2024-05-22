@@ -30,7 +30,7 @@ Route::get('/master',function(){
 Route::get('/home', [UpgradeController::class, 'upgradesCount', 'changesData']);
 Route::get('/upgrades/filter/{zone}', [UpgradeController::class, 'filterByZone'])->name('upgrades.filterByZone');
 Route::get('/my-upgrades', [UpgradeController::class, 'getMyUpgrades'])->name('my.upgrades');
-Route::get('/upgrades/search', [UpgradeController::class, 'search'])->name('upgrades.search');
+Route::get('/search', [UpgradeController::class, 'search'])->name('upgrades.search');
 
 
 

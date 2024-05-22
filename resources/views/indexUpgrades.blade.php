@@ -76,12 +76,10 @@
         <div class="col">
             <h2 class="mb-0">Lista de mejoras</h2>
         </div>
-        <div class="col d-flex align-items-center">
-            <form id="search-form" class="input-group">
-                <input id="search-input" type="text" class="form-control" placeholder="Ejemplo..." aria-label="Cerca">
-                <button id="search-button" class="btn btn-outline-secondary" type="submit">Buscar</button>
-            </form>
-        </div>
+        <form action="{{ route('upgrades.index') }}" method="GET">
+            <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}">
+            <button type="submit">Search</button>
+        </form>
         <div class="col-auto d-flex justify-content-end">
             <div class="dropdown">
                 <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown"
@@ -343,51 +341,6 @@ document.querySelectorAll('.zone-filter').forEach((item) => {
 document.querySelectorAll('.state-filter').forEach((item) => {
     item.addEventListener('click', () => handleFilterClick(item, 'state'));
 });
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const searchButton = document.getElementById('search-button');
-    if (searchButton) {
-        searchButton.addEventListener('click', function(event) {
-            event.preventDefault(); // Evitar que el formulari s'envii
-
-            const query = encodeURIComponent(document.getElementById('search-input').value);
-            const searchUrl =
-                "{{ route('upgrades.search') }}"; // Utilitzar la ruta correcta per a la cerca
-
-            // Fer la sol·licitud AJAX
-            fetch(searchUrl + '?query=' + query)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("S'ha produït un error en processar la cerca.");
-                    }
-                    return response.json(); // Convertir la resposta a JSON
-                })
-                .then(data => {
-                    // Manipular la resposta segons les necessitats
-                    console.log(data);
-                    // Actualitzar la llista de millores amb els resultats de la cerca
-                    updateUpgradeList(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-    }
-});
-
-// Funció per actualitzar la llista de millores amb els resultats de la cerca
-function updateUpgradeList(upgrades) {
-    const resultatsCerca = document.getElementById('resultats-cerca');
-    resultatsCerca.innerHTML = ''; // Netegem el contingut anterior
-
-    // Recorrem tots els resultats i els afegim com elements de llista al div
-    upgrades.forEach(function(upgrade) {
-        const li = document.createElement('li');
-        li.textContent = upgrade.title;
-        resultatsCerca.appendChild(li);
-    });
-}
 </script>
 
 
