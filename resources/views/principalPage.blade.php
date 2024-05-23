@@ -10,9 +10,7 @@
             <div class="card shadow-sm" style="border: 2px solid #000000; border-radius: 15px; height: 150px;background: rgb(228,228,228);
 background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(235,54,58,1) 100%); ">
                 <div class="card-body text-center">
-
-                    <h4 class="card-title">Mejoras </h4>
-
+                    <h4 class="card-title">Millores a valorar</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['Valorandose'] }}
                     </p>
@@ -25,7 +23,7 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(235,54,58,1) 10
             <div class="card shadow-sm" style="border: 2px solid #000000; border-radius: 15px; height: 150px;background: rgb(228,228,228);
 background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(255,205,86,1) 100%);">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Mejoras en curso</h4>
+                    <h4 class="card-title">Millores en curs</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['En_curso'] }}
                     </p>
@@ -38,7 +36,7 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(255,205,86,1) 1
             <div class="card shadow-sm" style="border: 2px solid #000000; border-radius: 15px; height: 150px; background: rgb(228,228,228);
 background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 100%);">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Mejoras resueltas</h4>
+                    <h4 class="card-title">Millores Resoltes</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['Resuelta'] }}
                     </p>
@@ -56,7 +54,6 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
                     <h5>Distribución por Estado</h5>
                     <canvas id="tascasChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
                 </div>
-
             </div>
         </div>
 
@@ -69,14 +66,7 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
                 </div>
             </div>
         </div>
-
-
-        <!-- Gráfico para el tiempo promedio de cambios de estado -->
-        <div class="col-md-6">
-            <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
-                <div class="card-body text-center">
-                    <h5>Tiempo Promedio para Cambiar de Estado</h5>
-                    <canvas id="avgStateChangeTimeChart" width="200" height="180"></canvas> <!-- Ajustar tamaño -->
+    </div>
 
     <!-- Tabla de usuarios con más upgrades -->
     <div class="row mt-4">
@@ -100,11 +90,10 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
-
+    </div>
 
     <!-- Tendencia de Mejoras Resueltas por Mes -->
     <div class="row mt-4">
@@ -113,7 +102,6 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
                 <div class="card-body text-center">
                     <h5>Tendencia de Mejoras Resueltas por Mes</h5>
                     <canvas id="monthlyTrendsChart" width="1100" height="200"></canvas>
-
                 </div>
             </div>
         </div>
@@ -129,7 +117,7 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
     const myChartTascas = new Chart(ctxTascas, {
         type: 'doughnut',
         data: {
-            labels: ['Valorandose', 'En curso', 'Resuelta'],
+            labels: ['Valorant-se', 'En curs', 'Resoltes'],
             datasets: [{
                 data: [
                     {{ $percentages['Valorandose'] }},
@@ -154,35 +142,29 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
     const avgStateChangeTimeChart = new Chart(ctxAvgStateChangeTime, {
         type: 'bar',
         data: {
-
-            labels: ['Valorandose', 'En curso', 'Resuelta'],
+            labels: ['Observació', 'En curs', 'Resoltes'],
             datasets: [{
-                label: 'Tiempo Promedio (días)',
-                data: [
-                    {{ $upgradeTimes['Valorandose'] ?? 0 }},
-                    {{ $upgradeTimes['En curso'] ?? 0 }},
-                    {{ $upgradeTimes['Resuelta'] ?? 0 }},
-                ],
+                label: 'Temps Promig (dies)',
+                data: [3, 7, 2], // Ajustar segons les dades reals
                 backgroundColor: ['#eb363a', '#ffcd56', '#36a2eb'],
-
+                borderColor: ['#eb363a', '#ffcd56', '#36a2eb'],
+                borderWidth: 1,
             }],
         },
         options: {
             responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
-            },
             plugins: {
                 legend: {
                     display: false,
                 },
                 title: {
                     display: true,
-
-                    text: 'Tiempo Promedio para Cambiar de Estado (días)',
-
+                    text: 'Tiempo Promedio para Cambiar de Estado',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
                 },
             },
         },
@@ -192,42 +174,30 @@ background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 1
     const monthlyTrendsChart = new Chart(ctxMonthlyTrends, {
         type: 'line',
         data: {
-
-            labels: {!! json_encode(array_keys($monthlyData['Valorandose'])) !!},
+            labels: @json($monthLabels),
             datasets: [{
-                label: 'Valorandose',
-                data: {!! json_encode(array_values($monthlyData['Valorandose'])) !!},
-                borderColor: '#eb363a',
-                fill: false,
-            }, {
-                label: 'En curso',
-                data: {!! json_encode(array_values($monthlyData['En_curso'])) !!},
-                borderColor: '#ffcd56',
-                fill: false,
-            }, {
-                label: 'Resuelta',
-                data: {!! json_encode(array_values($monthlyData['Resuelta'])) !!},
-                borderColor: '#36a2eb',
-                fill: false,
-
+                label: 'Mejoras Resueltas',
+                data: @json($monthlyCounts),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                fill: true,
             }],
         },
         options: {
             responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
-            },
             plugins: {
                 legend: {
-
-                    position: 'top',
+                    display: false,
                 },
                 title: {
                     display: true,
-                    text: 'Tendencia de Mejoras por Mes',
-
+                    text: 'Tendencia de Mejoras Resueltas por Mes',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
                 },
             },
         },
