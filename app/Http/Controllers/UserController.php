@@ -36,10 +36,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'name' => 'required',
+            'surname'=> 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
         ]);
         $usuario = new User;
+        $usuario->name = $request->input('name');
+        $usuario->surname = $request->input('surname');
         $usuario->email = $request->input('email');
         $usuario->password = bcrypt($request->input('password'));
         $usuario->save();

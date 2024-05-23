@@ -33,6 +33,16 @@
           <form method='POST' action="{{  route('users.store')  }}">
               @csrf 
               <div class="mb-3 row">
+                  <label for="inputName" class="col-4 col-form-label">Nombre: </label>
+                  <div class="col-6">
+                      <input type="name" class="form-control" name="name" id="name" placeholder="Nombre" required>
+                  </div>
+
+                  <label for="inputSurname" class="col-4 col-form-label">Apellido: </label>
+                  <div class="col-6">
+                      <input type="surname" class="form-control" name="surname" id="surname" placeholder="Apellido" required>
+                  </div>
+
                   <label for="inputEmail" class="col-4 col-form-label">Email: </label>
                   <div class="col-6">
                       <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
