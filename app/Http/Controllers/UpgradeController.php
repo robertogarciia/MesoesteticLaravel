@@ -104,45 +104,23 @@ class UpgradeController extends Controller
         $upgrades = Upgrade::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
         return view('indexUpgrades', compact('upgrades'));
     }
-   public function dashboardData() {
-        // Cuenta el número de mejoras por estado
+   
+    public function dashboardData() {
+        // Comptar el nombre de millores per estat
         $countUpgrades = [
             'Valorandose' => Upgrade::where('state', 'Valorandose')->count(),
             'En_curso' => Upgrade::where('state', 'En curso')->count(),
             'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
         ];
-    
-        // Calcular los porcentajes de cada estado respecto al total de mejoras
-        $totalMejoras = array_sum($countUpgrades);
+
+        // Calcular els percentatges de cada estat respecte al total de millores
+        $totalMejoras = Upgrade::count(); 
         $percentages = [
             'Valorandose' => ($totalMejoras > 0) ? ($countUpgrades['Valorandose'] / $totalMejoras) * 100 : 0,
             'En_Curso' => ($totalMejoras > 0) ? ($countUpgrades['En_curso'] / $totalMejoras) * 100 : 0,
             'Resuelta' => ($totalMejoras > 0) ? ($countUpgrades['Resuelta'] / $totalMejoras) * 100 : 0,
         ];
-    
-        // Calcula el tiempo medio en que las mejoras cambian de estado
-        $upgradeTimes = Upgrade::selectRaw('state, AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) as avg_time')
-                                ->groupBy('state')
-                                ->pluck('avg_time', 'state');
-    
-        // Obtener número de mejoras por mes y estado
-        $upgradesPerMonth = Upgrade::selectRaw('MONTH(updated_at) as month, MONTHNAME(updated_at) as month_name, state, COUNT(*) as count')
-                                    ->groupBy('month', 'month_name', 'state')
-                                    ->orderBy('month')
-                                    ->get();
-    
-        // Formatear los datos para el gráfico mensual
-        $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        $monthlyData = [];
-        foreach ($months as $month) {
-            $monthlyData['Valorandose'][$month] = 0;
-            $monthlyData['En_curso'][$month] = 0;
-            $monthlyData['Resuelta'][$month] = 0;
-        }
-    
-        foreach ($upgradesPerMonth as $data) {
-            $monthlyData[$data->state][$data->month_name] = $data->count;
-        }
+
         // Obtenir els usuaris amb el nombre d'upgrades creats
         $userUpgrades = User::withCount('upgrades')
             ->orderBy('upgrades_count', 'desc')
@@ -173,9 +151,23 @@ class UpgradeController extends Controller
         }
 
         return view('principalPage', compact('countUpgrades', 'percentages', 'userUpgrades', 'monthLabels', 'monthlyCounts'));
-    
-        
     }
+    public function changesData() {
+        // Número de mejoras que han cambiado de estado
+        $stateChangeCounts = [
+            'Valorándose' => Upgrade::where('state', 'Valorándose')->count(),
+            'En_curso' => Upgrade::where('state', 'En curso')->count(),
+            'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
+        ];
+
+        // Calcula el tiempo medio en que las mejoras cambian de estado
+        $upgradeTimes = Upgrade::selectRaw('state, AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) as avg_time')
+                                ->groupBy('state')
+                                ->pluck('avg_time', 'state'); 
+
+        return view('principalPage', compact('stateChangeCounts', 'upgradeTimes'));
+    }
+
     
 
     /**
