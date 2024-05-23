@@ -71,12 +71,66 @@ class UpgradeController extends Controller
         ));
     }
 
-    public function getMyUpgrades()
+    public function getMyUpgrades(Request $request)
     {
         $userId = Auth::user()->id;
         $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
-        return view('indexUpgrades', ['upgrades' => $userUpgrades]);
+
+        $sort_by = $request->input('sort_by', 'created_at');
+        $sort_direction = $request->input('sort_direction', 'desc');
+        $state = urldecode($request->input('state', 'todos'));
+        $zone = urldecode($request->input('zone', 'todos'));
+        $start_date = $request->input('start_date', null);
+        $end_date = $request->input('end_date', null);
+        $search = $request->input('search', null);
+
+        $query = Upgrade::orderBy($sort_by, $sort_direction);
+
+        if ($state !== 'todos') {
+            $query->where('state', $state);
+        }
+
+        if ($zone !== 'todos') {
+            $query->where('zone', $zone);
+        }
+
+        if ($start_date && $end_date) {
+            $start = Carbon::parse($start_date)->startOfDay();
+            $end = Carbon::parse($end_date)->endOfDay();
+
+            if ($start->gt($end)) {
+                return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
+            }
+
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        if ($search) {
+            $query->where('title', 'like', "%$search%");
+        }
+
+        $upgrades = $query->paginate(10);
+
+        $totalPages = $upgrades->lastPage();
+        $currentPage = $upgrades->currentPage();
+        $pagesToShow = 5;
+
+        $startPage = max(1, $currentPage - intdiv($pagesToShow, 2));
+        $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2));
+
+        if ($endPage - $startPage < $pagesToShow - 1) {
+            if ($currentPage <= intdiv($pagesToShow, 2)) {
+                $endPage = min($pagesToShow, $totalPages);
+            } else {
+                $startPage = max(1, $totalPages - $pagesToShow + 1);
+            }
+        }
+
+        return view('userUpgrades', compact(
+            'userUpgrades', 'sort_by', 'sort_direction', 'state', 'zone', 'start_date', 'end_date', 'startPage', 'endPage', 'currentPage', 'totalPages'
+        ));
     }
+
 
     public function filterDate(Request $request)
     {
