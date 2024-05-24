@@ -6,7 +6,12 @@
         display: block;
     }
 
-    .btn {
+    .btn-d {
+        transition: transform 250ms;
+        color: black;
+    }
+
+    .btn{
         transition: transform 250ms;
         color: black;
     }
@@ -23,7 +28,7 @@
         background: linear-gradient(356deg, rgba(217, 189, 127, 1) 0%, rgba(255, 179, 0, 1) 100%);
     }
 
-    .btn:hover {
+    .btn-d:hover {
         transform: translateY(-10px);
     }
 
@@ -83,7 +88,7 @@
         </form>
         <div class="col-auto d-flex justify-content-end">
             <div class="dropdown">
-                <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn-d btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Ordenar por
                 </button>
                 <ul class="dropdown-menu">
@@ -93,8 +98,8 @@
                     <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Titol Desc</a></li>
                 </ul>
             </div>
-            <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear mejora</a>
-            <a href="{{ route('my.upgrades') }}" class="btn btn-info btn-lg m-2">Mis mejoras</a>
+            <a href="{{ route('upgrades.create') }}" class="btn-d btn-success btn-lg m-2">Crear mejora</a>
+            <a href="{{ route('my.upgrades') }}" class="btn-d btn-info btn-lg m-2">Mis mejoras</a>
         </div>
     </div>
 
