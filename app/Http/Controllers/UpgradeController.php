@@ -207,14 +207,14 @@ class UpgradeController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'zone' => 'required|string',
+        $request->validate([
+            'title' => 'required|string',
+            'zone' => 'required|string|max:255', // Añadir validación de longitud si es necesario
             'type' => 'required|string',
             'worry' => 'required|string',
             'benefit' => 'required|string',
         ]);
-
+        
         $upgrade = new Upgrade();
         $upgrade->title = $request->title;
         $upgrade->zone = $request->zone;
@@ -224,8 +224,8 @@ class UpgradeController extends Controller
         $upgrade->state = 'Valorandose';
         $upgrade->likes = 0;
         $upgrade->user_id = auth()->id();
-
         $upgrade->save();
+        
 
         return redirect()->route('upgrades.index');
     }

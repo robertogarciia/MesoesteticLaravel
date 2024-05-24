@@ -114,7 +114,7 @@
 
                     <h4 style="margin-top:5px;margin-bottom:15px;">Filtro por estado: </h4>
                     <div class="d-flex flex-column alignments-start" style="border-radius:10px;padding-left:10px;">
-                        @foreach (['valorandose' => 'hourglass-half', 'encurso' => 'spinner', 'resuelta' => 'check-circle'] as $stateName => $icon)
+                        @foreach (['valorandose' => 'hourglass-half', 'En curso' => 'spinner', 'resuelta' => 'check-circle'] as $stateName => $icon)
                             <div class="d-flex alignments-center">
                                 <i class="fas fa-{{ $icon }}" style="margin: 15px; margin-top:5px; margin-left:12px;"></i>
                                 <h5 class="state-filter {{ $state == $stateName ? 'active-filter' : '' }}" data-state="{{ $stateName }}">{{ ucfirst($stateName) }}</h5>
