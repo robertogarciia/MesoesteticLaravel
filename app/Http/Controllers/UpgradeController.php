@@ -206,8 +206,7 @@ class UpgradeController extends Controller
     }
 
     public function store(Request $request)
-    {
-        
+    {   
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'zone' => 'required|string', 
@@ -226,8 +225,8 @@ class UpgradeController extends Controller
         $upgrade->likes = 0;    
         $upgrade->user_id = auth()->id();
 
-        
         $upgrade->save();
+        
 
         return redirect()->route('upgrades.index');
     }
