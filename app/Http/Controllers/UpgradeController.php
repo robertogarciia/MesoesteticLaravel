@@ -207,14 +207,15 @@ class UpgradeController extends Controller
 
     public function store(Request $request)
     {
+        
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'zone' => 'required|string',
+            'zone' => 'required|string', 
             'type' => 'required|string',
             'worry' => 'required|string',
             'benefit' => 'required|string',
         ]);
-
+        
         $upgrade = new Upgrade();
         $upgrade->title = $request->title;
         $upgrade->zone = $request->zone;
@@ -222,13 +223,15 @@ class UpgradeController extends Controller
         $upgrade->worry = $request->worry;
         $upgrade->benefit = $request->benefit;
         $upgrade->state = 'Valorandose';
-        $upgrade->likes = 0;
+        $upgrade->likes = 0;    
         $upgrade->user_id = auth()->id();
 
+        
         $upgrade->save();
 
         return redirect()->route('upgrades.index');
     }
+
 
     public function show(Upgrade $upgrade)
     {
