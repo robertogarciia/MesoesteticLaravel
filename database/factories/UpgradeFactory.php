@@ -32,7 +32,7 @@ class UpgradeFactory extends Factory
         'worry' => $this->faker->sentence,
         'benefit' => $this->faker->sentence,
         'state' => $this->faker->randomElement(['Valorandose','En curso','Resuelta']),
-        'likes' => $this->faker->numberBetween(0, 100),
+        'likes' => 0,
         'user_id' => $user->id,
 
 
