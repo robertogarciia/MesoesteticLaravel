@@ -82,6 +82,7 @@
         <div class="col">
             <h2 class="mb-0">Lista de mejoras</h2>
         </div>
+        <!-- comentario en html =  -->
         <form action="{{ route('upgrades.index') }}" method="GET" class="search-form">
             <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}" class="search-input">
             <button type="submit" class="search-button">Search</button>
