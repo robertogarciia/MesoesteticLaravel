@@ -47,8 +47,7 @@
                         {{ __('Log in') }}
                     </a>
                 </x-button>
-
-            </div>
+                        </div>
         </form>
     </x-authentication-card>
 </x-guest-layout>

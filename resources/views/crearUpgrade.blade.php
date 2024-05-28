@@ -1,7 +1,7 @@
 @extends('master')
 @section('content')
 <style>
-  /* Estil del contenidor general */
+  /* General container style */
   .container {
     background-color: #f5f5f5;
     border-radius: 10px;
@@ -11,14 +11,14 @@
     margin: 5% auto;
   }
 
-  /* Estil per a etiquetes */
+  /* Estilo para etiquetas */
   label {
     font-weight: bold;
     color: #333;
     font-size: 18px;
   }
 
-  /* Estil per a controls de formulari */
+  /* Estilo para controles de formulario */
   .form-control {
     border-radius: 8px; 
     border: 2px solid #ccc; 
@@ -32,7 +32,7 @@
     box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
   }
 
-  /* Estil per al botó d'enviament */
+  /* Estilo para el botón de envío */
   .btn-primary {
     background-color: #3498db;
     border-color: #3498db;
@@ -48,7 +48,7 @@
     background-color: #2980b9;
   }
 
-  /* Estil per al selector de colors */
+  /* Estilo para selector de colores */
   .color-selector {
     display: flex;
     gap: 20px;
@@ -63,13 +63,13 @@
     transition: transform 0.3s, border 0.3s;
   }
 
-  /* Augmentar la mida en passar el cursor i afegir vora */
+  /* Aumentar tamaño al pasar el cursor y agregar borde */
   .color-option:hover {
     transform: scale(1.2);
-    border: 3px solid #000000; /* Vora negra 2px */
+    border: 3px solid #000000; /* Borde negro 2px */
   }
 
-  /* Colors de les opcions */
+  /* Colores de las opciones */
   .rojo {
     background-color: #FF3636; 
   }
@@ -86,27 +86,27 @@
     background-color: #C1C1C1; 
   }
 
-  /* Ocultar input radio per defecte */
+  /* Ocultar input radio por defecto */
   input[type="radio"] {
     display: none;
   }
 
-  /* Estil per a l'opció seleccionada */
+  /* Estilo para opción seleccionada */
   input[type="radio"]:checked + .color-option {
-    border: 3px solid #000000; /* Vora negra de 2px */
+    border: 3px solid #000000; /* Borde negro de 2px */
   }
 
-  /* Espai entre files */
+  /* Espacio entre filas */
   .mb-3 {
     margin-bottom: 30px; 
   }
 
-  /* Alineació de text */
+  /* Alineación de texto */
   .row {
     text-align: left;
   }
 
-  /* Ajustar l'amplada i el padding del select */
+  /* Ajustar el ancho y el padding del select */
   select.form-control {
     
     width: 100%; 
@@ -119,9 +119,9 @@
       @csrf
 
       <div class="mb-3 row">
-        <label para="inputName" class="col-sm-4">Títol:</label>
+        <label para="inputName" class="col-sm-4">Título:</label>
         <div class="col-sm-8">
-          <input type="text" class="form-control" name="title" id="title" placeholder="Títol...">
+          <input type="text" class="form-control" name="title" id="title" placeholder="Título...">
         </div>
       </div>
 
@@ -129,22 +129,22 @@
         <label class="col-sm-4">Zona:</label>
         <div class="col-sm-8">
           <div class="color-selector">
-            <!-- Botons de radio amb vora negra per a l'opció seleccionada -->
-            <label class="color-label" title="Medicaments">
-              <input type="radio" id="zone" name="zone" value="Medicaments">
+            <!-- Botones de radio con borde negro para opción seleccionada -->
+            <label class="color-label" title="Medicamentos">
+              <input type="radio" id="zone" name="zone" value="Medicamentos">
               <div class="color-option rojo"></div>
             </label>
-            <label class="color-label" title="Sanitària">
-              <input type="radio" id="zone" name="zone" value="Sanitària">
+            <label class="color-label" title="Sanitaria">
+              <input type="radio" id="zone" name="zone" value="Sanitaria">
               <div class="color-option verde"></div>
             </label>
             <label la
-            bel="color-label" title="Cosmètics">
-              <input type="radio" id="zone" name="zone" value="Cosmètics">
+            bel="color-label" title="Cosmeticos">
+              <input type="radio" id="zone" name="zone" value="Cosmeticos">
               <div class="color-option azul"></div>
             </label>
-            <label class="color-label" title="Control de Qualitat">
-              <input type="radio" id="zone" name="zone" value="Control de Qualitat">
+            <label class="color-label" title="Control de Calidad">
+              <input type="radio" id="zone" name="zone" value="Control de Calidad">
               <div class="color-option gris"></div>
             </label>
           </div>
@@ -152,27 +152,27 @@
       </div>
 
       <div class="mb-3 row">
-        <label para="type" class="col-sm-4">Tipus:</label>
+        <label para="type" class="col-sm-4">Tipo:</label>
         <div class="col-sm-8">
           <select class="form-control" id="type" name="type">
-            <option>Maquinària</option>
-            <option>Espai</option>
+            <option>Máquinaria</option>
+            <option>Espacio</option>
             <option>Material</option>
           </select>
         </div>
       </div>
 
       <div class="mb-3 row">
-        <label para="worry" class="col-sm-4">Preocupació:</label>
+        <label para="worry" class="col-sm-4">Preocupación:</label>
         <div class="col-sm-8">
-          <textarea class="form-control" name="worry" id="worry" rows="3" placeholder="Descriu les teves preocupacions..."></textarea>
+          <textarea class="form-control" name="worry" id="worry" rows="3" placeholder="Describe tus preocupaciones..."></textarea>
         </div>
       </div>
 
       <div class="mb-3 row">
-        <label para="benefit" class="col-sm-4">Benefici:</label>
+        <label para="benefit" class="col-sm-4">Beneficio:</label>
         <div class="col-sm-8">
-          <textarea class="form-control" name="benefit" id="benefit" rows="3" placeholder="Descriu els beneficis..."></textarea>
+          <textarea class="form-control" name="benefit" id="benefit" rows="3" placeholder="Describe los beneficios..."></textarea>
         </div>
       </div>
 

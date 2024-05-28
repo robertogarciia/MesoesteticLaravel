@@ -25,9 +25,9 @@ Route::get('/hola',function(){
 Route::get('/master',function(){
     return view('master');
 });
-Route::get('/register',function(){
+/*Route::get('/register',function(){
     return redirect()->route('login');
-});
+});*/
 
 
 Route::get('/home', [UpgradeController::class, 'dashboardData'])->name('home');

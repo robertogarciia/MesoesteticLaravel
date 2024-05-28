@@ -33,12 +33,11 @@ class ApiController extends Controller
 
     public function getAllByUser(Request $request)
     {
-        $userId = $request->input('userId');
-        
-        $upgrades = Upgrade::where('user_id', $userId)->get();
-        
-        $result = $upgrades->orderBy('id', 'desc')->get(); 
-        return response()->json($result);
+    $userId = $request->input('id');
+    
+    $upgrades = Upgrade::where('user_id', $userId)->orderBy('id', 'desc')->get();
+    
+    return response()->json($upgrades);
     }
 
 
