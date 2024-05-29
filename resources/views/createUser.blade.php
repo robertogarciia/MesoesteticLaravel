@@ -62,7 +62,7 @@
                   <label for="inputPost" class="col-4 col-form-label">Cargo: </label>
                   <div class="col-6">
                       <select class="form-control" name="post" id="post" required>
-                          <option value="0">Usuari</option>
+                          <option value="2">Usuari</option>
                           <option value="1">Admin</option>
                       </select>
                   </div>
