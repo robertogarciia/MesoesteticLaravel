@@ -10,16 +10,19 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
-         // Modo por defecto es 'cards'
-        $users = User::all(); // Obtén todos los usuarios
-        $users = User::paginate(20);
+        $search = $request->input('search');
+        if ($search) {
+            $users = User::where('email', 'like', "%{$search}%")
+                        ->orWhere('name', 'like', "%{$search}%")
+                        ->paginate(20);
+        } else {
+            $users = User::paginate(20);
+        }
         return view('indexUsers', ['users' => $users]);
-
-        
     }
+
 
 
     /**
@@ -86,6 +89,13 @@ class UserController extends Controller
         }
         $user->delete();
         return redirect()->back()->with('success', '¡Usuario eliminado correctamente!');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $results = User::where('email', 'like', "%$search%")->get();
+        return view('indexusers', ['results' => $results]);
     }
     
 }
