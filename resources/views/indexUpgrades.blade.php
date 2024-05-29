@@ -2,6 +2,9 @@
 
 @section('content')
 <style>
+    #pag{
+        margin-left:710px;
+    }
     .upgrade-card {
         display: block;
     }
@@ -196,7 +199,7 @@
             </div>
         </div>
 
-        <ul class="pagination d-flex justify-content-center mt-4 ml-5">
+        <ul class="pagination d-flex justify-content-center mt-4 " id="pag">
             <li class="page-item {{ $upgrades->onFirstPage() ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ $upgrades->url(1) }}" aria-label="First">1</a>
             </li>

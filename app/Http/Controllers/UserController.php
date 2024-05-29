@@ -11,11 +11,11 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-
 {
     // Obtener los parámetros de filtro y ordenado de la solicitud
     $post = $request->input('post');
     $sortOrder = $request->input('sort_order', 'asc');
+    $search = $request->input('search');
 
     // Construir la consulta con filtros y ordenado
     $query = User::query();
@@ -23,29 +23,21 @@ class UserController extends Controller
     if ($post !== null) {
         $query->where('post', $post);
     }
-      
-      $query->orderBy('name', $sortOrder);
 
-        $search = $request->input('search');
-        if ($search) {
-            $users = User::where('email', 'like', "%{$search}%")
-                        ->orWhere('name', 'like', "%{$search}%")
-                        ->paginate(20);
-        } else {
-            $users = User::paginate(20);
-        }
-        return view('indexUsers', ['users' => $users]);
+    if ($search) {
+        $query->where(function ($query) use ($search) {
+            $query->where('email', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%");
+        });
+    }
 
-   
+    $query->orderBy('name', $sortOrder);
 
-    
+    // Paginar los resultados
+    $users = $query->paginate(20);
 
-
+    return view('indexUsers', ['users' => $users]);
 }
-
-
-
-
 
     /**
      * Show the form for creating a new resource.
