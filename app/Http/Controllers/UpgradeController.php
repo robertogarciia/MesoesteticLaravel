@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Upgrade;
 
 use App\Models\upgradeIntermedia;
-
-
 use App\Models\User;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -268,7 +266,7 @@ class UpgradeController extends Controller
         // Implementar la lògica per eliminar una millora si és necessari
     }
 
-    public function filterByZone($zone)
+    public function filterByZone($zone){
 
         $upgrades = Upgrade::where('zone', $zone)->paginate(10);
         return view('indexUpgrades', compact('upgrades'));

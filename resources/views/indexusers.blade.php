@@ -80,7 +80,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $usuari)
+                @foreach($users as $usuario)
                 <tr>
 
                     <td>{{ $usuario->id }}</td> <!-- ID del usuario -->
