@@ -40,6 +40,14 @@ class ApiController extends Controller
     return response()->json($upgrades);
     }
 
+    public function getAllByUser(Request $request)
+    {
+    $userId = $request->input('userId');
+    
+    $upgrades = Upgrade::where('user_id', $userId)->get();
+    
+    return response()->json($upgrades);
+    }
 
 
 
@@ -67,11 +75,62 @@ class ApiController extends Controller
     }
 
 
+<<<<<<< HEAD
+public function store(Request $request)
+{
+   
+    
+    // Crea una nueva Upgrade con los datos recibidos
+    $upgrade = new Upgrade();
+    $upgrade->title = $request->title;
+    $upgrade->zone = $request->zone;
+    $upgrade->type = $request->type;
+    $upgrade->worry = $request->worry;
+    $upgrade->benefit = $request->benefit;
+    $upgrade->state = 'Valorandose';
+    $upgrade->likes = 0;    
+    $upgrade->user_id = $request->user_id; 
+    
+    // Guarda la Upgrade en la base de datos
+    $upgrade->save();
+
+
+    // Retorna una respuesta JSON con los datos de la Upgrade recién creada
+    return response()->json($upgrade);
+}
+
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
 
 
 
 
 
+<<<<<<< HEAD
+public function update(Request $request, $id)
+{
+    $upgrade = Upgrade::find($id);
+
+    if (!$upgrade) {
+        return response()->json(['error' => 'Actualización no encontrada'], 404);
+    }
+
+    if ($upgrade->state !== 'Valorandose') {
+        return response()->json(['error' => 'No se puede actualizar. El estado no es Valorandose'], 400);
+    }
+
+    // Actualiza los campos de Upgrade
+    $upgrade->fill($request->only(['title', 'zone', 'type', 'worry', 'benefit', 'likes']));
+
+    // Guarda los cambios en Upgrade
+    $upgrade->save();
+
+    // Actualiza la tabla pivote
+    if ($request->has('likedBoolean') && $request->has('userId')) {
+        $userId = $request->input('userId'); // Obtén el ID del usuario del cuerpo de la solicitud
+        $upgradeId = $request->input('upgradeId');
+        $likePressed = $request->input('likedBoolean');
+=======
     public function getAll(Request $request)
     {
         $upgrades = Upgrade::query();
@@ -90,6 +149,7 @@ class ApiController extends Controller
         if ($keyword) {
             $upgrades->where('title', 'like', '%' . $keyword . '%');
         }
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
         
         $result = $upgrades->orderBy('id', 'desc')->get(); 
         return response()->json($result);
@@ -196,7 +256,20 @@ class ApiController extends Controller
                             ->orderBy('id', 'desc')
                             ->get(); 
 
+<<<<<<< HEAD
+        public function listUpgradesByStateAndUser(Request $request)
+        {
+            $state = $request->input('state');
+            $userId = $request->input('userId');
+            
+            $upgrades = Upgrade::where('state', $state)
+                                ->where('user_id', $userId)
+                                ->get();
+            
+            return response()->json($upgrades);
+=======
             return response()->json($result);
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
         }
 
         public function listUpgradesByZoneAndUser(Request $request)
@@ -257,10 +330,18 @@ class ApiController extends Controller
             $upgradeId = $request->input('upgrade_id');
             $userId = $request->input('user_id');
         
+<<<<<<< HEAD
+            // Eliminar el registro
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $upgradeIntermedia = UpgradeIntermedia::where('upgrade_id', $upgradeId)
                                                   ->where('user_id', $userId)
                                                   ->delete();
         
+<<<<<<< HEAD
+            // Recuperar la lista actualizada de IDs de actualizaciones que le gustan al usuario
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $likedUpgradeIds = UpgradeIntermedia::where('user_id', $userId)
                                                   ->where('like_pressed', true)
                                                   ->pluck('upgrade_id');
@@ -272,17 +353,32 @@ class ApiController extends Controller
 
         public function storeIntermedia(Request $request)
         {
+<<<<<<< HEAD
+            // Crea un nuevo registro en la tabla UpgradeIntermedia
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $tablaPivote = new UpgradeIntermedia();
             $tablaPivote->like_pressed = $request->like_pressed;
             $tablaPivote->user_id = $request->user_id;
             $tablaPivote->upgrade_id = $request->upgrade_id;
             
+<<<<<<< HEAD
+            // Guarda el registro en la base de datos
             $tablaPivote->save();
         
+            // Recupera la lista actualizada de IDs de actualizaciones que le gustan al usuario
+=======
+            $tablaPivote->save();
+        
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $likedUpgradeIds = UpgradeIntermedia::where('user_id', $request->user_id)
                                                 ->where('like_pressed', true)
                                                 ->pluck('upgrade_id');
         
+<<<<<<< HEAD
+            // Retorna una respuesta JSON con los datos el nuevo registro en la tabla intermedia y la lista actualizada de IDs
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             return response()->json($likedUpgradeIds);
         }
 
@@ -297,6 +393,8 @@ class ApiController extends Controller
             return response()->json($upgrade, 200);
         }
 
+<<<<<<< HEAD
+=======
         public function editUser(Request $request, $id)
         {
             $validatedData = $request->validate([
@@ -376,5 +474,6 @@ class ApiController extends Controller
         return response()->json($upgrade);
     }
 
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
 
 }
