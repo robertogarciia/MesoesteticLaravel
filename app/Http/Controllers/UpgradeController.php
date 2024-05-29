@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Upgrade;
+
+use App\Models\upgradeIntermedia;
+
+
 use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use DB;
 
 class UpgradeController extends Controller
 {
@@ -140,8 +144,10 @@ class UpgradeController extends Controller
         return view('indexUpgrades', compact('upgrades'));
     }
 
+
     public function dashboardData()
     {
+
         $countUpgrades = [
             'Valorandose' => Upgrade::where('state', 'Valorandose')->count(),
             'En_curso' => Upgrade::where('state', 'En curso')->count(),
@@ -184,6 +190,7 @@ class UpgradeController extends Controller
 
         return view('principalPage', compact('countUpgrades', 'percentages', 'userUpgrades', 'monthLabels', 'monthlyCounts'));
     }
+
 
     public function changesData()
     {
@@ -262,10 +269,11 @@ class UpgradeController extends Controller
     }
 
     public function filterByZone($zone)
-    {
+
         $upgrades = Upgrade::where('zone', $zone)->paginate(10);
         return view('indexUpgrades', compact('upgrades'));
     }
+
 
     public function search(Request $request)
     {

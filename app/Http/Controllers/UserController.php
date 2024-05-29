@@ -11,7 +11,21 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
+
+{
+    // Obtener los parámetros de filtro y ordenado de la solicitud
+    $post = $request->input('post');
+    $sortOrder = $request->input('sort_order', 'asc');
+
+    // Construir la consulta con filtros y ordenado
+    $query = User::query();
+
+    if ($post !== null) {
+        $query->where('post', $post);
+    }
+      
+      $query->orderBy('name', $sortOrder);
+
         $search = $request->input('search');
         if ($search) {
             $users = User::where('email', 'like', "%{$search}%")
@@ -21,7 +35,15 @@ class UserController extends Controller
             $users = User::paginate(20);
         }
         return view('indexUsers', ['users' => $users]);
-    }
+
+   
+
+    
+
+
+}
+
+
 
 
 
