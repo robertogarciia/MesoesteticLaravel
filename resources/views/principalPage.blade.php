@@ -10,7 +10,7 @@
             <div class="card shadow-sm"
                 style="border: 2px solid #000000; border-radius: 15px; height: 150px; background: rgb(228,228,228); background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(235,54,58,1) 100%);">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Millores a valorar</h4>
+                    <h4 class="card-title">Mejoras a valorar</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['Valorandose'] }}
                     </p>
@@ -23,7 +23,7 @@
             <div class="card shadow-sm"
                 style="border: 2px solid #000000; border-radius: 15px; height: 150px; background: rgb(228,228,228); background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(255,205,86,1) 100%);">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Millores en curs</h4>
+                    <h4 class="card-title">Mejoras en curso</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['En_curso'] }}
                     </p>
@@ -36,7 +36,7 @@
             <div class="card shadow-sm"
                 style="border: 2px solid #000000; border-radius: 15px; height: 150px; background: rgb(228,228,228); background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(54,162,235,1) 100%);">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Millores Resoltes</h4>
+                    <h4 class="card-title">Mejoras resueltas</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['Resuelta'] }}
                     </p>
@@ -51,7 +51,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
                 <div class="card-body text-center">
-                    <h5>Distribució per Estat</h5>
+                    <h5>Distribución por estado</h5>
                     <canvas id="tascasChart" width="200" height="180"></canvas> <!-- Ajustar mida -->
                 </div>
             </div>
@@ -61,7 +61,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
                 <div class="card-body text-center">
-                    <h5>Temps Promig per Canviar d'Estat</h5>
+                    <h5>Tiempo promedio para cambiar de estado</h5>
                     <canvas id="avgStateChangeTimeChart" width="200" height="180"></canvas> <!-- Ajustar mida -->
                 </div>
             </div>
@@ -73,12 +73,12 @@
         <div class="col-12">
             <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
                 <div class="card-body text-center">
-                    <h5>Usuaris amb més Upgrades</h5>
+                    <h5>Usuarios con mas mejoras creadas</h5>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Usuari</th>
-                                <th>Nombre d'Upgrades</th>
+                                <th>Usuario</th>
+                                <th>Numero de mejoras</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -100,7 +100,7 @@
         <div class="col-12">
             <div class="card shadow-sm" style="border-radius: 15px; border: 1px solid #ddd; padding: 20px;">
                 <div class="card-body text-center">
-                    <h5>Tendència de Millores Resoltes per Mes</h5>
+                    <h5>Tendencia de mejoras resueltas por mes</h5>
                     <canvas id="monthlyTrendsChart" width="1100" height="200"></canvas>
                 </div>
             </div>

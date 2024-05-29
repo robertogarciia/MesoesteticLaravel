@@ -20,19 +20,27 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <img src="{{ asset('images/mesoestetic-logo.png') }}" alt="logo mesoestetic" style="width:200px;padding-right:10px;">
+        <img src="{{ asset('images/mesoestetic-logo.png') }}" alt="logo mesoestetic"
+            style="width:200px;padding-right:10px;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link {{ Request::is('home') ? 'font-weight-bold' : '' }}" href="/home">Home</a>
-                <a class="nav-item nav-link {{ Request::is('upgrades*') ? 'font-weight-bold' : '' }}" href="{{ route('upgrades.index') }}">Upgrades</a>
                 @auth
-                    @if(strpos(Auth::user()->post, 1) !== false)
-                        <a class="nav-item nav-link {{ Request::is('users*') ? 'font-weight-bold' : '' }}" href="{{ route('users.index') }}">Users</a>
-                    @endif
+                @if(strpos(Auth::user()->post, 1) !== false)
+                <a class="nav-item nav-link {{ Request::is('home') ? 'font-weight-bold' : '' }}" href="/home">Home</a>
+
+                @endif
+                @endauth
+                <a class="nav-item nav-link {{ Request::is('upgrades*') ? 'font-weight-bold' : '' }}"
+                    href="{{ route('upgrades.index') }}">Upgrades</a>
+                @auth
+                @if(strpos(Auth::user()->post, 1) !== false)
+                <a class="nav-item nav-link {{ Request::is('users*') ? 'font-weight-bold' : '' }}"
+                    href="{{ route('users.index') }}">Users</a>
+                @endif
                 @endauth
             </div>
             <ul class="navbar-nav ml-auto">
