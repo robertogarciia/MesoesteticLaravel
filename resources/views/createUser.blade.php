@@ -3,6 +3,11 @@
 @section('content')
 
 <style>
+
+    .container-fluid {
+        border-radius: 20px;
+    }
+
     .eye-toggle {
         cursor: pointer;
         position: absolute;
@@ -27,12 +32,22 @@
     <div class="col-md-6">
       <div class="card shadow">
         <div class="card-body">
-          <div class="usuarios"> 
+          <div class="usuarios">
               <h2 class="titulo-usuarios">Crear usuario</h2>
           </div>
           <form method='POST' action="{{  route('users.store')  }}">
               @csrf 
               <div class="mb-3 row">
+                  <label for="inputName" class="col-4 col-form-label">Nombre: </label>
+                  <div class="col-6">
+                      <input type="name" class="form-control" name="name" id="name" placeholder="Nombre" required>
+                  </div>
+
+                  <label for="inputSurname" class="col-4 col-form-label">Apellido: </label>
+                  <div class="col-6">
+                      <input type="surname" class="form-control" name="surname" id="surname" placeholder="Apellido" required>
+                  </div>
+
                   <label for="inputEmail" class="col-4 col-form-label">Email: </label>
                   <div class="col-6">
                       <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
@@ -42,6 +57,14 @@
                   <div class="col-6 position-relative">
                       <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña" required>
                       <span toggle="#password" class="eye-toggle fa fa-eye"></span>
+                  </div>
+
+                  <label for="inputPost" class="col-4 col-form-label">Cargo: </label>
+                  <div class="col-6">
+                      <select class="form-control" name="post" id="post" required>
+                          <option value="2">Usuario</option>
+                          <option value="1">Admin</option>
+                      </select>
                   </div>
               </div>
               <div class="mb-3 row">

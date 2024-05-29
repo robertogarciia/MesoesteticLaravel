@@ -16,9 +16,13 @@ class Upgrade extends Model
         'worry',
         'benefit',
         'state',
+<<<<<<< HEAD
         'likes',
 
 
+=======
+        'likes'
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
     ];
 
 

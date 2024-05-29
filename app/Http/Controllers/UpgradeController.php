@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Upgrade;
-use App\Models\upgradeIntermedia;
 
+use App\Models\upgradeIntermedia;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -14,52 +16,50 @@ class UpgradeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
-
-     public function index(Request $request) {
+    public function index(Request $request)
+    {
         $sort_by = $request->input('sort_by', 'created_at');
         $sort_direction = $request->input('sort_direction', 'desc');
-        $estado = urldecode($request->input('state', 'todos'));
-        $zona = urldecode($request->input('zone', 'todos'));
+        $state = urldecode($request->input('state', 'todos'));
+        $zone = urldecode($request->input('zone', 'todos'));
         $start_date = $request->input('start_date', null);
         $end_date = $request->input('end_date', null);
-    
+        $search = $request->input('search', null);
+
         $query = Upgrade::orderBy($sort_by, $sort_direction);
-    
-        // Filtrar por estado si no es 'todos'
-        if ($estado !== 'todos') {
-            $query->where('state', $estado);
+
+        if ($state !== 'todos') {
+            $query->where('state', $state);
         }
-    
-        // Filtrar por zona si no es 'todos'
-        if ($zona !== 'todos') {
-            $query->where('zone', $zona);
+
+        if ($zone !== 'todos') {
+            $query->where('zone', $zone);
         }
-    
-        // Filtrar por fechas si ambos valores están definidos
+
         if ($start_date && $end_date) {
             $start = Carbon::parse($start_date)->startOfDay();
             $end = Carbon::parse($end_date)->endOfDay();
-    
+
             if ($start->gt($end)) {
                 return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
             }
-    
+
             $query->whereBetween('created_at', [$start, $end]);
         }
-    
+
+        if ($search) {
+            $query->where('title', 'like', "%$search%");
+        }
+
         $upgrades = $query->paginate(10);
-    
-        
-        $totalPages = $upgrades->lastPage(); 
-        $currentPage = $upgrades->currentPage(); 
-        $pagesToShow = 5; 
-    
-        
-        $startPage = max(1, $currentPage - intdiv($pagesToShow, 2)); 
-        $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2)); 
-    
-        
+
+        $totalPages = $upgrades->lastPage();
+        $currentPage = $upgrades->currentPage();
+        $pagesToShow = 5;
+
+        $startPage = max(1, $currentPage - intdiv($pagesToShow, 2));
+        $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2));
+
         if ($endPage - $startPage < $pagesToShow - 1) {
             if ($currentPage <= intdiv($pagesToShow, 2)) {
                 $endPage = min($pagesToShow, $totalPages);
@@ -67,86 +67,149 @@ class UpgradeController extends Controller
                 $startPage = max(1, $totalPages - $pagesToShow + 1);
             }
         }
-    
-        
-        return view('indexUpgrades', [
-            'upgrades' => $upgrades,
-            'sort_by' => $sort_by,
-            'sort_direction' => $sort_direction,
-            'state' => $estado,
-            'zone' => $zona,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'startPage' => $startPage, 
-            'endPage' => $endPage,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages 
-        ]);
+
+        return view('indexUpgrades', compact(
+            'upgrades', 'sort_by', 'sort_direction', 'state', 'zone', 'start_date', 'end_date', 'startPage', 'endPage', 'currentPage', 'totalPages'
+        ));
     }
-    
-    
 
-    
+    public function getMyUpgrades(Request $request)
+    {
+        $userId = Auth::user()->id;
+        $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
 
-    public function filterDate(Request $request){
-        
+        $sort_by = $request->input('sort_by', 'created_at');
+        $sort_direction = $request->input('sort_direction', 'desc');
+        $state = urldecode($request->input('state', 'todos'));
+        $zone = urldecode($request->input('zone', 'todos'));
+        $start_date = $request->input('start_date', null);
+        $end_date = $request->input('end_date', null);
+        $search = $request->input('search', null);
+
+        $query = Upgrade::orderBy($sort_by, $sort_direction);
+
+        if ($state !== 'todos') {
+            $query->where('state', $state);
+        }
+
+        if ($zone !== 'todos') {
+            $query->where('zone', $zone);
+        }
+
+        if ($start_date && $end_date) {
+            $start = Carbon::parse($start_date)->startOfDay();
+            $end = Carbon::parse($end_date)->endOfDay();
+
+            if ($start->gt($end)) {
+                return back()->withErrors(['error' => 'La fecha de inicio no puede ser posterior a la fecha de fin']);
+            }
+
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        if ($search) {
+            $query->where('title', 'like', "%$search%");
+        }
+
+        $upgrades = $query->paginate(10);
+
+        $totalPages = $upgrades->lastPage();
+        $currentPage = $upgrades->currentPage();
+        $pagesToShow = 5;
+
+        $startPage = max(1, $currentPage - intdiv($pagesToShow, 2));
+        $endPage = min($totalPages, $currentPage + intdiv($pagesToShow, 2));
+
+        if ($endPage - $startPage < $pagesToShow - 1) {
+            if ($currentPage <= intdiv($pagesToShow, 2)) {
+                $endPage = min($pagesToShow, $totalPages);
+            } else {
+                $startPage = max(1, $totalPages - $pagesToShow + 1);
+            }
+        }
+
+        return view('userUpgrades', compact(
+            'userUpgrades', 'sort_by', 'sort_direction', 'state', 'zone', 'start_date', 'end_date', 'startPage', 'endPage', 'currentPage', 'totalPages'
+        ));
+    }
+
+
+    public function filterDate(Request $request)
+    {
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-
         $upgrades = Upgrade::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
-
         return view('indexUpgrades', compact('upgrades'));
     }
-   
-    public function upgradesCount() {
-        // Cuenta el número de mejoras por estado
+
+
+    public function dashboardData()
+    {
+
         $countUpgrades = [
             'Valorandose' => Upgrade::where('state', 'Valorandose')->count(),
             'En_curso' => Upgrade::where('state', 'En curso')->count(),
             'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
         ];
 
-        // Calcular los porcentajes de cada estado respecto al total de mejoras
-        $totalMejoras = Upgrade::count(); 
+        $totalMejoras = Upgrade::count();
         $percentages = [
             'Valorandose' => ($totalMejoras > 0) ? ($countUpgrades['Valorandose'] / $totalMejoras) * 100 : 0,
             'En_Curso' => ($totalMejoras > 0) ? ($countUpgrades['En_curso'] / $totalMejoras) * 100 : 0,
             'Resuelta' => ($totalMejoras > 0) ? ($countUpgrades['Resuelta'] / $totalMejoras) * 100 : 0,
         ];
 
-        return view('principalPage', compact('countUpgrades', 'percentages'));
+        $userUpgrades = User::withCount('upgrades')
+            ->orderBy('upgrades_count', 'desc')
+            ->take(10)
+            ->get();
+
+        $monthlyTrends = Upgrade::select(
+            DB::raw('YEAR(updated_at) as year'),
+            DB::raw('MONTH(updated_at) as month'),
+            DB::raw('count(*) as count')
+        )
+            ->where('state', 'Resuelta')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::createFromDate($date->year, $date->month, 1)->format('Y-m');
+            });
+
+        $monthLabels = [];
+        $monthlyCounts = [];
+
+        foreach ($monthlyTrends as $month => $values) {
+            $monthLabels[] = $month;
+            $monthlyCounts[] = $values->sum('count');
+        }
+
+        return view('principalPage', compact('countUpgrades', 'percentages', 'userUpgrades', 'monthLabels', 'monthlyCounts'));
     }
 
-    public function changesData() {
-        // Número de mejoras que han cambiado de estado
+
+    public function changesData()
+    {
         $stateChangeCounts = [
             'Valorándose' => Upgrade::where('state', 'Valorándose')->count(),
             'En_curso' => Upgrade::where('state', 'En curso')->count(),
             'Resuelta' => Upgrade::where('state', 'Resuelta')->count(),
         ];
 
-        // Calcula el tiempo medio en que las mejoras cambian de estado
         $upgradeTimes = Upgrade::selectRaw('state, AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) as avg_time')
-                                ->groupBy('state')
-                                ->pluck('avg_time', 'state'); 
+            ->groupBy('state')
+            ->pluck('avg_time', 'state');
 
         return view('principalPage', compact('stateChangeCounts', 'upgradeTimes'));
     }
 
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-
         return view('crearUpgrade');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         
@@ -154,8 +217,8 @@ class UpgradeController extends Controller
             'title' => 'required|string|max:255',
             'zone' => 'required|string', 
             'type' => 'required|string',
-            'worry' => 'required|string',
-            'benefit' => 'required|string',
+            'worry' => 'required|string|max:255',
+            'benefit' => 'required|string|max:255',
         ]);
         
         $upgrade = new Upgrade();
@@ -175,85 +238,46 @@ class UpgradeController extends Controller
     }
 
 
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Upgrade $upgrade)
     {
         $user = Auth::user();
-        return view('showUpgrades',['Upgrade'=>$upgrade, 'user'=>$user]);
-
+        return view('showUpgrades', ['Upgrade' => $upgrade, 'user' => $user]);
     }
 
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Upgrade $upgrade)
     {
         $user = Auth::user();
-        
-
 
         if (strpos($user->email, 'admin') === 0) {
             return view('editAdminUpgrade', ['upgrade' => $upgrade]);
         } else {
             return view('editupgrade', ['upgrade' => $upgrade]);
         }
-
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Upgrade $upgrade)
-{
-    // Estado anterior
-    $upgrade->update($request->all());
+    {
 
+        $upgrade->update($request->all());
+        return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
+    }
 
-    return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
-}
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Upgrade $upgrade)
     {
-        //
+        // Implementar la lògica per eliminar una millora si és necessari
     }
 
-    public function filterByZone($zone)
-{
-    // Aquí pots recuperar les millores de la base de dades segons la zona seleccionada
-    $upgrades = Upgrade::where('zone', $zone)->paginate(10);
-    
-    // Això retorna les millores a una vista específica. Potser voldràs ajustar això a les teves necessitats.
-    return view('indexUpgrades', compact('upgrades'));
-}
+    public function filterByZone($zone){
 
-public function getMyUpgrades() {
-    // Aquí obtenemos las actualizaciones del usuario actual
-    $userId = Auth::user()->id;
-    $userUpgrades = Upgrade::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
+        $upgrades = Upgrade::where('zone', $zone)->paginate(10);
+        return view('indexUpgrades', compact('upgrades'));
+    }
 
-    // Renderizamos la vista 'indexUpgrades' con las actualizaciones del usuario
-    return view('indexUpgrades', ['upgrades' => $userUpgrades]);
-}
 
-// App\Http\Controllers\UpgradeController.php
-
-public function search(Request $request)
+    public function search(Request $request)
     {
-        $query = $request->input('query');
-        $upgrades = Upgrade::where('title', 'like', '%' . $query . '%')->get(); // Ajusta aquesta consulta segons les teves necessitats
-        return response()->json($upgrades);
+        $search = $request->input('search');
+        $results = Upgrade::where('title', 'like', "%$search%")->get();
+        return view('indexUpgrades', ['results' => $results]);
     }
-
-
-
-
-    
 }

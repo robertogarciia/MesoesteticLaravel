@@ -27,26 +27,24 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="/home">Home <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="{{ route('upgrades.index') }}">Upgrades</a>
+                <a class="nav-item nav-link {{ Request::is('home') ? 'font-weight-bold' : '' }}" href="/home">Home</a>
+                <a class="nav-item nav-link {{ Request::is('upgrades*') ? 'font-weight-bold' : '' }}" href="{{ route('upgrades.index') }}">Upgrades</a>
                 @auth
-                    @if(strpos(Auth::user()->email, 'admin') !== false)
-                        <a class="nav-item nav-link" href="{{ route('users.index') }}">Users</a>
+                    @if(strpos(Auth::user()->post, 1) !== false)
+                        <a class="nav-item nav-link {{ Request::is('users*') ? 'font-weight-bold' : '' }}" href="{{ route('users.index') }}">Users</a>
                     @endif
                 @endauth
-
             </div>
             <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-link text-white">
-                                <img src="{{ asset('images/FavIconLogOut.png') }}" alt="Log Out"
-                                    style="max-height: 35px;">
-                            </button>
-                        </form>
-                    </li>
-                </ul>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-link text-white">
+                            <img src="{{ asset('images/FavIconLogOut.png') }}" alt="Log Out" style="max-height: 35px;">
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </nav>
 

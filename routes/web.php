@@ -25,13 +25,20 @@ Route::get('/hola',function(){
 Route::get('/master',function(){
     return view('master');
 });
+/*Route::get('/register',function(){
+    return redirect()->route('login');
+});*/
 
 
-Route::get('/home', [UpgradeController::class, 'upgradesCount', 'changesData']);
+Route::get('/home', [UpgradeController::class, 'dashboardData'])->name('home');
 Route::get('/upgrades/filter/{zone}', [UpgradeController::class, 'filterByZone'])->name('upgrades.filterByZone');
 Route::get('/my-upgrades', [UpgradeController::class, 'getMyUpgrades'])->name('my.upgrades');
-Route::get('/upgrades/search', [UpgradeController::class, 'search'])->name('upgrades.search');
+Route::get('/search', [UpgradeController::class, 'search'])->name('upgrades.search');
 
+
+Route::get('/search', [UserController::class, 'search'])->name('user.search');
+
+Route::get('/analytics/user-upgrades', [UpgradeController::class, 'userUpgrades'])->name('analytics.user-upgrades');
 
 
 

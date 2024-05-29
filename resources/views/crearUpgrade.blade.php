@@ -43,6 +43,7 @@
     transition: all 0.3s;
   }
 
+  
   .btn-primary:hover {
     background-color: #2980b9;
   }
@@ -154,7 +155,7 @@
         <label para="type" class="col-sm-4">Tipo:</label>
         <div class="col-sm-8">
           <select class="form-control" id="type" name="type">
-            <option>Máquinaria</option>
+            <option>Maquinaria</option>
             <option>Espacio</option>
             <option>Material</option>
           </select>

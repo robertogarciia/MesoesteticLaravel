@@ -30,26 +30,14 @@ class ApiController extends Controller
     }
 
 
-    public function getUserById($id)
-{
-    $user = User::find($id);
 
-    if (!$user) {
-        $user -> id = -1;
-        return response()->json($user, 404);
-    }
-
-    return response()->json($user);
-}
-
-
-    public function getUsers()
+    public function getAllByUser(Request $request)
     {
-
-        $users = User::all(); // Get all users from the database
-        
-        return response()->json($users);
-
+    $userId = $request->input('id');
+    
+    $upgrades = Upgrade::where('user_id', $userId)->orderBy('id', 'desc')->get();
+    
+    return response()->json($upgrades);
     }
 
     public function getAllByUser(Request $request)
@@ -62,78 +50,32 @@ class ApiController extends Controller
     }
 
 
-    public function getAll()
-    {
-        $upgrades = Upgrade::all(); 
 
-        return response()->json(
-           
-            $upgrades
-        );
-    }
-
-    public function getAllValorandose()
-    {
-        $upgrades = Upgrade::where('state', 'Valorandose')->get();
-        return response()->json($upgrades);
-    }
-
-    public function getAllEnCurso()
-    {
-        $upgrades = Upgrade::where('state', 'En curso')->get();
-        return response()->json($upgrades);
-    }
-
-    public function getAllResuelta()
-    {
-        $upgrades = Upgrade::where('state', 'Resuelta')->get();
-        return response()->json($upgrades);
-    }
-
-    public function getSanitarioZone()
-    {
-        $upgrades = Upgrade::where('zone', 'Sanitaria')->get();
-        return response()->json($upgrades);
-    }
-
-    public function getMedicamentosZone()
-    {
-        $upgrades = Upgrade::where('zone', 'Medicamentos')->get();
-        return response()->json($upgrades);
-    }
-
-    public function getCalidadZone()
-    {
-        $upgrades = Upgrade::where('zone', 'Control de calidad')->get();
-        return response()->json($upgrades);
-    }
-
-    public function getCosmeticosZone()
-    {
-        $upgrades = Upgrade::where('zone', 'Cosmeticos')->get();
-        return response()->json($upgrades);
-    }
-
-    public function listUpgradesByState(Request $request)
+    public function SortByStateAndZone(Request $request)
     {
         $state = $request->input('state');
         $zone = $request->input('zone');
-        
+        $keyword = $request->input('keyword'); 
+
         $upgrades = Upgrade::where('state', $state);
-        
+
         if ($zone) {
             $upgrades->where('zone', $zone);
         }
-        
-        $direction = $request->input('direction', 'asc');
-        $upgrades->orderBy('zone', $direction);
-        
+
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+
+        $upgrades->orderBy('id', 'desc');
+
         $result = $upgrades->get();
-        
+
         return response()->json($result);
     }
 
 
+<<<<<<< HEAD
 public function store(Request $request)
 {
    
@@ -157,11 +99,14 @@ public function store(Request $request)
     return response()->json($upgrade);
 }
 
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
 
 
 
 
 
+<<<<<<< HEAD
 public function update(Request $request, $id)
 {
     $upgrade = Upgrade::find($id);
@@ -185,84 +130,133 @@ public function update(Request $request, $id)
         $userId = $request->input('userId'); // Obtén el ID del usuario del cuerpo de la solicitud
         $upgradeId = $request->input('upgradeId');
         $likePressed = $request->input('likedBoolean');
+=======
+    public function getAll(Request $request)
+    {
+        $upgrades = Upgrade::query();
+        $result = $this->filterAndSort($request, $upgrades);
+
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
+    }
+
+
+    public function getAllValorandose(Request $request)
+    {
+        $upgrades = Upgrade::where('state', 'Valorandose');
         
-        $upgrade->users()->sync([$userId => ['like_pressed' => $likePressed]], false); // El segundo parámetro false evita eliminar otros registros de la tabla pivote
+        $keyword = $request->input('keyword'); 
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%');
+        }
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
+        
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
     }
 
-    return response()->json($upgrade);
-}
-
-
-/*
-public function update(Request $request, $id)
-{
-    $upgrade = Upgrade::find($id);
-
-    if (!$upgrade) {
-        return response()->json(['error' => 'Actualización no encontrada'], 404);
+    public function getAllEnCurso(Request $request)
+    {
+        $upgrades = Upgrade::where('state', 'En curso');
+        
+        $keyword = $request->input('keyword'); 
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+        
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
     }
 
-    if ($upgrade->state !== 'Valorandose') {
-        return response()->json(['error' => 'No se puede actualizar. El estado no es Valorandose'], 400);
+    public function getAllResuelta(Request $request)
+    {
+        $upgrades = Upgrade::where('state', 'Resuelta');
+        
+        $keyword = $request->input('keyword'); 
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+        
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
     }
 
-    if ($request->has('title')) {
-        $upgrade->title = $request->input('title');
-    }
-    if ($request->has('zone')) {
-        $upgrade->zone = $request->input('zone');
-    }
-    if ($request->has('type')) {
-        $upgrade->type = $request->input('type');
-    }
-    if ($request->has('worry')) {
-        $upgrade->worry = $request->input('worry');
-    }
-    if ($request->has('likes')) {
-        $upgrade->likes = $request->input('likes');
-    }
-    if ($request->has('likedBoolean')) {
-        $upgrade->likes = $request->input('likedBoolean');
-    }
-    if ($request->has('benefit')) {
-        $upgrade->benefit = $request->input('benefit');
+    public function getSanitariaZone(Request $request)
+    {
+        $upgrades = Upgrade::where('zone', 'Sanitaria');
+        
+        $keyword = $request->input('keyword'); 
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+        
+        $result = $upgrades->orderBy('id', 'desc')->get();
+        return response()->json($result);
     }
 
-    $upgrade->save();
-
-    return response()->json($upgrade);
-}
-*/
-public function destroy($id)
-{
-    $upgrade = Upgrade::find($id);
-
-    if (!$upgrade) {
-        return response()->json(['error' => 'Actualización no encontrada'], 404);
+    public function getMedicamentosZone(Request $request)
+    {
+        $upgrades = Upgrade::where('zone', 'Medicamentos');
+        
+        $keyword = $request->input('keyword');
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+        
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
     }
 
-    $upgrade->delete();
+    public function getCalidadZone(Request $request)
+    {
+        $upgrades = Upgrade::where('zone', 'Control de calidad');
+        
+        $keyword = $request->input('keyword'); 
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+        
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
+    }
 
-    return response()->json(['message' => 'Actualización eliminada correctamente']);
-}
+    public function getCosmeticosZone(Request $request)
+    {
+        $upgrades = Upgrade::where('zone', 'Cosmeticos');
+        
+        $keyword = $request->input('keyword');
+        if ($keyword) {
+            $upgrades->where('title', 'like', '%' . $keyword . '%'); 
+        }
+        
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
+    }
 
 
-public function listUpgradesByWord(Request $request)
-{
-    
-    $keyword = $request->input('keyword'); 
+    public function listUpgradesByWord(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        $upgrades = Upgrade::where('title', 'like', '%' . $keyword . '%');
 
-    $upgrades = Upgrade::where('title', 'like', '%' . $keyword . '%');
+        
+
+        $result = $upgrades->orderBy('id', 'desc')->get(); 
+        return response()->json($result);
+    }
 
 
-    $direction = $request->input('direction', 'asc');
-    $upgrades->orderBy('zone', $direction);
+        public function listUpgradesByStateAndUser(Request $request)
+        {
+            $state = $request->input('state');
+            $userId = $request->input('userId');
+            
+            $result = Upgrade::where('state', $state)
+                            ->where('user_id', $userId)
+                            ->orderBy('id', 'desc')
+                            ->get(); 
 
-    $result = $upgrades->get();
-
-    return response()->json($result);
-}
-
+<<<<<<< HEAD
         public function listUpgradesByStateAndUser(Request $request)
         {
             $state = $request->input('state');
@@ -273,6 +267,9 @@ public function listUpgradesByWord(Request $request)
                                 ->get();
             
             return response()->json($upgrades);
+=======
+            return response()->json($result);
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
         }
 
         public function listUpgradesByZoneAndUser(Request $request)
@@ -280,11 +277,12 @@ public function listUpgradesByWord(Request $request)
             $zone = $request->input('zone');
             $userId = $request->input('userId');
             
-            $upgrades = Upgrade::where('zone', $zone)
+            $result = Upgrade::where('zone', $zone)
                                 ->where('user_id', $userId)
+                                ->orderBy('id', 'desc')
                                 ->get();
             
-            return response()->json($upgrades);
+            return response()->json($result);
         }
 
 
@@ -294,50 +292,24 @@ public function listUpgradesByWord(Request $request)
             $zone = $request->input('zone');
             $userId = $request->input('userId');
             
-            $upgrades = Upgrade::where('state', $state)
+            $result = Upgrade::where('state', $state)
                                 ->where('zone', $zone)
                                 ->where('user_id', $userId)
+                                ->orderBy('id', 'desc')
                                 ->get();
             
-            return response()->json($upgrades);
+            return response()->json($result);
         }
 
-        public function getUpgradeCountByStateForUser(Request $request)
-        {
-            // Obtenemos el userId de la solicitud
-            $userId = $request->input('userId');
-        
-            // Realiza la búsqueda según el $userId proporcionado
-            $countValorandose = Upgrade::where('state', 'Valorandose')
-                                        ->where('user_id', $userId)
-                                        ->count();
-        
-            $countEnCurso = Upgrade::where('state', 'En curso')
-                                    ->where('user_id', $userId)
-                                    ->count();
-        
-            $countResuelta = Upgrade::where('state', 'Resuelta')
-                                    ->where('user_id', $userId)
-                                    ->count();
-        
-            // Calcula el total de actualizaciones
-            $totalCount = $countValorandose + $countEnCurso + $countResuelta;
-        
-            // Retorna la respuesta JSON con el recuento de actualizaciones por estado
-            return response()->json([
-                'Valorandose' => $countValorandose,
-                'En Curso' => $countEnCurso,
-                'Resuelta' => $countResuelta,
-                'Total' => $totalCount
-            ]);
-        }
-
+ 
 
 
         public function getUpgradesByUserId($userId)
         {
-            $upgrades = Upgrade::where('user_id', $userId)->get();
-        
+            $upgrades = Upgrade::where('user_id', $userId)
+                       ->orderBy('id', 'desc')
+                       ->get();
+
             return response()->json($upgrades);
         }
         
@@ -358,12 +330,18 @@ public function listUpgradesByWord(Request $request)
             $upgradeId = $request->input('upgrade_id');
             $userId = $request->input('user_id');
         
+<<<<<<< HEAD
             // Eliminar el registro
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $upgradeIntermedia = UpgradeIntermedia::where('upgrade_id', $upgradeId)
                                                   ->where('user_id', $userId)
                                                   ->delete();
         
+<<<<<<< HEAD
             // Recuperar la lista actualizada de IDs de actualizaciones que le gustan al usuario
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $likedUpgradeIds = UpgradeIntermedia::where('user_id', $userId)
                                                   ->where('like_pressed', true)
                                                   ->pluck('upgrade_id');
@@ -375,21 +353,32 @@ public function listUpgradesByWord(Request $request)
 
         public function storeIntermedia(Request $request)
         {
+<<<<<<< HEAD
             // Crea un nuevo registro en la tabla UpgradeIntermedia
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $tablaPivote = new UpgradeIntermedia();
             $tablaPivote->like_pressed = $request->like_pressed;
             $tablaPivote->user_id = $request->user_id;
             $tablaPivote->upgrade_id = $request->upgrade_id;
             
+<<<<<<< HEAD
             // Guarda el registro en la base de datos
             $tablaPivote->save();
         
             // Recupera la lista actualizada de IDs de actualizaciones que le gustan al usuario
+=======
+            $tablaPivote->save();
+        
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             $likedUpgradeIds = UpgradeIntermedia::where('user_id', $request->user_id)
                                                 ->where('like_pressed', true)
                                                 ->pluck('upgrade_id');
         
+<<<<<<< HEAD
             // Retorna una respuesta JSON con los datos el nuevo registro en la tabla intermedia y la lista actualizada de IDs
+=======
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
             return response()->json($likedUpgradeIds);
         }
 
@@ -404,5 +393,87 @@ public function listUpgradesByWord(Request $request)
             return response()->json($upgrade, 200);
         }
 
+<<<<<<< HEAD
+=======
+        public function editUser(Request $request, $id)
+        {
+            $validatedData = $request->validate([
+                'name' => ['required', 'string', 'max:35', 'regex:/^[a-zA-Z\s]+$/'],
+                'surname' => ['required', 'string', 'max:45', 'regex:/^[a-zA-Z\s]+$/'],
+            ]);
+        
+            $user = User::findOrFail($id);
+        
+            $user->name = $validatedData['name'];
+            $user->surname = $validatedData['surname'];
+        
+            $user->save();
+        
+            return response()->json($user, 200);
+        }
+
+
+
+        
+        public function store(Request $request)
+        {
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'zone' => 'required|string',
+                'type' => 'required|string',
+                'worry' => 'required|string',
+                'benefit' => 'required|string',
+            ]);
+        
+            $upgrade = new Upgrade();
+            $upgrade->title = $validatedData['title'];
+            $upgrade->zone = $validatedData['zone'];
+            $upgrade->type = $validatedData['type'];
+            $upgrade->worry = $validatedData['worry'];
+            $upgrade->benefit = $validatedData['benefit'];
+            $upgrade->state = 'Valorandose';
+            $upgrade->likes = 0;
+            $upgrade->user_id = $request->user_id; 
+
+
+            $upgrade->save();
+        
+            return response()->json($upgrade);
+        }
+
+
+
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'zone' => 'required|string', 
+            'type' => 'required|string',
+            'worry' => 'required|string',
+            'benefit' => 'required|string',
+        ]);
+
+        $upgrade = Upgrade::find($id);
+
+        if (!$upgrade) {
+            return response()->json(['error' => 'Actualización no encontrada'], 404);
+        }
+
+        if ($upgrade->state !== 'Valorandose') {
+            return response()->json(['error' => 'No se puede actualizar. El estado no es Valorandose'], 400);
+        }
+
+        $upgrade->title = $validatedData['title'];
+        $upgrade->zone = $validatedData['zone'];
+        $upgrade->type = $validatedData['type'];
+        $upgrade->worry = $validatedData['worry'];
+        $upgrade->benefit = $validatedData['benefit'];
+
+        $upgrade->save();
+
+        return response()->json($upgrade);
+    }
+
+>>>>>>> d305d2f18cfb7355e8229472105bc6ac21676818
 
 }
