@@ -10,16 +10,28 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(Request $request)
+{
+    // Obtener los parámetros de filtro y ordenado de la solicitud
+    $post = $request->input('post');
+    $sortOrder = $request->input('sort_order', 'asc');
 
-         // Modo por defecto es 'cards'
-        $users = User::all(); // Obtén todos los usuarios
-        $users = User::paginate(20);
-        return view('indexUsers', ['users' => $users]);
+    // Construir la consulta con filtros y ordenado
+    $query = User::query();
 
-        
+    if ($post !== null) {
+        $query->where('post', $post);
     }
+
+    $query->orderBy('name', $sortOrder);
+
+    // Paginar los resultados
+    $users = $query->paginate(20);
+
+    return view('indexUsers', ['users' => $users]);
+}
+
+
 
 
     /**
