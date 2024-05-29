@@ -28,6 +28,35 @@
     font-weight: bold;
     /* Negreta per als encapçalaments */
 }
+
+.search-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 300px;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px 0 0 5px;
+        font-size: 16px;
+    }
+
+    .search-button {
+        padding: 10px 20px;
+        border: 2px solid #007bff;
+        background-color: #007bff;
+        color: white;
+        border-radius: 0 5px 5px 0;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .search-button:hover {
+        background-color: #0056b3;
+    }
 </style>
 
 <div class="container-fluid">
