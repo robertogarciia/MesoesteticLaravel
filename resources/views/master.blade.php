@@ -30,7 +30,7 @@
                 <a class="nav-item nav-link {{ Request::is('home') ? 'font-weight-bold' : '' }}" href="/home">Home</a>
                 <a class="nav-item nav-link {{ Request::is('upgrades*') ? 'font-weight-bold' : '' }}" href="{{ route('upgrades.index') }}">Upgrades</a>
                 @auth
-                    @if(strpos(Auth::user()->email, 'admin') !== false)
+                    @if(strpos(Auth::user()->post, 1) !== false)
                         <a class="nav-item nav-link {{ Request::is('users*') ? 'font-weight-bold' : '' }}" href="{{ route('users.index') }}">Users</a>
                     @endif
                 @endauth
