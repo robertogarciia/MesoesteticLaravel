@@ -247,19 +247,26 @@ class UpgradeController extends Controller
     public function edit(Upgrade $upgrade)
     {
         $user = Auth::user();
-
-        if (strpos($user->email, 'admin') === 0) {
-            return view('editAdminUpgrade', ['upgrade' => $upgrade]);
-        } else {
+    
+        
+        if ($user->id === $upgrade->user_id) {
+            
             return view('editupgrade', ['upgrade' => $upgrade]);
+        } else {
+            if (strpos($user->post, 1) !== false) {
+                return view('editAdminUpgrade', ['upgrade' => $upgrade]);
+            } else {
+                return redirect()->route('upgrades.index')->with('error', 'No tienes permiso para editar esta mejora.');
+            }
         }
     }
+    
 
     public function update(Request $request, Upgrade $upgrade)
     {
 
         $upgrade->update($request->all());
-        return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
+                return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
     }
 
     public function destroy(Upgrade $upgrade)

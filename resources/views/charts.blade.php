@@ -7,7 +7,7 @@
     const myChartTascas = new Chart(ctxTascas, {
         type: 'doughnut',
         data: {
-            labels: ['Valorant-se', 'En curs', 'Resoltes'],
+            labels: ['Valorandose', 'En curso', 'Resueltas'],
             datasets: [{
                 data: [
                     {{ $percentages['Valorandose'] }},
@@ -32,9 +32,9 @@
     const avgStateChangeTimeChart = new Chart(ctxAvgStateChangeTime, {
         type: 'bar',
         data: {
-            labels: ['Observació', 'En curs', 'Resoltes'],
+            labels: ['Valorandose', 'En curso', 'Resueltas'],
             datasets: [{
-                label: 'Temps Promig (dies)',
+                label: 'Tiempo promedio (días)',
                 data: [3, 7, 2], // Ajustar segons les dades reals
                 backgroundColor: ['#eb363a', '#ffcd56', '#36a2eb'],
                 borderColor: ['#eb363a', '#ffcd56', '#36a2eb'],
@@ -49,7 +49,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Temps Promig per Canviar d\'Estat',
+                    text: 'Tiempo promedio para cambiar de estado (días)',
                 },
             },
             scales: {
@@ -66,7 +66,7 @@
         data: {
             labels: @json($monthLabels),
             datasets: [{
-                label: 'Millores Resoltes',
+                label: 'Mejoras resueltas',
                 data: @json($monthlyCounts),
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
@@ -82,7 +82,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Tendència de Millores Resoltes per Mes',
+                    text: 'Tendencia de mejoras resueltas por mes',
                 },
             },
             scales: {
