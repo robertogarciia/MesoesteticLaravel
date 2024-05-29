@@ -3,25 +3,42 @@
 @section('content')
 
 <style>
-    .table {
-        border-radius: 20px; /* Bordes redondeados para la tabla */
-        overflow: hidden; /* Asegura que los bordes redondeados se apliquen correctamente */
-        font-size: 1.2em; /* Tamaño de letra más grande */
-    }
-    .table th, .table td {
-        padding: 12px; /* Espaciado para celdas */
-        text-align: left; /* Alineación de texto */
-        border-bottom: 1px solid #ddd; /* Borde inferior para filas */
-    }
-    .table thead {
-        background-color: #f2f2f2; /* Fondo para encabezados */
-        font-weight: bold; /* Negrita para encabezados */
-    }
+.table {
+    border-radius: 20px;
+    /* Cantonades arrodonides per a la taula */
+    overflow: hidden;
+    /* Assegura que les cantonades arrodonides s'apliquin correctament */
+    font-size: 1.2em;
+    /* Mida de lletra més gran */
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    /* Espaiat per a les cel·les */
+    text-align: left;
+    /* Alineació de text */
+    border-bottom: 1px solid #ddd;
+    /* Vora inferior per a files */
+}
+
+.table thead {
+    background-color: #f2f2f2;
+    /* Fons per als encapçalaments */
+    font-weight: bold;
+    /* Negreta per als encapçalaments */
+}
 </style>
 
-<div class="container-fluid"> <!-- Contenedor más amplio -->
+<div class="container-fluid">
+    <!-- Contenidor més ampli -->
     <div class="d-flex justify-content-between align-items-center my-4">
+
         <h1>Lista de Usuarios</h1>
+        <form action="{{ route('users.index') }}" method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
         <a href="{{ route('users.create') }}" class="btn btn-success btn-lg" style="margin-right: 20px;">Crear Usuario</a>
     </div>
 
@@ -59,11 +76,13 @@
                     <th>Apellido</th>
                     <th>Tipo de Usuario</th>
                     <th>Acciones</th> <!-- Columna para acciones -->
+
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $usuario)
+                @foreach($users as $usuari)
                 <tr>
+
                     <td>{{ $usuario->id }}</td> <!-- ID del usuario -->
                     <td>{{ $usuario->email }}</td> <!-- Correo del usuario -->
                     <td>{{ $usuario->name }}</td> <!-- Nombre del usuario -->
@@ -73,14 +92,18 @@
                             Admin
                         @elseif($usuario->post == 2)
                             Usuario
+
                         @endif
+
                     </td>
+
                     <td> <!-- Acciones para cada usuario -->
                         <a href="{{ route('users.edit', $usuario->id) }}" class="btn btn-primary btn-lg" style="margin-right: 5px;">Editar</a>
                         <form action="{{ route('users.destroy', $usuario->id) }}" method="POST" style="display: inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">Borrar</button>
+
                         </form>
                     </td>
                 </tr>
@@ -97,9 +120,11 @@
             </a>
         </li>
         @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+
             <li class="page-item {{ $users->currentPage() == $page ? 'active' : '' }}">
                 <a class="page-link" href="{{ $url }}">{{ $page }}</a>
             </li>
+
         @endforeach
         <li class="page-item">
             <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-label="Next">
@@ -108,6 +133,7 @@
             </a>
         </li>
     </ul>
+
 </div>
 
 @endsection

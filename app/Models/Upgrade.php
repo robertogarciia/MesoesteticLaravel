@@ -17,9 +17,6 @@ class Upgrade extends Model
         'benefit',
         'state',
         'likes'
-
-
-
     ];
 
     public function user()

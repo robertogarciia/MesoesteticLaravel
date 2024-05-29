@@ -6,12 +6,7 @@
         display: block;
     }
 
-    .btn-d {
-        transition: transform 250ms;
-        color: black;
-    }
-
-    .btn{
+    .btn {
         transition: transform 250ms;
         color: black;
     }
@@ -28,7 +23,7 @@
         background: linear-gradient(356deg, rgba(217, 189, 127, 1) 0%, rgba(255, 179, 0, 1) 100%);
     }
 
-    .btn-d:hover {
+    .btn:hover {
         transform: translateY(-10px);
     }
 
@@ -82,14 +77,13 @@
         <div class="col">
             <h2 class="mb-0">Lista de mejoras</h2>
         </div>
-        <!-- comentario en html =  -->
         <form action="{{ route('upgrades.index') }}" method="GET" class="search-form">
             <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}" class="search-input">
             <button type="submit" class="search-button">Search</button>
         </form>
         <div class="col-auto d-flex justify-content-end">
             <div class="dropdown">
-                <button class="btn-d btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-lg btn-secondary dropdown-toggle m-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Ordenar por
                 </button>
                 <ul class="dropdown-menu">
@@ -99,8 +93,8 @@
                     <li><a class="dropdown-item" href="?sort_by=title&sort_direction=desc&zone={{ $zone }}&state={{ $state }}&start_date={{ $start_date }}&end_date={{ $end_date }}">Titol Desc</a></li>
                 </ul>
             </div>
-            <a href="{{ route('upgrades.create') }}" class="btn-d btn-success btn-lg m-2">Crear mejora</a>
-            <a href="{{ route('my.upgrades') }}" class="btn-d btn-info btn-lg m-2">Mis mejoras</a>
+            <a href="{{ route('upgrades.create') }}" class="btn btn-success btn-lg m-2">Crear mejora</a>
+            <a href="{{ route('my.upgrades') }}" class="btn btn-info btn-lg m-2">Mis mejoras</a>
         </div>
     </div>
 
@@ -120,7 +114,7 @@
 
                     <h4 style="margin-top:5px;margin-bottom:15px;">Filtro por estado: </h4>
                     <div class="d-flex flex-column alignments-start" style="border-radius:10px;padding-left:10px;">
-                        @foreach (['valorandose' => 'hourglass-half', 'En curso' => 'spinner', 'resuelta' => 'check-circle'] as $stateName => $icon)
+                        @foreach (['valorandose' => 'hourglass-half', 'encurso' => 'spinner', 'resuelta' => 'check-circle'] as $stateName => $icon)
                             <div class="d-flex alignments-center">
                                 <i class="fas fa-{{ $icon }}" style="margin: 15px; margin-top:5px; margin-left:12px;"></i>
                                 <h5 class="state-filter {{ $state == $stateName ? 'active-filter' : '' }}" data-state="{{ $stateName }}">{{ ucfirst($stateName) }}</h5>
@@ -157,7 +151,7 @@
         <div class="col-lg-9 w-50 mt-3">
             <div class="container">
                 <div class="row" id="upgrade-list">
-                    @foreach($upgrades as $upgrade)
+                    @foreach($userUpgrades as $upgrade)
                         <div class="col-md-6 mb-4 upgrade-card" data-zone="{{ $upgrade->zone }}" data-likes="{{ $upgrade->likes }}" data-state="{{ $upgrade->state }}">
                             <div class="card border-10 shadow h-100 d-flex flex-column" style="border-radius:10px;">
                                 <img src="{{ $upgrade->image }}" class="card-img-top" alt="{{ $upgrade->name }}">
@@ -197,22 +191,22 @@
         </div>
 
         <ul class="pagination d-flex justify-content-center mt-4 ml-5">
-            <li class="page-item {{ $upgrades->onFirstPage() ? 'disabled' : '' }}">
-                <a class="page-link" href="{{ $upgrades->url(1) }}" aria-label="First">1</a>
+            <li class="page-item {{ $userUpgrades->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $userUpgrades->url(1) }}" aria-label="First">1</a>
             </li>
-            <li class="page-item {{ $upgrades->previousPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $upgrades->previousPageUrl() }}" aria-label="Previous">&laquo;</a>
+            <li class="page-item {{ $userUpgrades->previousPageUrl() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $userUpgrades->previousPageUrl() }}" aria-label="Previous">&laquo;</a>
             </li>
             @for ($i = $startPage; $i <= $endPage; $i++)
                 <li class="page-item {{ $currentPage == $i ? 'active' : '' }}">
-                    <a class="page-link" href="{{ $upgrades->url($i) }}">{{ $i }}</a>
+                    <a class="page-link" href="{{ $userUpgrades->url($i) }}">{{ $i }}</a>
                 </li>
             @endfor
-            <li class="page-item {{ $upgrades->nextPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $upgrades->nextPageUrl() }}" aria-label="Next">&raquo;</a>
+            <li class="page-item {{ $userUpgrades->nextPageUrl() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $userUpgrades->nextPageUrl() }}" aria-label="Next">&raquo;</a>
             </li>
-            <li class="page-item {{ $upgrades->hasMorePages() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $upgrades->url($totalPages) }}" aria-label="Last">{{ $totalPages }}</a>
+            <li class="page-item {{ $userUpgrades->hasMorePages() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $userUpgrades->url($totalPages) }}" aria-label="Last">{{ $totalPages }}</a>
             </li>
         </ul>
     </div>

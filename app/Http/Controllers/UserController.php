@@ -11,6 +11,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
+
 {
     // Obtener los parámetros de filtro y ordenado de la solicitud
     $post = $request->input('post');
@@ -22,14 +23,26 @@ class UserController extends Controller
     if ($post !== null) {
         $query->where('post', $post);
     }
+      
+      $query->orderBy('name', $sortOrder);
 
-    $query->orderBy('name', $sortOrder);
+        $search = $request->input('search');
+        if ($search) {
+            $users = User::where('email', 'like', "%{$search}%")
+                        ->orWhere('name', 'like', "%{$search}%")
+                        ->paginate(20);
+        } else {
+            $users = User::paginate(20);
+        }
+        return view('indexUsers', ['users' => $users]);
 
-    // Paginar los resultados
-    $users = $query->paginate(20);
+   
 
-    return view('indexUsers', ['users' => $users]);
+    
+
+
 }
+
 
 
 
@@ -48,10 +61,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'name' => 'required',
+            'surname'=> 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
         ]);
         $usuario = new User;
+        $usuario->name = $request->input('name');
+        $usuario->surname = $request->input('surname');
         $usuario->email = $request->input('email');
         $usuario->password = bcrypt($request->input('password'));
         $usuario->save();
@@ -94,6 +111,13 @@ class UserController extends Controller
         }
         $user->delete();
         return redirect()->back()->with('success', '¡Usuario eliminado correctamente!');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $results = User::where('email', 'like', "%$search%")->get();
+        return view('indexusers', ['results' => $results]);
     }
     
 }
