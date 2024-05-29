@@ -43,8 +43,13 @@
                 @endif
                 @endauth
             </div>
+            <div style="margin-left:900px;">
+                <img src="{{ asset('../images/LogoTiltedTowers.png') }}" alt="Tilted Towers" style="max-height: 60px;">
+            </div>
+
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
+
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn btn-link text-white">
