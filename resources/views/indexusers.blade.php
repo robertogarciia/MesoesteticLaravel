@@ -34,6 +34,10 @@
     <!-- Contenidor més ampli -->
     <div class="d-flex justify-content-between align-items-center my-4">
         <h1>Llista d'Usuaris</h1>
+        <form action="{{ route('users.index') }}" method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
         <a href="{{ route('users.create') }}" class="btn btn-success btn-lg" style="margin-right: 20px;">Crear Usuari
         </a>
     </div>

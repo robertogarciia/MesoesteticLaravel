@@ -35,6 +35,8 @@ Route::get('/upgrades/filter/{zone}', [UpgradeController::class, 'filterByZone']
 Route::get('/my-upgrades', [UpgradeController::class, 'getMyUpgrades'])->name('my.upgrades');
 Route::get('/search', [UpgradeController::class, 'search'])->name('upgrades.search');
 
+Route::get('/search', [UserController::class, 'search'])->name('user.search');
+
 Route::get('/analytics/user-upgrades', [UpgradeController::class, 'userUpgrades'])->name('analytics.user-upgrades');
 
 
