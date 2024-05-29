@@ -118,7 +118,7 @@ select.form-control {
         @method('PUT')
 
         <div class="mb-3 row">
-            <label for="title" class="col-sm-4">Títol:</label>
+            <label for="title" class="col-sm-4">Titulo:</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" name="title" id="title" value="{{ $upgrade->title }}"
                     placeholder="Títol...">
@@ -131,23 +131,23 @@ select.form-control {
                 <div class="color-selector">
                     <!-- Botons de radio amb borde per a l'opció seleccionada -->
                     <label class="color-label">
-                        <input type="radio" id="zone_1" name="zone" value="Medicaments"
-                            {{ $upgrade->zone == 'Medicaments' ? 'checked' : '' }}>
+                        <input type="radio" id="zone_1" name="zone" value="Medicamentos"
+                            {{ $upgrade->zone == 'Medicamentos' ? 'checked' : '' }}>
                         <div class="color-option rojo"></div>
                     </label>
                     <label class="color-label">
                         <input type="radio" id="zone_2" name="zone" value="Sanitària"
                             {{ $upgrade->zone == 'Sanitària' ? 'checked' : '' }}>
-                        <div class="color-option verd"></div>
+                        <div class="color-option verde"></div>
                     </label>
                     <label class="color-label">
-                        <input type="radio" id="zone_3" name="zone" value="Cosmètics"
-                            {{ $upgrade->zone == 'Cosmètics' ? 'checked' : '' }}>
-                        <div class="color-option blau"></div>
+                        <input type="radio" id="zone_3" name="zone" value="Cosmeticos"
+                            {{ $upgrade->zone == 'Cosmeticos' ? 'checked' : '' }}>
+                        <div class="color-option azul"></div>
                     </label>
                     <label class="color-label">
-                        <input type="radio" id="zone_4" name="zone" value="Control de Qualitat"
-                            {{ $upgrade->zone == 'Control de Qualitat' ? 'checked' : '' }}>
+                        <input type="radio" id="zone_4" name="zone" value="Control de Calidad"
+                            {{ $upgrade->zone == 'Control de Calidad' ? 'checked' : '' }}>
                         <div class="color-option gris"></div>
                     </label>
                 </div>
@@ -155,26 +155,26 @@ select.form-control {
         </div>
 
         <div class="mb-3 row">
-            <label for="type" class="col-sm-4">Tipus:</label>
+            <label for="type" class="col-sm-4">Tipo:</label>
             <div class="col-sm-8">
                 <select class="form-control" id="type" name="type">
-                    <option value="Maquinària" {{ $upgrade->type == 'Maquinària' ? 'selected' : '' }}>Maquinària
+                    <option value="Maquinaria" {{ $upgrade->type == 'Maquinaria' ? 'selected' : '' }}>Maquinaria
                     </option>
-                    <option value="Espai" {{ $upgrade->type == 'Espai' ? 'selected' : '' }}>Espai</option>
+                    <option value="Espacio" {{ $upgrade->type == 'Espacio' ? 'selected' : '' }}>Espacio</option>
                     <option value="Material" {{ $upgrade->type == 'Material' ? 'selected' : '' }}>Material</option>
                 </select>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="worry" class="col-sm-4">Preocupació:</label>
+            <label for="worry" class="col-sm-4">Preocupación:</label>
             <div class="col-sm-8">
                 <textarea class="form-control" name="worry" id="worry" rows="3">{{ $upgrade->worry }}</textarea>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="benefit" class="col-sm-4">Benefici:</label>
+            <label for="benefit" class="col-sm-4">Beneficio:</label>
             <div class="col-sm-8">
                 <textarea class="form-control" name="benefit" id="benefit"
                     rows="3">{{ $upgrade->benefit }}</textarea>
@@ -183,7 +183,7 @@ select.form-control {
 
         <div class="mb-3 row">
             <div class="offset-sm-4 col-sm-8">
-                <button type="submit" class="btn btn-primary">Desar canvis</button>
+                <button type="submit" class="btn btn-primary">Guardar canvios</button>
             </div>
         </div>
 

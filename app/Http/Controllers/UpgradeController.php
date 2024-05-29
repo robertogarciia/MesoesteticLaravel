@@ -217,8 +217,8 @@ class UpgradeController extends Controller
             'title' => 'required|string|max:255',
             'zone' => 'required|string', 
             'type' => 'required|string',
-            'worry' => 'required|string',
-            'benefit' => 'required|string',
+            'worry' => 'required|string|max:255',
+            'benefit' => 'required|string|max:255',
         ]);
         
         $upgrade = new Upgrade();
@@ -257,6 +257,7 @@ class UpgradeController extends Controller
 
     public function update(Request $request, Upgrade $upgrade)
     {
+
         $upgrade->update($request->all());
         return redirect()->route('upgrades.show', ['upgrade' => $upgrade]);
     }
