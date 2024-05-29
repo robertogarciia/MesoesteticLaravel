@@ -69,7 +69,7 @@ select.form-control {
         @method('PUT')
 
         <div class="mb-3 row">
-            <label for="title" class="col-sm-4">Correu electrònic:</label>
+            <label for="title" class="col-sm-4">Correo electrónico:</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" name="email" id="email" value="{{ $user->email }}">
             </div>
@@ -77,7 +77,7 @@ select.form-control {
 
         <div class="mb-3 row">
             <div class="offset-sm-4 col-sm-8">
-                <button type="submit" class="btn btn-primary">Guardar canvis</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
         </div>
 

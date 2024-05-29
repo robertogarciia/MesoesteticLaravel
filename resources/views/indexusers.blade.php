@@ -109,8 +109,8 @@
   <div class="d-flex justify-content-between align-items-center my-2">
     <h1>Lista de Usuarios</h1>
     <form action="{{ route('users.index') }}" method="GET" class="search-form">
-      <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}" class="search-input">
-      <button type="submit" class="search-button">Search</button>
+      <input type="text" name="search" placeholder="Buscar Products" value="{{ request('search') }}" class="search-input">
+      <button type="submit" class="search-button">Buscar</button>
     </form>
     <form method="GET" action="{{ route('users.index') }}" class="mb-4">
       <div class="d-flex justify-content-end"> <div class="dropdown me-2"> <button class="btn-d btn-lg btn-info mt-4 dropdown-toggle" type="button" id="dropdownMenuUserType" data-bs-toggle="dropdown" aria-expanded="false">

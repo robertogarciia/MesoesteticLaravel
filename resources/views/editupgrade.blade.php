@@ -183,7 +183,7 @@ select.form-control {
 
         <div class="mb-3 row">
             <div class="offset-sm-4 col-sm-8">
-                <button type="submit" class="btn btn-primary">Guardar canvios</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
         </div>
 
