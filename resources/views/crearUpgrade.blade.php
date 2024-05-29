@@ -139,7 +139,7 @@
               <div class="color-option verde"></div>
             </label>
             <label la
-            bel="color-label" title="Cosmeticos">
+            bel="color-label" title="Cosméticos">
               <input type="radio" id="zone" name="zone" value="Cosmeticos">
               <div class="color-option azul"></div>
             </label>
