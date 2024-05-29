@@ -65,12 +65,14 @@ class UserController extends Controller
             'surname'=> 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
+            'post' => 'required',
         ]);
         $usuario = new User;
         $usuario->name = $request->input('name');
         $usuario->surname = $request->input('surname');
         $usuario->email = $request->input('email');
         $usuario->password = bcrypt($request->input('password'));
+        $usuario->post = $request->input('post');
         $usuario->save();
 
         return redirect()->route('users.index');

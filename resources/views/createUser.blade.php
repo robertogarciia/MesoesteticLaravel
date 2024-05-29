@@ -3,6 +3,11 @@
 @section('content')
 
 <style>
+
+    .container-fluid {
+        border-radius: 20px;
+    }
+
     .eye-toggle {
         cursor: pointer;
         position: absolute;
@@ -27,7 +32,7 @@
     <div class="col-md-6">
       <div class="card shadow">
         <div class="card-body">
-          <div class="usuarios"> 
+          <div class="usuarios">
               <h2 class="titulo-usuarios">Crear usuario</h2>
           </div>
           <form method='POST' action="{{  route('users.store')  }}">
@@ -52,6 +57,14 @@
                   <div class="col-6 position-relative">
                       <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña" required>
                       <span toggle="#password" class="eye-toggle fa fa-eye"></span>
+                  </div>
+
+                  <label for="inputPost" class="col-4 col-form-label">Cargo: </label>
+                  <div class="col-6">
+                      <select class="form-control" name="post" id="post" required>
+                          <option value="0">Usuari</option>
+                          <option value="1">Admin</option>
+                      </select>
                   </div>
               </div>
               <div class="mb-3 row">
