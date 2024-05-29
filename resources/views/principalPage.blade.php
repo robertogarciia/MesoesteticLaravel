@@ -9,9 +9,7 @@
         <div class="col-sm-4">
             <div class="card shadow-sm" style="border: 2px solid #000000; border-radius: 15px; height: 150px; background: rgb(228,228,228); background: linear-gradient(360deg, rgba(228,228,228,1) 0%, rgba(235,54,58,1) 100%);">
                 <div class="card-body text-center">
-
-                    <h4 class="card-title">Mejoras </h4>
-
+                    <h4 class="card-title">Millores a valorar</h4>
                     <p class="card-text" style="font-size: 2em; font-weight: bold;">
                         {{ $countUpgrades['Valorandose'] }}
                     </p>
@@ -67,7 +65,6 @@
         </div>
     </div>
 
-
     <!-- Taula d'usuaris amb més upgrades -->
     <div class="row mt-4">
         <div class="col-12">
@@ -102,7 +99,6 @@
                 <div class="card-body text-center">
                     <h5>Tendència de Millores Resoltes per Mes</h5>
                     <canvas id="monthlyTrendsChart" width="1100" height="200"></canvas>
-
                 </div>
             </div>
         </div>
@@ -132,11 +128,8 @@
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
-                },
-                title: {
                     display: true,
-                    text: 'Distribución por Estado',
+                    position: 'bottom',
                 },
             },
         },
@@ -146,17 +139,13 @@
     const avgStateChangeTimeChart = new Chart(ctxAvgStateChangeTime, {
         type: 'bar',
         data: {
-
-            labels: ['Valorandose', 'En curso', 'Resuelta'],
-
+            labels: ['Observació', 'En curs', 'Resoltes'],
             datasets: [{
                 label: 'Temps Promig (dies)',
                 data: [3, 7, 2], // Ajustar segons les dades reals
                 backgroundColor: ['#eb363a', '#ffcd56', '#36a2eb'],
-
                 borderColor: ['#eb363a', '#ffcd56', '#36a2eb'],
                 borderWidth: 1,
-
             }],
         },
         options: {
@@ -167,16 +156,12 @@
                 },
                 title: {
                     display: true,
-
-                    text: 'Tiempo Promedio para Cambiar de Estado (días)',
-
-                   
+                    text: 'Temps Promig per Canviar d\'Estat',
                 },
             },
             scales: {
                 y: {
                     beginAtZero: true,
-
                 },
             },
         },
@@ -186,31 +171,20 @@
     const monthlyTrendsChart = new Chart(ctxMonthlyTrends, {
         type: 'line',
         data: {
-
-            labels: {!! json_encode(array_keys($monthlyData['Valorandose'])) !!},
+            labels: @json($monthLabels),
             datasets: [{
-                label: 'Valorandose',
-                data: {!! json_encode(array_values($monthlyData['Valorandose'])) !!},
-                borderColor: '#eb363a',
-                fill: false,
-            }, {
-                label: 'En curso',
-                data: {!! json_encode(array_values($monthlyData['En_curso'])) !!},
-                borderColor: '#ffcd56',
-                fill: false,
-            }, {
-                label: 'Resuelta',
-                data: {!! json_encode(array_values($monthlyData['Resuelta'])) !!},
-                borderColor: '#36a2eb',
-                fill: false,
-
+                label: 'Millores Resoltes',
+                data: @json($monthlyCounts),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                fill: true,
             }],
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-
                     display: false,
                 },
                 title: {
@@ -221,7 +195,6 @@
             scales: {
                 y: {
                     beginAtZero: true,
-
                 },
             },
         },
