@@ -19,7 +19,9 @@ use App\Http\Controllers\UserController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
-
+Route::get('/hola',function(){
+    return view('ppp');
+});
 Route::get('/master',function(){
     return view('master');
 });
@@ -53,7 +55,7 @@ Route::middleware([
 
     Route::middleware(['admin'])->group(function () {
         Route::resource('users', UserController::class);
-        Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/home', [UpgradeController::class, 'dashboardData'])->name('home');
     });
 });
 
