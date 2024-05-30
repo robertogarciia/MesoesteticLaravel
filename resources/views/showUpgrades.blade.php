@@ -47,7 +47,11 @@
                 @if($Upgrade->state === 'Valorandose' && ($user->id === $Upgrade->user_id || strpos($user->post, '1')
                 !== false))
                 <a href="{{ route('upgrades.edit', ['upgrade'=>$Upgrade]) }}" class="btn btn-secondary">Editar</a>
+                @elseif(($Upgrade->state === 'En curso' || $Upgrade->state === 'Resuelta') && strpos($user->post, '1')
+                !== false && $user->id !== $Upgrade->user_id)
+                <a href="{{ route('upgrades.edit', ['upgrade'=>$Upgrade]) }}" class="btn btn-secondary">Editar</a>
                 @endif
+
 
             </div>
         </div>
