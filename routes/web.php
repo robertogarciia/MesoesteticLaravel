@@ -50,8 +50,13 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return redirect()->route('upgrades.index'); // Uso correcto de route() para redirigir por nombre
     })->name('dashboard');
+    
     Route::resource('upgrades', UpgradeController::class);
-    Route::resource('users', UserController::class);
 
+    Route::middleware(['admin'])->group(function () {
+        Route::resource('users', UserController::class);
+        Route::get('/home', 'HomeController@index')->name('home');
+    });
 });
+
 
