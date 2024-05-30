@@ -249,9 +249,10 @@ class UpgradeController extends Controller
         $user = Auth::user();
     
         
-        if ($user->id === $upgrade->user_id) {
+        if ($user->id === $upgrade->user_id  && $upgrade->state === 'Valorandose') {
             
             return view('editupgrade', ['upgrade' => $upgrade]);
+            
         } else {
             if (strpos($user->post, 1) !== false) {
                 return view('editAdminUpgrade', ['upgrade' => $upgrade]);

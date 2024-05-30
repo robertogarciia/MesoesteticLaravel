@@ -11,7 +11,7 @@
             <input type="hidden" name="upgrade_id" value="{{ $upgrade->id }}">
 
                 <div class="mb-3">
-                    <label for="state" class="form-label">Estat</label>
+                    <label for="state" class="form-label">Estado</label>
                     <select class="form-control" id="state" name="state">
                         <option value="Valorandose" {{ $upgrade->state == 'Valorandose' ? 'selected' : '' }}>Valorandose</option>
                         <option value="En curso" {{ $upgrade->state == 'En curso' ? 'selected' : '' }}>En curso</option>
@@ -19,7 +19,7 @@
                     </select>
                 </div>
             
-            <button type="submit" class="btn btn-primary">Desar canvis</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </form>
         </div>
     </main>
