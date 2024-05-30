@@ -88,7 +88,7 @@
         </div>
         <!-- comentario en html =  -->
         <form action="{{ route('upgrades.index') }}" method="GET" class="search-form">
-            <input type="text" name="search" placeholder="Buscar Productos" value="{{ request('search') }}" class="search-input">
+            <input type="text" name="search" placeholder="Buscar Upgrades" value="{{ request('search') }}" class="search-input">
             <button type="submit" class="search-button">Buscar</button>
         </form>
         <div class="col-auto d-flex justify-content-end">
