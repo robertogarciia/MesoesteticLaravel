@@ -35,7 +35,7 @@
                 @endif
                 @endauth
                 <a class="nav-item nav-link {{ Request::is('upgrades*') ? 'font-weight-bold' : '' }}"
-                    href="{{ route('upgrades.index') }}">Upgrades</a>
+                    href="{{ route('upgrades.index') }}">Mejoras</a>
                 @auth
                 @if(strpos(Auth::user()->post, 1) !== false)
                 <a class="nav-item nav-link {{ Request::is('users*') ? 'font-weight-bold' : '' }}"
